@@ -21,6 +21,29 @@ Pattern B (Phase 5) — MCP tool calling:
       -> tool results returned to Qwen
       -> final answer + tool-call evidence trail
 
+Model fallback chain (four models, 2026-08-30):
+
+    qwen3.7-plus (primary)
+        -> qwen3.6-plus
+        -> qwen-plus-2025-07-28
+        -> qwen3-vl-235b-a22b-thinking
+
+The chain is deterministic and configuration-driven (QWEN_MODEL + the
+ordered QWEN_FALLBACK_MODELS list). A fallback model is used ONLY when
+the previous model fails with an eligible model-availability error
+(HTTP 429 rate/quota limit, 404 model not found, or >= 500 provider
+capacity). Every model goes through the identical retry + Pydantic
+validation pipeline; the chain never restarts from the primary and never
+recurses. Authentication/configuration errors (401/403, missing key,
+invalid base URL), transport errors, and output validation errors never
+switch models — a broken configuration is not fixed by another model.
+
+Attempt budget (documented maximums):
+    Pattern A: 2 attempts per model x 4 models = 8 API calls worst case.
+    Pattern B: one tool-loop per model (max 4 loops); the outer MCP
+               retry policy in mcp_search_service may run the whole
+               chain twice.
+
 Usage:
 
     from services.ai_service import get_ai_service
@@ -66,6 +89,61 @@ _RETRY_INSTRUCTION = (
 )
 
 
+def _model_chain() -> list[str]:
+    """
+    Ordered model chain: primary first, then the configured fallbacks.
+
+    The fallbacks come from QWEN_FALLBACK_MODELS — an ordered,
+    comma-separated list. Empty entries and duplicates (including any
+    entry equal to the primary) are dropped; an empty setting disables
+    the fallback entirely. Future models are added through configuration
+    only — no router or feature service ever changes.
+    """
+    primary = settings.QWEN_MODEL.strip()
+    chain = [primary]
+    for name in settings.QWEN_FALLBACK_MODELS.split(","):
+        name = name.strip()
+        if not name or name in chain:
+            continue
+        chain.append(name)
+    return chain
+
+
+def _raise_controlled_api_error(exc: Exception, operation: str) -> None:
+    """
+    Translate a provider API error into the controlled AI service error.
+
+    Eligible model-availability failures (HTTP 429 rate/quota limit, 404
+    model not found, >= 500 provider capacity) raise _ModelUnavailableError
+    so the fallback chain can switch models. Everything else — 401/403
+    authentication, 400 bad request, 422, unknown APIError — raises plain
+    AIUnavailableError and never triggers a model switch.
+    """
+    status = getattr(exc, "status_code", None)
+    if isinstance(exc, RateLimitError) or status == 429:
+        logger.error("AI rate limit: operation=%s", operation)
+        raise _ModelUnavailableError(
+            f"The AI provider rate-limited the request (operation={operation})."
+        ) from exc
+    if status == 404:
+        logger.error("AI model unavailable: operation=%s", operation)
+        raise _ModelUnavailableError(
+            f"The AI model is unavailable (operation={operation})."
+        ) from exc
+    if isinstance(status, int) and status >= 500:
+        logger.error("AI provider capacity error: operation=%s", operation)
+        raise _ModelUnavailableError(
+            f"The AI provider is temporarily unavailable (operation={operation})."
+        ) from exc
+    logger.error(
+        "AI API error: operation=%s error=%s",
+        operation, type(exc).__name__,
+    )
+    raise AIUnavailableError(
+        f"The AI provider returned an error ({type(exc).__name__})."
+    ) from exc
+
+
 # ---------------------------------------------------------------------------
 # Controlled application-level exceptions (no provider internals leak out)
 # ---------------------------------------------------------------------------
@@ -81,6 +159,17 @@ class AIValidationError(AIServiceError):
 
 class AIUnavailableError(AIServiceError):
     """The AI provider is not configured, unreachable, or rejected the request."""
+
+
+class _ModelUnavailableError(AIUnavailableError):
+    """
+    The configured model is unavailable (HTTP 429 / 404 / 5xx).
+
+    Internal marker: the model fallback chain reacts to it and retries the
+    same request on the backup model. Callers only ever see the public
+    AIUnavailableError contract (this is a subclass), so no router or
+    feature service needs to change.
+    """
 
 
 class MCPCallResult(BaseModel):
@@ -160,14 +249,23 @@ class AIService:
         """
         Send ONE structured request to Qwen and return a validated Pydantic object.
 
-        Retries at most ONCE for recoverable failures:
+        Per-model retry: at most ONCE for recoverable failures:
         - transport errors (connection / timeout),
         - malformed JSON,
         - Pydantic schema validation failures.
 
+        Model fallback: if a model fails with an ELIGIBLE
+        model-availability error (HTTP 429 / 404 / 5xx), the identical
+        request + validation pipeline runs on the NEXT model in the
+        configured fallback chain (qwen3.6-plus -> qwen-plus-2025-07-28
+        -> qwen3-vl-235b-a22b-thinking). The chain never restarts from
+        the primary and never recurses; non-eligible errors never switch
+        models.
+
         Raises:
             AIValidationError  -- output invalid after the retry.
-            AIUnavailableError -- provider not configured, unreachable, or rejected.
+            AIUnavailableError -- provider not configured, unreachable, or
+                                  rejected the request on every model tried.
         """
         if system_prompt is None:
             system_prompt = DEFAULT_STRUCTURED_SYSTEM_PROMPT
@@ -190,19 +288,46 @@ class AIService:
             },
         ]
 
+        models = _model_chain()
+        for index, model in enumerate(models):
+            try:
+                return self._structured_attempts(
+                    model, list(messages), response_model, operation
+                )
+            except _ModelUnavailableError as exc:
+                if index + 1 < len(models):
+                    logger.warning(
+                        "AI model unavailable; attempting next model in the "
+                        "fallback chain: operation=%s from_model=%s "
+                        "to_model=%s error=%s",
+                        operation, model, models[index + 1], type(exc).__name__,
+                    )
+                    continue
+                # Chain exhausted — the public AIUnavailableError contract.
+                raise
+        raise AIUnavailableError("No model configured for the fallback chain.")
+
+    def _structured_attempts(
+        self,
+        model: str,
+        messages: list[dict],
+        response_model: Type[T],
+        operation: str,
+    ) -> T:
+        """Pattern A attempt loop for ONE model: initial call + at most one retry."""
         last_error: Exception | None = None
         last_kind = "validation"  # or "unavailable"
 
         for attempt in range(1, _MAX_ATTEMPTS + 1):
             if attempt > 1:
                 logger.warning(
-                    "AI retry: operation=%s model=%s", operation, settings.QWEN_MODEL
+                    "AI retry: operation=%s model=%s", operation, model
                 )
                 messages = messages + [{"role": "system", "content": _RETRY_INSTRUCTION}]
 
             # --- make the request ---------------------------------------
             try:
-                raw = self._request_raw(messages, operation)
+                raw = self._request_raw(messages, operation, model)
             except APIConnectionError as exc:
                 last_error, last_kind = exc, "unavailable"
                 logger.warning(
@@ -218,6 +343,9 @@ class AIService:
                     attempt, _MAX_ATTEMPTS, operation,
                 )
                 continue
+            # _ModelUnavailableError (429/404/5xx) propagates immediately:
+            # rate limits and model outages are never retried on the SAME
+            # model — the fallback chain in call_structured reacts instead.
 
             # --- parse the JSON -----------------------------------------
             try:
@@ -243,7 +371,7 @@ class AIService:
 
             logger.info(
                 "AI structured call succeeded: operation=%s model=%s attempts=%s",
-                operation, settings.QWEN_MODEL, attempt,
+                operation, model, attempt,
             )
             return result
 
@@ -279,6 +407,12 @@ class AIService:
             3. repeat until Qwen produces a final answer (or the round
                limit is hit).
 
+        Model fallback: on an ELIGIBLE model-availability failure
+        (HTTP 429 / 404 / 5xx) the whole tool-calling loop re-runs on the
+        NEXT model in the configured fallback chain — a fresh conversation
+        with the same tools and executor. MCP transport failures,
+        validation failures, and tool-executor errors never switch models.
+
         Returns an MCPCallResult carrying the final answer AND the full
         tool-call trail ({tool, arguments, result} per call) so callers can
         prove which database records the answer is grounded in.
@@ -292,6 +426,43 @@ class AIService:
         if system_prompt is None:
             system_prompt = DEFAULT_MCP_SYSTEM_PROMPT
 
+        models = _model_chain()
+        for index, model in enumerate(models):
+            try:
+                return self._mcp_attempts(
+                    model,
+                    prompt,
+                    tools=tools,
+                    tool_executor=tool_executor,
+                    system_prompt=system_prompt,
+                    operation=operation,
+                    max_tool_rounds=max_tool_rounds,
+                )
+            except _ModelUnavailableError as exc:
+                if index + 1 < len(models):
+                    logger.warning(
+                        "AI model unavailable; attempting next model in the "
+                        "fallback chain: operation=%s from_model=%s "
+                        "to_model=%s error=%s",
+                        operation, model, models[index + 1], type(exc).__name__,
+                    )
+                    continue
+                # Chain exhausted — the public AIUnavailableError contract.
+                raise
+        raise AIUnavailableError("No model configured for the fallback chain.")
+
+    def _mcp_attempts(
+        self,
+        model: str,
+        prompt: str,
+        *,
+        tools: list[dict],
+        tool_executor: Callable[[str, dict], dict],
+        system_prompt: str,
+        operation: str,
+        max_tool_rounds: int,
+    ) -> MCPCallResult:
+        """Pattern B tool-calling loop for ONE model (fresh conversation)."""
         messages: list[dict] = [
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": prompt},
@@ -299,7 +470,7 @@ class AIService:
         used_tool_calls: list[dict] = []
 
         for _round in range(max_tool_rounds + 1):
-            response = self._request_with_tools(messages, tools, operation)
+            response = self._request_with_tools(messages, tools, operation, model)
             try:
                 message = response.choices[0].message
             except (AttributeError, IndexError, TypeError) as exc:
@@ -312,7 +483,7 @@ class AIService:
                     raise AIValidationError("empty response content")
                 logger.info(
                     "AI MCP call succeeded: operation=%s model=%s tool_rounds=%s",
-                    operation, settings.QWEN_MODEL, len(used_tool_calls),
+                    operation, model, len(used_tool_calls),
                 )
                 return MCPCallResult(
                     answer=str(content), tool_calls=used_tool_calls
@@ -372,28 +543,20 @@ class AIService:
 
     # ------------------------------------------------------------------ internal
 
-    def _request_raw(self, messages: list[dict], operation: str) -> str:
+    def _request_raw(self, messages: list[dict], operation: str, model: str) -> str:
         """Call Qwen chat completions in json_object mode; return raw text content."""
         try:
             response = self.client.chat.completions.create(
-                model=settings.QWEN_MODEL,
+                model=model,
                 messages=messages,
                 response_format={"type": "json_object"},
             )
         except APIConnectionError:
             # Transport-level failure — the caller decides whether to retry.
             raise
-        except RateLimitError as exc:
-            logger.error("AI rate limit: operation=%s", operation)
-            raise AIUnavailableError("The AI provider rate-limited the request.") from exc
         except APIError as exc:
-            logger.error(
-                "AI API error: operation=%s error=%s",
-                operation, type(exc).__name__,
-            )
-            raise AIUnavailableError(
-                f"The AI provider returned an error ({type(exc).__name__})."
-            ) from exc
+            # Classified: 429/404/5xx -> model-chain eligible; rest -> plain.
+            _raise_controlled_api_error(exc, operation)  # always raises
 
         try:
             content = response.choices[0].message.content
@@ -405,12 +568,12 @@ class AIService:
         return content
 
     def _request_with_tools(
-        self, messages: list[dict], tools: list[dict], operation: str
+        self, messages: list[dict], tools: list[dict], operation: str, model: str
     ):
         """Call Qwen chat completions in tool-calling mode (Pattern B)."""
         try:
             return self.client.chat.completions.create(
-                model=settings.QWEN_MODEL,
+                model=model,
                 messages=messages,
                 tools=tools,
                 tool_choice="auto",
@@ -418,17 +581,9 @@ class AIService:
         except APIConnectionError:
             # Transport-level failure — the caller decides whether to retry.
             raise
-        except RateLimitError as exc:
-            logger.error("AI rate limit: operation=%s", operation)
-            raise AIUnavailableError("The AI provider rate-limited the request.") from exc
         except APIError as exc:
-            logger.error(
-                "AI API error: operation=%s error=%s",
-                operation, type(exc).__name__,
-            )
-            raise AIUnavailableError(
-                f"The AI provider returned an error ({type(exc).__name__})."
-            ) from exc
+            # Classified: 429/404/5xx -> model-chain eligible; rest -> plain.
+            _raise_controlled_api_error(exc, operation)  # always raises
 
 
 # ---------------------------------------------------------------------------

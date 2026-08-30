@@ -18,7 +18,7 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from config import settings
+from config import REQUIRED_QWEN_MODELS, settings
 from database import init_db
 from routers.careers import router as careers_router
 from routers.coach import router as coach_router
@@ -28,6 +28,7 @@ from routers.journey import router as journey_router
 from routers.onboarding import router as onboarding_router
 from routers.opportunities import router as opportunities_router
 from routers.sports import router as sports_router
+from services.ai_service import _model_chain  # single source of chain resolution
 
 # --- MCP servers (Phase 5) ---------------------------------------------
 # The Mcp package lives at the repository root; make it importable, then
@@ -149,6 +150,20 @@ def on_startup() -> None:
             "Aborting startup. Set them in your .env file or platform dashboard."
         )
     logger.info("Environment validation passed.")
+
+    # Configuration-only validation of the mandated four-model fallback
+    # chain: every required model must be present in the resolved chain.
+    # This checks configuration only — no live API calls are made here.
+    chain = _model_chain()
+    missing_models = [m for m in REQUIRED_QWEN_MODELS if m not in chain]
+    if missing_models:
+        raise RuntimeError(
+            f"The Qwen model chain is misconfigured — missing required "
+            f"models: {', '.join(missing_models)}. Set QWEN_MODEL and "
+            "QWEN_FALLBACK_MODELS in the .env file or platform dashboard."
+        )
+    logger.info("Model chain validated: %s", " -> ".join(chain))
+
     logger.info("Initialising database …")
     init_db()
     logger.info("Database ready.")

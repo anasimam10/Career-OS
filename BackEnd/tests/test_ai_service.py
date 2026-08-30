@@ -192,13 +192,28 @@ class TestTransportErrors:
         assert client.chat.completions.create.call_count == 2
 
     def test_rate_limit_raises_immediately_without_retry(self):
-        client = mock_client([rate_limit_error()])
+        # Updated for the four-model fallback chain (spec: rate limit is an
+        # ELIGIBLE model-availability failure). Preserved intent: a rate
+        # limit is never retried on the SAME model — every model in the
+        # chain is called exactly once, in order, then stop.
+        chain = [
+            "qwen3.7-plus",
+            "qwen3.6-plus",
+            "qwen-plus-2025-07-28",
+            "qwen3-vl-235b-a22b-thinking",
+        ]
+        client = mock_client([rate_limit_error() for _ in chain])
         service = AIService(client=client)
 
         with pytest.raises(AIUnavailableError):
             service.call_structured("Generate one action.", NextBestAction)
 
-        assert client.chat.completions.create.call_count == 1
+        assert client.chat.completions.create.call_count == len(chain)
+        models_used = [
+            c.kwargs["model"]
+            for c in client.chat.completions.create.call_args_list
+        ]
+        assert models_used == chain
 
     def test_empty_content_is_controlled_failure(self):
         client = mock_client([None, ""])

@@ -26,6 +26,14 @@ class Settings:
     DASHSCOPE_WORKSPACE_ID: str = os.getenv("DASHSCOPE_WORKSPACE_ID", "")
     DASHSCOPE_BASE_URL: str = os.getenv("DASHSCOPE_BASE_URL", "")
     QWEN_MODEL: str = os.getenv("QWEN_MODEL", "qwen3.7-plus")
+    # Ordered backup models tried ONLY when the primary fails with an
+    # eligible model-availability error (HTTP 429 / 404 / 5xx). Comma-
+    # separated, order preserved; empty entries and duplicates of earlier
+    # models are ignored. An empty value disables the fallback entirely.
+    QWEN_FALLBACK_MODELS: str = os.getenv(
+        "QWEN_FALLBACK_MODELS",
+        "qwen3.6-plus,qwen-plus-2025-07-28,qwen3-vl-235b-a22b-thinking",
+    )
     AI_TIMEOUT_SECONDS: float = float(os.getenv("AI_TIMEOUT_SECONDS", "60"))
 
     # --- MCP servers (Phase 5) ---
@@ -37,6 +45,18 @@ class Settings:
     SECRET_KEY: str = os.getenv("SECRET_KEY", "change-me-to-a-random-string")
     CORS_ORIGINS: list[str] = os.getenv("CORS_ORIGINS", "http://localhost:3000").split(",")
     LOG_LEVEL: str = os.getenv("LOG_LEVEL", "INFO")
+
+
+# Mandated deployment chain (four-model fallback, 2026-08-30). Application
+# startup validates that every model below is present in the resolved
+# chain — a configuration check only, never a live API call. Future chain
+# changes update QWEN_MODEL / QWEN_FALLBACK_MODELS and this list together.
+REQUIRED_QWEN_MODELS = [
+    "qwen3.7-plus",
+    "qwen3.6-plus",
+    "qwen-plus-2025-07-28",
+    "qwen3-vl-235b-a22b-thinking",
+]
 
 
 settings = Settings()

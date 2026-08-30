@@ -19,6 +19,16 @@ A&H Career is a Pakistan-first AI career and sports mentor. It guides students f
 - Stage transitions are deterministic (not AI-driven).
 - Opportunity data comes from the database, not from model general knowledge.
 
+**Model fallback chain (extended to four models 2026-08-30):**
+- `qwen3.7-plus` is the PRIMARY model — used for every call when healthy; never load-balanced, never randomly chosen.
+- Ordered fallback chain: `qwen3.7-plus` → `qwen3.6-plus` → `qwen-plus-2025-07-28` → `qwen3-vl-235b-a22b-thinking` (single ordered list `QWEN_FALLBACK_MODELS`). A fallback is tried ONLY when the previous model fails with an eligible model-availability error (HTTP 429 rate/quota limit, 404 model not found, >= 500 provider capacity).
+- Non-eligible failures (401/403 auth, 400 bad request, connection errors, Pydantic validation failures, unconfigured service) NEVER switch models — a broken configuration is not fixed by another model.
+- Hard limits: max 4 models per call, max 3 fallback transitions, no recursion, the chain never restarts at the primary. Pattern A worst case 8 API calls (2 per model); Pattern B one tool-loop per model.
+- Startup configuration validation (`REQUIRED_QWEN_MODELS` in `config.py`, checked in `main.py`): all four mandated models must be present in the resolved chain — a configuration check only, never a live API call.
+- Pattern B/MCP compatibility: CONFIRMED for all four models (standard Chat Completions tool calling — same API surface; every model verified live, including one real tool-calling call each).
+- Pattern A compatibility: CONFIRMED for all four models (json_object → JSON parse → Pydantic; every model verified live, including the thinking VL model qwen3-vl-235b-a22b-thinking).
+- Future Qwen models: added through the ordered `QWEN_FALLBACK_MODELS` configuration only (`_model_chain()` in `ai_service.py` resolves it) — no router or service changes.
+
 ---
 
 ## 2. Current Implemented State (Phases 1–7)
@@ -807,7 +817,7 @@ DASHSCOPE_API_KEY=sk-...
 DASHSCOPE_WORKSPACE_ID=ws-...
 DASHSCOPE_BASE_URL=https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
 QWEN_MODEL=qwen3.7-plus
-
+QWEN_FALLBACK_MODELS=qwen3.6-plus,qwen-plus-2025-07-28,qwen3-vl-235b-a22b-thinking
 # Database
 DATABASE_URL=sqlite:////data/bano_qabil.db
 

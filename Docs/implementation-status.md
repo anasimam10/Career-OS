@@ -1,6 +1,6 @@
 # A&H Career — Implementation Status
 
-**Audit date:** 2026-08-30 (last updated after Phase 9 — full QA, security hardening, 256 tests, 11/11 pages verified)
+**Audit date:** 2026-08-30 (last updated: four-model Qwen fallback chain — qwen3.7-plus → qwen3.6-plus → qwen-plus-2025-07-28 → qwen3-vl-235b-a22b-thinking, 311 tests passing)
 **Audited by:** Qoder (backend/AI/MCP engineer role)
 
 ---
@@ -144,6 +144,8 @@
 - Frontend lint: 0 warnings, 0 errors
 - Browser E2E: 11/11 pages pass with real backend data, zero console errors
 - Backend pytest: 256 passed, 0 failed — zero regressions
+- Model fallback chain (2026-08-30): qwen3.7-plus primary + qwen3.6-plus backup; 291 total tests passing (35 new fallback tests); frontend lint + build re-verified clean
+- Four-model fallback chain (2026-08-30): chain extended to qwen3.7-plus → qwen3.6-plus → qwen-plus-2025-07-28 → qwen3-vl-235b-a22b-thinking via the ordered `QWEN_FALLBACK_MODELS` list; 311 total tests passing (20 new); all four models verified live for Pattern A AND Pattern B; frontend lint + build re-verified clean
 - Browser verification: all 9 pages load with real data, no console errors, no undefined/blank fields, AI-dependent pages (Reality Check, Trial Plan, Opportunity Match, Sports Match) return valid results from real Qwen calls
 
 ---
@@ -234,13 +236,42 @@ Frontend is **fully functional** with mock data. Switching `NEXT_PUBLIC_USE_MOCK
   - `build_system_prompt()` with injection slots (student profile, verified data, schema name, extra rules)
 - Configuration: `DASHSCOPE_API_KEY`, `DASHSCOPE_WORKSPACE_ID`, `DASHSCOPE_BASE_URL`, `QWEN_MODEL` (default `qwen3.7-plus`) via `BackEnd/config.py` + `BackEnd/.env`
 - `.env.example` with placeholders only (no real credentials)
-- Mocked unit tests: `BackEnd/tests/test_ai_service.py` (23 tests — zero API quota)
+- Mocked unit tests: `BackEnd/tests/test_ai_service.py` (23 tests — zero API quota) + `BackEnd/tests/test_model_fallback.py` (35 tests — model fallback chain, zero API quota)
 - Manual real-connection proof script: `BackEnd/test_qwen.py` (one real call, validates `NextBestAction`, never prints credentials)
 
 ### Real connectivity — VERIFIED (2026-08-29)
 - `BackEnd/test_qwen.py` executed with real credentials in `BackEnd/.env`
 - Result: **SUCCESS** — `qwen3.7-plus` responded; output parsed as JSON and validated as `NextBestAction` via Pydantic
 - One real API call used for the proof (connection-level failure was diagnosed and fixed via base-URL normalization before the successful call; no quota wasted on debugging)
+
+### Completed (Model Fallback Chain — 2026-08-30)
+- `qwen3.7-plus` remains the primary model; `qwen3.6-plus` is the configured backup (`QWEN_FALLBACK_MODEL`)
+- `BackEnd/services/ai_service.py`:
+  - `_model_chain()` — ordered `[primary, fallback]` list; future backup models can be appended without touching routers/services; fallback disabled when unset or equal to the primary
+  - `_raise_controlled_api_error()` — classifies provider errors: HTTP 429 / 404 / >= 500 raise the internal `_ModelUnavailableError(AIUnavailableError)` (model-chain eligible); 401/403/400/unknown raise plain `AIUnavailableError` (never switch models — a broken configuration is not fixed by another model)
+  - `call_structured` / `call_with_mcp` — thin model-chain wrappers; per-model attempt logic extracted to `_structured_attempts` / `_mcp_attempts`; both patterns run the fallback through the identical retry + Pydantic validation pipeline
+  - Hard limits: max 2 models per call, max 1 fallback transition, no recursion; rate limits are never retried on the SAME model
+  - Attempt budget: Pattern A worst case 4 API calls; Pattern B one tool-loop per model (the outer `mcp_search_service` retry may run the chain twice)
+  - Safe fallback logging: model names + operation + error category only (existing sanitisation reused)
+- Pattern B/MCP compatibility: CONFIRMED — the implementation uses standard Chat Completions tool calling (`tools`, `tool_choice=auto`), the same API surface for both models; qwen3.6-plus verified live through the same pipeline
+- Public contracts unchanged: `call_structured(...)` / `call_with_mcp(...)` signatures identical; callers only ever see `AIValidationError` / `AIUnavailableError`; zero router/service/frontend changes required
+- Configuration: `QWEN_MODEL=qwen3.7-plus`, `QWEN_FALLBACK_MODEL=qwen3.6-plus` in `.env` + `.env.example` (placeholders only in the example)
+- Tests: `tests/test_model_fallback.py` (35 mocked tests — all 13 required categories, zero API quota); one existing test updated to the new specified rate-limit contract (rate limit → fallback, still no same-model retry)
+- Real verification: one live qwen3.7-plus call + one direct live qwen3.6-plus call — both returned JSON validated as `NextBestAction`
+- Full regression: 291 passed, 0 failed (256 existing + 35 new); frontend lint + build clean
+
+### Completed (Four-Model Fallback Chain Extension — 2026-08-30)
+- Chain extended to the mandated four-model order: `qwen3.7-plus` → `qwen3.6-plus` → `qwen-plus-2025-07-28` → `qwen3-vl-235b-a22b-thinking`
+- Configuration: single ordered list `QWEN_FALLBACK_MODELS=qwen3.6-plus,qwen-plus-2025-07-28,qwen3-vl-235b-a22b-thinking` (`config.py`, `.env`, `.env.example`, `render.yaml`) — replaces the single-model `QWEN_FALLBACK_MODEL`; no numbered per-model variables
+- `_model_chain()` parses the ordered list; empty entries, duplicates, and entries equal to the primary are dropped; an empty setting disables the fallback entirely; future models are configuration-only additions (callers and public signatures unchanged)
+- Fallback error classification unchanged: HTTP 429 / 404 / >= 500 eligible; 400/401/403, transport, validation, and unconfigured failures never switch models
+- Hard limits: max 4 models per call, max 3 fallback transitions, the chain never restarts at the primary, no recursion; Pattern A worst case 8 API calls (2 per model), Pattern B one tool-loop per model (the outer `mcp_search_service` retry may run the chain twice)
+- Startup configuration validation: `REQUIRED_QWEN_MODELS` in `config.py`, checked in `main.py` on_startup — aborts with a clear error if any mandated model is missing from the resolved chain; configuration check only, no live API calls
+- Pattern A compatibility — all four models verified with one real live call each (json_object → JSON parse → Pydantic `NextBestAction` validation), including the thinking VL model `qwen3-vl-235b-a22b-thinking`
+- Pattern B/MCP compatibility — all four models verified with one real live tool-calling call each (`tools` + `tool_choice=auto` → tool execution → final answer). Note: official DashScope structured-output docs list only non-thinking VL models for `json_object`; live testing proved the existing pipeline works for `qwen3-vl-235b-a22b-thinking` (its tolerant JSON extractor + retry already handle fenced/reasoning-wrapped output). Residual risk documented: thinking models may occasionally emit non-strict JSON — covered by the existing per-model validation retry, never bypassing Pydantic
+- Tests: `tests/test_four_model_fallback.py` — all 14 spec-mandated tests under their exact names (2 parametrized: non-eligible errors ×3, per-model Pydantic validation ×4) plus a startup-validation test = 20 test items; fully mocked, zero API quota. Existing `test_model_fallback.py` and `test_ai_service.py` fallback tests updated to the four-model contract (coverage preserved and strengthened, none deleted)
+- Full regression: 311 passed, 0 failed, 0 skipped (291 existing + 20 new); frontend lint 0 warnings/errors; build 11 pages
+- Security: `BackEnd/.env` not tracked by git; 165 source files + 197 `.next` files scanned — zero secret matches; multi-model fallback logs carry model names / operation / error category only
 
 ### Missing (later phases)
 - Nothing for MVP scope (all required prompts are done — career_analysis, trial_plan, next_best_action, coach, job_readiness)
