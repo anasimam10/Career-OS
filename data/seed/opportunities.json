@@ -1,0 +1,130 @@
+{
+  "_meta": {
+    "label": "TEMPLATE DATA — NOT INDEPENDENTLY VERIFIED",
+    "note": "Placeholder opportunity records created for Phase 5 (MCP) development and testing. Organizations, deadlines, and source URLs are TEMPLATE values pending verification with real Pakistani data. Replace before production use. Tools must return these records as-is (they are the database's verified data) and never invent others.",
+    "created_for": "Phase 5 — MCP Integration",
+    "last_updated": "2026-08-29"
+  },
+  "opportunities": [
+    {
+      "type": "internship",
+      "title": "Python Developer Intern",
+      "organization": "TechBridge Solutions (template)",
+      "location": "Karachi",
+      "deadline": "2026-10-15",
+      "required_skills": ["Python", "Git"],
+      "description": "Summer internship for beginner Python developers. Work on internal tools with a senior mentor.",
+      "source_url": "https://example.com/internships/techbridge-python",
+      "last_verified": "2026-08-01",
+      "is_active": true
+    },
+    {
+      "type": "internship",
+      "title": "Software Engineering Intern",
+      "organization": "KarachiSoft Labs (template)",
+      "location": "Karachi",
+      "deadline": "2026-09-30",
+      "required_skills": ["Python", "Data Structures", "Git"],
+      "description": "Six-week engineering internship covering web development basics and code review practice.",
+      "source_url": "https://example.com/internships/karachisoft-swe",
+      "last_verified": "2026-08-01",
+      "is_active": true
+    },
+    {
+      "type": "internship",
+      "title": "Data Analytics Intern",
+      "organization": "Insight Analytics PK (template)",
+      "location": "Lahore",
+      "deadline": "2026-11-01",
+      "required_skills": ["SQL", "Python"],
+      "description": "Internship supporting the analytics team with dashboards and data cleaning tasks.",
+      "source_url": "https://example.com/internships/insight-analytics",
+      "last_verified": "2026-08-01",
+      "is_active": true
+    },
+    {
+      "type": "internship",
+      "title": "Digital Marketing Intern (Inactive Example)",
+      "organization": "Old Campaigns Co. (template)",
+      "location": "Karachi",
+      "deadline": "2026-01-15",
+      "required_skills": ["Communication"],
+      "description": "Expired internship kept in the database with is_active=false — must never appear in search results.",
+      "source_url": "https://example.com/internships/old-campaigns",
+      "last_verified": "2025-12-01",
+      "is_active": false
+    },
+    {
+      "type": "job",
+      "title": "Junior Software Developer",
+      "organization": "PakDev Studio (template)",
+      "location": "Karachi",
+      "deadline": "2026-10-01",
+      "required_skills": ["Python", "Django", "Git"],
+      "description": "Entry-level developer role for fresh graduates comfortable with Python and Django.",
+      "source_url": "https://example.com/jobs/pakdev-junior-dev",
+      "last_verified": "2026-08-01",
+      "is_active": true
+    },
+    {
+      "type": "job",
+      "title": "Data Analyst",
+      "organization": "NationalRetail Data (template)",
+      "location": "Lahore",
+      "deadline": "2026-10-20",
+      "required_skills": ["SQL", "Excel", "Python"],
+      "description": "Analyst role turning sales data into weekly reports. Entry-level, SQL required.",
+      "source_url": "https://example.com/jobs/nationalretail-analyst",
+      "last_verified": "2026-08-01",
+      "is_active": true
+    },
+    {
+      "type": "education",
+      "title": "BS Computer Science Programme",
+      "organization": "University of Karachi (template)",
+      "location": "Karachi",
+      "deadline": "2026-09-15",
+      "required_skills": [],
+      "description": "Four-year bachelor's degree programme in computer science with software engineering electives.",
+      "source_url": "https://example.com/universities/ku-bcs",
+      "last_verified": "2026-08-01",
+      "is_active": true
+    },
+    {
+      "type": "education",
+      "title": "BSc Data Science Programme",
+      "organization": "Lahore University of Management Sciences (template)",
+      "location": "Lahore",
+      "deadline": "2026-10-31",
+      "required_skills": ["Mathematics"],
+      "description": "Four-year bachelor's degree programme covering statistics, programming, and machine learning.",
+      "source_url": "https://example.com/universities/lums-ds",
+      "last_verified": "2026-08-01",
+      "is_active": true
+    },
+    {
+      "type": "scholarship",
+      "title": "Merit Scholarship for Computer Science",
+      "organization": "EduFuture Foundation (template)",
+      "location": "Nationwide",
+      "deadline": "2026-12-01",
+      "required_skills": [],
+      "description": "Tuition support scholarship for high-scoring CS students with financial need.",
+      "source_url": "https://example.com/scholarships/edufuture-cs",
+      "last_verified": "2026-08-01",
+      "is_active": true
+    },
+    {
+      "type": "scholarship",
+      "title": "Women in Technology Scholarship",
+      "organization": "TechRise PK (template)",
+      "location": "Nationwide",
+      "deadline": "2026-11-15",
+      "required_skills": [],
+      "description": "Scholarship supporting female students entering technology degree programmes.",
+      "source_url": "https://example.com/scholarships/techrise-women-tech",
+      "last_verified": "2026-08-01",
+      "is_active": true
+    }
+  ]
+}

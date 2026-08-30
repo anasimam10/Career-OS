@@ -1,0 +1,229 @@
+{
+  "_meta": {
+    "label": "TEMPLATE DATA — NOT INDEPENDENTLY VERIFIED",
+    "note": "Converted from Frontend/lib/mock/careers.mock.ts (the existing frontend template data) for Phase 3 development. Full records exist for software-engineering, data-science, and medicine. The remaining careers are list-level template entries with null detail fields. Real Pakistan-specific seed research and verification belong to the data phase (see Docs/architecture_corrected.md).",
+    "converted_from": "Frontend/lib/mock/careers.mock.ts",
+    "template_last_updated": "2025-06-01"
+  },
+  "careers": [
+    {
+      "slug": "software-engineering",
+      "name": "Software Engineering",
+      "field": "Technology",
+      "demand_level": "HIGH",
+      "competition_level": "HIGH",
+      "difficulty_level": "MEDIUM",
+      "required_skills": ["Python", "JavaScript", "Data Structures", "Git", "Algorithms"],
+      "pk_opportunities": [
+        "Consistent demand across software houses and product startups in major cities",
+        "Remote work opportunities for international and regional clients",
+        "Active freelance and contract development market",
+        "Broad career progression from junior developer to engineering lead"
+      ],
+      "top_pk_universities": ["FAST-NUCES", "LUMS", "NUST", "UET Lahore", "IBA Karachi", "GIKI"],
+      "risks": [
+        "Highly competitive degree admissions",
+        "Requires continuous self-learning as industry tools change",
+        "Entry-level roles vary significantly in quality and compensation"
+      ],
+      "last_updated": "2025-06-01"
+    },
+    {
+      "slug": "data-science",
+      "name": "Data Science",
+      "field": "Technology",
+      "demand_level": "HIGH",
+      "competition_level": "MEDIUM",
+      "difficulty_level": "HIGH",
+      "required_skills": ["Python", "Statistics", "Machine Learning", "SQL", "Data Visualisation"],
+      "pk_opportunities": [
+        "Growing analytics requirements in Pakistani banking, telecom, and e-commerce",
+        "Increasing adoption of machine learning in digital services",
+        "Remote data analysis roles available internationally"
+      ],
+      "top_pk_universities": ["LUMS", "FAST-NUCES", "NUST", "Karachi University"],
+      "risks": [
+        "Strong mathematical and statistical foundations required",
+        "Local market for specialized senior roles is still maturing"
+      ],
+      "last_updated": "2025-06-01"
+    },
+    {
+      "slug": "medicine",
+      "name": "Medicine (MBBS)",
+      "field": "Healthcare",
+      "demand_level": "HIGH",
+      "competition_level": "HIGH",
+      "difficulty_level": "HIGH",
+      "required_skills": ["Biology", "Chemistry", "Physics", "MDCAT preparation", "Clinical skills"],
+      "pk_opportunities": [
+        "High ongoing societal demand for qualified medical professionals",
+        "Clinical opportunities in public health systems and private hospitals",
+        "Specialization pathways in surgery, pediatrics, internal medicine, and research"
+      ],
+      "top_pk_universities": ["AKHSS", "PIMS", "CMH Lahore", "King Edward Medical University", "Aga Khan University"],
+      "risks": [
+        "Demanding 5+ year MBBS program followed by intensive house job/residency",
+        "Highly competitive national entrance testing (MDCAT)",
+        "Extended timeline before reaching independent senior practice"
+      ],
+      "last_updated": "2025-06-01"
+    },
+    {
+      "slug": "cybersecurity",
+      "name": "Cybersecurity",
+      "field": "Technology",
+      "demand_level": "HIGH",
+      "competition_level": null,
+      "difficulty_level": null,
+      "required_skills": [],
+      "pk_opportunities": [],
+      "top_pk_universities": [],
+      "risks": [],
+      "last_updated": "2025-06-01"
+    },
+    {
+      "slug": "ui-ux-design",
+      "name": "UI/UX Design",
+      "field": "Design",
+      "demand_level": "MEDIUM",
+      "competition_level": null,
+      "difficulty_level": null,
+      "required_skills": [],
+      "pk_opportunities": [],
+      "top_pk_universities": [],
+      "risks": [],
+      "last_updated": "2025-06-01"
+    },
+    {
+      "slug": "mobile-development",
+      "name": "Mobile App Development",
+      "field": "Technology",
+      "demand_level": "HIGH",
+      "competition_level": null,
+      "difficulty_level": null,
+      "required_skills": [],
+      "pk_opportunities": [],
+      "top_pk_universities": [],
+      "risks": [],
+      "last_updated": "2025-06-01"
+    },
+    {
+      "slug": "business-administration",
+      "name": "Business Administration",
+      "field": "Business",
+      "demand_level": "MEDIUM",
+      "competition_level": null,
+      "difficulty_level": null,
+      "required_skills": [],
+      "pk_opportunities": [],
+      "top_pk_universities": [],
+      "risks": [],
+      "last_updated": "2025-06-01"
+    },
+    {
+      "slug": "finance-banking",
+      "name": "Finance & Banking",
+      "field": "Business",
+      "demand_level": "MEDIUM",
+      "competition_level": null,
+      "difficulty_level": null,
+      "required_skills": [],
+      "pk_opportunities": [],
+      "top_pk_universities": [],
+      "risks": [],
+      "last_updated": "2025-06-01"
+    },
+    {
+      "slug": "electrical-engineering",
+      "name": "Electrical Engineering",
+      "field": "Engineering",
+      "demand_level": "HIGH",
+      "competition_level": null,
+      "difficulty_level": null,
+      "required_skills": [],
+      "pk_opportunities": [],
+      "top_pk_universities": [],
+      "risks": [],
+      "last_updated": "2025-06-01"
+    },
+    {
+      "slug": "civil-engineering",
+      "name": "Civil Engineering",
+      "field": "Engineering",
+      "demand_level": "MEDIUM",
+      "competition_level": null,
+      "difficulty_level": null,
+      "required_skills": [],
+      "pk_opportunities": [],
+      "top_pk_universities": [],
+      "risks": [],
+      "last_updated": "2025-06-01"
+    },
+    {
+      "slug": "mechanical-engineering",
+      "name": "Mechanical Engineering",
+      "field": "Engineering",
+      "demand_level": "MEDIUM",
+      "competition_level": null,
+      "difficulty_level": null,
+      "required_skills": [],
+      "pk_opportunities": [],
+      "top_pk_universities": [],
+      "risks": [],
+      "last_updated": "2025-06-01"
+    },
+    {
+      "slug": "marketing",
+      "name": "Marketing & Digital Media",
+      "field": "Business",
+      "demand_level": "MEDIUM",
+      "competition_level": null,
+      "difficulty_level": null,
+      "required_skills": [],
+      "pk_opportunities": [],
+      "top_pk_universities": [],
+      "risks": [],
+      "last_updated": "2025-06-01"
+    },
+    {
+      "slug": "teaching",
+      "name": "Teaching & Education",
+      "field": "Education",
+      "demand_level": "MEDIUM",
+      "competition_level": null,
+      "difficulty_level": null,
+      "required_skills": [],
+      "pk_opportunities": [],
+      "top_pk_universities": [],
+      "risks": [],
+      "last_updated": "2025-06-01"
+    },
+    {
+      "slug": "pharmacy",
+      "name": "Pharmacy",
+      "field": "Healthcare",
+      "demand_level": "MEDIUM",
+      "competition_level": null,
+      "difficulty_level": null,
+      "required_skills": [],
+      "pk_opportunities": [],
+      "top_pk_universities": [],
+      "risks": [],
+      "last_updated": "2025-06-01"
+    },
+    {
+      "slug": "accounting",
+      "name": "Accounting & Finance",
+      "field": "Business",
+      "demand_level": "HIGH",
+      "competition_level": null,
+      "difficulty_level": null,
+      "required_skills": [],
+      "pk_opportunities": [],
+      "top_pk_universities": [],
+      "risks": [],
+      "last_updated": "2025-06-01"
+    }
+  ]
+}

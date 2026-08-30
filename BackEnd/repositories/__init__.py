@@ -1,0 +1,3 @@
+from repositories.base import BaseRepository
+from repositories.student_repo import StudentRepository
+from repositories.career_repo import CareerRepository

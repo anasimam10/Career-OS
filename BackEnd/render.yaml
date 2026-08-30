@@ -1,0 +1,40 @@
+# ──────────────────────────────────────────────────────────────
+# Render configuration — A&H Careers backend.
+#
+# Docs: https://render.com/docs/blueprint-spec
+#
+# The build context is the repository root so the Dockerfile
+# can COPY the Mcp/ and data/ directories alongside BackEnd/.
+# ──────────────────────────────────────────────────────────────
+
+services:
+  - type: web
+    name: ah-career-backend
+    env: docker
+    dockerfilePath: BackEnd/Dockerfile
+    dockerContext: .
+    startCommand: sh -c "cd /app/BackEnd && exec uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000} --workers 1"
+    plan: starter
+    envVars:
+      - key: DASHSCOPE_API_KEY
+        sync: false                  # set manually in Render dashboard
+      - key: DASHSCOPE_WORKSPACE_ID
+        sync: false
+      - key: DASHSCOPE_BASE_URL
+        sync: false
+      - key: QWEN_MODEL
+        value: qwen3.7-plus
+      - key: DATABASE_URL
+        sync: false                  # e.g. sqlite:////data/ah_career.db
+      - key: SECRET_KEY
+        generateValue: true
+      - key: CORS_ORIGINS
+        sync: false                  # set to https://<frontend>.vercel.app
+      - key: LOG_LEVEL
+        value: INFO
+      - key: MCP_SERVER_BASE_URL
+        value: http://127.0.0.1:${PORT:-8000}
+    disk:
+      name: ah-career-data
+      mountPath: /data
+      sizeGB: 1
