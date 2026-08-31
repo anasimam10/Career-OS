@@ -40,4 +40,12 @@ from schemas.responses import (
     SportsOpportunityOut,
     OpportunityMatchResponse,
     SportsMatchResponse,
+    UniversitySummary,
+    UniversityListResponse,
+    ProgramSummary,
+    ProgramListResponse,
+    AlumniDetail,
+    AlumniListResponse,
+    LearningResourceOut,
+    LearningResourceListResponse,
 )

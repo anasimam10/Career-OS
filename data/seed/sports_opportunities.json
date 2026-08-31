@@ -1,9 +1,10 @@
 {
   "_meta": {
-    "label": "TEMPLATE DATA — NOT INDEPENDENTLY VERIFIED",
-    "note": "Placeholder sports opportunity records created for Phase 5 (MCP) development and testing. Organizations, deadlines, and source URLs are TEMPLATE values pending verification with real Pakistani data. Replace before production use. Tools must return these records as-is (they are the database's verified data) and never invent others.",
-    "created_for": "Phase 5 — MCP Integration",
-    "last_updated": "2026-08-29"
+    "label": "TEMPLATE DATA - NOT INDEPENDENTLY VERIFIED",
+    "note": "Placeholder sports opportunity records for development, testing, and demo use. Organizations, deadlines, and source URLs are TEMPLATE values pending verification with real Pakistani data. Date convention: deadline/last_verified values starting with '+' or '-' are day offsets from the seed date, 'today' = the seed date; anything else is an ISO date. Records marked is_active=false are deliberate negative examples that must never surface in student results.",
+    "created_for": "Final implementation - controlled starter dataset (spec section 8)",
+    "record_count": 8,
+    "last_updated": "today"
   },
   "sports_opportunities": [
     {
@@ -12,11 +13,11 @@
       "title": "Karachi Open Badminton Trials",
       "organization": "Karachi Badminton Association (template)",
       "location": "Karachi",
-      "deadline": "2026-09-20",
+      "deadline": "+25",
       "eligibility": {"age_min": 14, "age_max": 22, "level": "intermediate"},
       "description": "Open trials for the Karachi district youth badminton squad.",
       "source_url": "https://example.com/sports/karachi-badminton-trials",
-      "last_verified": "2026-08-01",
+      "last_verified": "today",
       "is_active": true
     },
     {
@@ -25,11 +26,24 @@
       "title": "National Badminton Talent Scholarship",
       "organization": "Pakistan Badminton Federation (template)",
       "location": "Nationwide",
-      "deadline": "2026-11-30",
+      "deadline": "+80",
       "eligibility": {"age_min": 14, "age_max": 20, "level": "advanced"},
       "description": "Training and equipment support for nationally ranked junior players.",
       "source_url": "https://example.com/sports/pbf-talent-scholarship",
-      "last_verified": "2026-08-01",
+      "last_verified": "today",
+      "is_active": true
+    },
+    {
+      "sport": "Badminton",
+      "type": "tournament",
+      "title": "Islamabad Under-19 Badminton Championship",
+      "organization": "Islamabad Badminton Association (template)",
+      "location": "Islamabad",
+      "deadline": "+70",
+      "eligibility": {"age_min": 15, "age_max": 19, "level": "intermediate"},
+      "description": "City-level under-19 championship with provincial scouts attending.",
+      "source_url": "https://example.com/sports/islamabad-u19-badminton",
+      "last_verified": "today",
       "is_active": true
     },
     {
@@ -38,11 +52,11 @@
       "title": "Lahore Under-19 Cricket Cup",
       "organization": "Lahore Region Cricket Board (template)",
       "location": "Lahore",
-      "deadline": "2026-10-10",
+      "deadline": "+45",
       "eligibility": {"age_min": 15, "age_max": 19, "level": "intermediate"},
       "description": "Annual district under-19 tournament with club scouting presence.",
       "source_url": "https://example.com/sports/lahore-u19-cup",
-      "last_verified": "2026-08-01",
+      "last_verified": "today",
       "is_active": true
     },
     {
@@ -51,11 +65,11 @@
       "title": "University Cricket Development Programme",
       "organization": "University Sports Directorate (template)",
       "location": "Lahore",
-      "deadline": "2026-09-05",
+      "deadline": "+15",
       "eligibility": {"enrollment": "university_student", "level": "beginner"},
       "description": "Year-round cricket development programme for enrolled university students.",
       "source_url": "https://example.com/sports/university-cricket-programme",
-      "last_verified": "2026-08-01",
+      "last_verified": "today",
       "is_active": true
     },
     {
@@ -64,11 +78,11 @@
       "title": "Sindh Youth Football Trials",
       "organization": "Sindh Football Association (template)",
       "location": "Karachi",
-      "deadline": "2026-09-25",
+      "deadline": "+30",
       "eligibility": {"age_min": 14, "age_max": 21, "level": "intermediate"},
       "description": "District squad trials for youth football players across Sindh.",
       "source_url": "https://example.com/sports/sindh-football-trials",
-      "last_verified": "2026-08-01",
+      "last_verified": "today",
       "is_active": true
     },
     {
@@ -77,11 +91,11 @@
       "title": "National School Hockey Championship",
       "organization": "Pakistan Hockey Federation (template)",
       "location": "Nationwide",
-      "deadline": "2026-10-30",
+      "deadline": "+60",
       "eligibility": {"enrollment": "school_student", "level": "intermediate"},
       "description": "School-level national championship with regional qualifying rounds.",
       "source_url": "https://example.com/sports/school-hockey-championship",
-      "last_verified": "2026-08-01",
+      "last_verified": "today",
       "is_active": true
     },
     {
@@ -90,11 +104,11 @@
       "title": "Islamabad Badminton League (Inactive Example)",
       "organization": "Old Sports Club (template)",
       "location": "Islamabad",
-      "deadline": "2026-02-01",
+      "deadline": "-200",
       "eligibility": {"level": "advanced"},
-      "description": "Expired tournament kept in the database with is_active=false — must never appear in search results.",
+      "description": "Expired tournament kept in the database with is_active=false - must never appear in search results.",
       "source_url": "https://example.com/sports/islamabad-league",
-      "last_verified": "2025-12-01",
+      "last_verified": "-400",
       "is_active": false
     }
   ]

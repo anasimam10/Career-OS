@@ -18,13 +18,27 @@ class CareerRepository(BaseRepository[Career]):
         super().__init__(Career, db)
 
     def get_by_slug(self, slug: str) -> Optional[Career]:
-        return self._db.query(Career).filter(Career.slug == slug).first()
+        # Master §17: student-facing career reads only return active records.
+        return (
+            self._db.query(Career)
+            .filter(Career.slug == slug, Career.is_active.is_(True))
+            .first()
+        )
 
     def get_all_careers(self) -> list[Career]:
-        return self._db.query(Career).order_by(Career.name).all()
+        return (
+            self._db.query(Career)
+            .filter(Career.is_active.is_(True))
+            .order_by(Career.name)
+            .all()
+        )
 
     def get_by_field(self, field: str) -> list[Career]:
-        return self._db.query(Career).filter(Career.field == field).all()
+        return (
+            self._db.query(Career)
+            .filter(Career.field == field, Career.is_active.is_(True))
+            .all()
+        )
 
     def to_dict(self, career: Career) -> dict:
         """Convert a Career ORM instance to a plain dict.

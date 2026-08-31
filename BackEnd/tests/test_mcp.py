@@ -32,8 +32,11 @@ import pytest
 import uvicorn
 
 from database import SessionLocal
+from models.alumni import Alumni
 from models.career import Career
+from models.learning import LearningResource
 from models.opportunity import Opportunity, SportsOpportunity
+from models.university import University
 from services.ai_service import (
     AIService,
     AIUnavailableError,
@@ -147,6 +150,7 @@ def mcp_db(db_session):
             description="Summer internship for beginner Python developers.",
             source_url="https://example.com/internships/techbridge-python",
             last_verified=None,
+            verification_status="VALIDATED",
             is_active=True,
         ),
     )
@@ -160,6 +164,7 @@ def mcp_db(db_session):
             required_skills=json.dumps(["Python", "Data Structures", "Git"]),
             description="Six-week engineering internship.",
             source_url="https://example.com/internships/karachisoft-swe",
+            verification_status="VALIDATED",
             is_active=True,
         ),
     )
@@ -173,6 +178,7 @@ def mcp_db(db_session):
             required_skills=json.dumps(["Communication"]),
             description="Inactive record that must never appear.",
             source_url="https://example.com/internships/old",
+            verification_status="VALIDATED",
             is_active=False,
         ),
     )
@@ -186,6 +192,7 @@ def mcp_db(db_session):
             required_skills=json.dumps(["Python", "Django", "Git"]),
             description="Entry-level developer role.",
             source_url="https://example.com/jobs/pakdev-junior-dev",
+            verification_status="VALIDATED",
             is_active=True,
         ),
     )
@@ -199,6 +206,7 @@ def mcp_db(db_session):
             required_skills=json.dumps([]),
             description="Tuition support scholarship for high-scoring CS students.",
             source_url="https://example.com/scholarships/edufuture-cs",
+            verification_status="VALIDATED",
             is_active=True,
         ),
     )
@@ -212,6 +220,7 @@ def mcp_db(db_session):
             required_skills=json.dumps([]),
             description="Four-year bachelor's degree programme.",
             source_url="https://example.com/universities/ku-bcs",
+            verification_status="VALIDATED",
             is_active=True,
         ),
     )
@@ -228,6 +237,7 @@ def mcp_db(db_session):
             eligibility=json.dumps({"age_min": 14, "level": "intermediate"}),
             description="Open trials for the Karachi district youth squad.",
             source_url="https://example.com/sports/karachi-badminton-trials",
+            verification_status="VALIDATED",
             is_active=True,
         ),
     )
@@ -242,6 +252,7 @@ def mcp_db(db_session):
             eligibility=json.dumps({"age_min": 14, "level": "advanced"}),
             description="Training support for nationally ranked juniors.",
             source_url="https://example.com/sports/pbf-talent-scholarship",
+            verification_status="VALIDATED",
             is_active=True,
         ),
     )
@@ -256,6 +267,7 @@ def mcp_db(db_session):
             eligibility=json.dumps({"enrollment": "university_student"}),
             description="Year-round cricket development programme.",
             source_url="https://example.com/sports/university-cricket-programme",
+            verification_status="VALIDATED",
             is_active=True,
         ),
     )
@@ -270,7 +282,115 @@ def mcp_db(db_session):
             eligibility=json.dumps({"level": "advanced"}),
             description="Inactive record that must never appear.",
             source_url="https://example.com/sports/islamabad-league",
+            verification_status="VALIDATED",
             is_active=False,
+        ),
+    )
+
+    # --- universities + alumni + learning (Phase 4 MCP tools) -------------
+    _add(
+        db_session,
+        University(
+            name="Lahore University of Management Sciences",
+            slug="lums-mcp-test",
+            city="Lahore",
+            type="PRIVATE",
+            verification_status="VERIFIED",
+        ),
+    )
+    _add(
+        db_session,
+        University(
+            name="National University of Sciences and Technology",
+            slug="nust-mcp-test",
+            city="Islamabad",
+            type="PUBLIC",
+            verification_status="VALIDATED",
+        ),
+    )
+    _add(
+        db_session,
+        Alumni(
+            name="Ayesha Khan",
+            university="LUMS",
+            field="Software Engineering",
+            role="Software Engineer",
+            company="Systems Limited (template)",
+            career_path="Python electives, internship, junior engineer.",
+            advice="Build projects every semester.",
+            tags=json.dumps(["Python"]),
+            is_verified=True,
+            university_id=1,
+            career_id=1,
+            source_url="https://example.com/alumni/ayesha",
+        ),
+    )
+    _add(
+        db_session,
+        Alumni(
+            name="Bilal Ahmed",
+            university="NUST",
+            field="Data Science",
+            role="Data Analyst",
+            company="Analytics PK (template)",
+            is_verified=True,
+            university_id=2,
+        ),
+    )
+    _add(
+        db_session,
+        Alumni(
+            name="Sara Malik",
+            university="LUMS",
+            field="Software Engineering",
+            role="Frontend Developer",
+            is_verified=False,
+            university_id=1,
+        ),
+    )
+    _add(
+        db_session,
+        LearningResource(
+            skill_name="Python",
+            title="Python for Everybody",
+            type="course",
+            url="https://example.com/py4e",
+            level="beginner",
+            is_free=True,
+            verification_status="VALIDATED",
+        ),
+    )
+    _add(
+        db_session,
+        LearningResource(
+            skill_name="Python",
+            title="Intermediate Python Projects",
+            type="project",
+            url="https://example.com/pyprojects",
+            level="intermediate",
+            is_free=True,
+            verification_status="VALIDATED",
+        ),
+    )
+    _add(
+        db_session,
+        LearningResource(
+            skill_name="Python",
+            title="Inactive Python Course",
+            type="course",
+            url="https://example.com/inactive",
+            verification_status="VALIDATED",
+            is_active=False,
+        ),
+    )
+    _add(
+        db_session,
+        LearningResource(
+            skill_name="Python",
+            title="Candidate Python Course",
+            type="course",
+            url="https://example.com/candidate",
+            verification_status="CANDIDATE",
         ),
     )
 
@@ -581,6 +701,78 @@ class TestOpportunityServerTools:
 
 
 # ===========================================================================
+# §16 Alumni + Learning tools (Phase 4 — direct function calls, the same
+#      functions the MCP server exposes; the SSE layer is covered below)
+# ===========================================================================
+
+
+class TestAlumniAndLearningTools:
+    def test_find_alumni_by_field_verified_first(self, mcp_db):
+        result = opportunity_tools.find_alumni("Software Engineering")
+        assert result["count"] == 2
+        names = [r["name"] for r in result["results"]]
+        # Verified journeys before community-submitted ones (master §24).
+        assert names == ["Ayesha Khan", "Sara Malik"]
+
+    def test_find_alumni_record_shape(self, mcp_db):
+        result = opportunity_tools.find_alumni("Software Engineering")
+        first = result["results"][0]
+        assert first["role"] == "Software Engineer"
+        assert first["tags"] == ["Python"]
+        assert first["is_verified"] is True
+        assert first["source_url"].startswith("https://example.com/")
+
+    def test_find_alumni_university_filter(self, mcp_db):
+        result = opportunity_tools.find_alumni("Science", university_id=2)
+        assert result["count"] == 1
+        assert result["results"][0]["name"] == "Bilal Ahmed"
+
+    def test_find_alumni_career_filter(self, mcp_db):
+        result = opportunity_tools.find_alumni("Engineering", career_id=1)
+        assert result["count"] == 1
+        assert result["results"][0]["name"] == "Ayesha Khan"
+
+    def test_find_alumni_no_results(self, mcp_db):
+        result = opportunity_tools.find_alumni("Astronomy")
+        assert result["count"] == 0
+        assert result["results"] == []
+        assert "No matching" in result["message"]
+
+    def test_find_alumni_invalid_input(self, mcp_db):
+        result = opportunity_tools.find_alumni("   ")
+        assert result["error"] == "invalid_input"
+        result = opportunity_tools.find_alumni("Engineering", career_id=0)
+        assert result["error"] == "invalid_input"
+
+    def test_get_learning_resources_by_skill(self, mcp_db):
+        result = opportunity_tools.get_learning_resources("Python")
+        titles = [r["title"] for r in result["results"]]
+        # Active + validated only, alphabetical by title.
+        assert titles == ["Intermediate Python Projects", "Python for Everybody"]
+
+    def test_get_learning_resources_level_filter(self, mcp_db):
+        result = opportunity_tools.get_learning_resources("Python", level="beginner")
+        assert result["count"] == 1
+        assert result["results"][0]["title"] == "Python for Everybody"
+
+    def test_get_learning_resources_excludes_inactive_and_candidate(self, mcp_db):
+        result = opportunity_tools.get_learning_resources("Python")
+        titles = [r["title"] for r in result["results"]]
+        assert "Inactive Python Course" not in titles
+        assert "Candidate Python Course" not in titles
+
+    def test_get_learning_resources_no_results(self, mcp_db):
+        result = opportunity_tools.get_learning_resources("Fortran")
+        assert result["count"] == 0
+        assert result["results"] == []
+        assert "No matching" in result["message"]
+
+    def test_get_learning_resources_invalid_input(self, mcp_db):
+        result = opportunity_tools.get_learning_resources("")
+        assert result["error"] == "invalid_input"
+
+
+# ===========================================================================
 # §15 SSE mounting tests (real FastAPI app, threaded uvicorn, SDK SSE client)
 # ===========================================================================
 
@@ -600,9 +792,11 @@ class TestSSEMounting:
             "get_university_opportunities",
         ]
 
-    def test_opportunity_sse_lists_six_tools(self, mcp_server):
+    def test_opportunity_sse_lists_eight_tools(self, mcp_server):
         tools = _run(_sse_list_tools(f"{mcp_server}/mcp/opportunity/sse"))
         assert sorted(tools) == [
+            "find_alumni",
+            "get_learning_resources",
             "match_opportunity",
             "search_internships",
             "search_jobs",
@@ -633,6 +827,17 @@ class TestSSEMounting:
         assert result["count"] == 2
         titles = [r["title"] for r in result["results"]]
         assert "Python Developer Intern" in titles
+
+    def test_alumni_sse_tool_call_round_trip(self, mcp_server):
+        result = _run(
+            _sse_call_tool(
+                f"{mcp_server}/mcp/opportunity/sse",
+                "find_alumni",
+                {"field": "Software Engineering"},
+            )
+        )
+        assert result["count"] == 2
+        assert result["results"][0]["name"] == "Ayesha Khan"
 
 
 # ===========================================================================

@@ -1,0 +1,88 @@
+{
+  "_meta": {
+    "label": "TEMPLATE DATA - NOT INDEPENDENTLY VERIFIED",
+    "note": "Placeholder alumni journey records created for the Alumni feature (architecture_master section 24). These are TEMPLATE stories with example career paths and advice; is_verified is false so listings order them after any verified record and the UI can label them unverified. Replace with real, publicly documented alumni journeys (with source_url) during ingestion. university_slug and career_slug are resolved to ids by the seeder.",
+    "verification_mode": "template",
+    "record_count": 6
+  },
+  "alumni": [
+    {
+      "name": "Sara Ahmed (template)",
+      "university_slug": "lums",
+      "university": "LUMS",
+      "field": "Computer Science",
+      "role": "Software Engineer",
+      "company": "Karachi Systems House (template)",
+      "career_slug": "software-engineering",
+      "career_path": "Started with a first-year Python course, built small web projects each semester, interned at a Karachi software house in the third year, and joined as a backend engineer after graduation.",
+      "advice": "Build small projects from your first year - a GitHub profile with real work matters more than grades in most interviews.",
+      "tags": ["software", "backend", "lums"],
+      "is_verified": false
+    },
+    {
+      "name": "Bilal Khan (template)",
+      "university_slug": "nust",
+      "university": "NUST",
+      "field": "Electrical Engineering",
+      "role": "Embedded Systems Engineer",
+      "company": "Indus Electronics (template)",
+      "career_slug": "electrical-engineering",
+      "career_path": "Focused on embedded systems electives, joined the university robotics team, completed a hardware internship, and now designs firmware for consumer devices.",
+      "advice": "Join a student technical society early - team projects teach you more than any single course.",
+      "tags": ["electronics", "firmware", "nust"],
+      "is_verified": false
+    },
+    {
+      "name": "Hina Raza (template)",
+      "university_slug": "kemu",
+      "university": "King Edward Medical University",
+      "field": "Medicine",
+      "role": "Postgraduate Trainee, Internal Medicine",
+      "company": "Lahore General Hospital (template)",
+      "career_slug": "medicine",
+      "career_path": "Cleared MDCAT in the second attempt, completed MBBS house job rotations, and entered a internal-medicine residency programme.",
+      "advice": "MDCAT pressure is real but survivable - consistent daily revision beats last-month cramming.",
+      "tags": ["medicine", "mdcat", "kemu"],
+      "is_verified": false
+    },
+    {
+      "name": "Usman Tariq (template)",
+      "university_slug": "iba-karachi",
+      "university": "IBA Karachi",
+      "field": "Business Administration",
+      "role": "Assistant Brand Manager",
+      "company": "Consumer Brands Pakistan (template)",
+      "career_slug": "marketing",
+      "career_path": "Started in BBA with a marketing major, led the university marketing society, interned in a brand team, and moved into brand management after graduation.",
+      "advice": "Internships are the fastest way to test whether a career actually fits you - apply early and often.",
+      "tags": ["marketing", "brands", "iba"],
+      "is_verified": false
+    },
+    {
+      "name": "Ayesha Malik (template)",
+      "university_slug": "fast-nuces",
+      "university": "FAST-NUCES",
+      "field": "Computer Science",
+      "role": "Data Analyst",
+      "company": "Retail Analytics PK (template)",
+      "career_slug": "data-science",
+      "career_path": "Learned SQL and Python alongside the degree, completed Kaggle projects in the third year, and started as an analyst before moving toward data science work.",
+      "advice": "Public projects on Kaggle or GitHub give you a portfolio before your first job - start one this month.",
+      "tags": ["data", "sql", "fast"],
+      "is_verified": false
+    },
+    {
+      "name": "Zainab Ali (template)",
+      "university_slug": "punjab",
+      "university": "University of the Punjab",
+      "field": "Pharmacy",
+      "role": "Hospital Pharmacist",
+      "company": "City Hospital Lahore (template)",
+      "career_slug": "pharmacy",
+      "career_path": "Completed Pharm-D with hospital rotations in the final years, passed the pharmacy council registration, and joined a hospital pharmacy team.",
+      "advice": "Use your rotation placements to try different pharmacy settings - hospital, retail and industry are very different careers.",
+      "tags": ["pharmacy", "hospital", "pu"],
+      "is_verified": false
+    }
+  ]
+}

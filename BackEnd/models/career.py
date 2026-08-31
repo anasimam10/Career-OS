@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from datetime import datetime
 
-from sqlalchemy import Integer, String, DateTime
+from sqlalchemy import Boolean, DateTime, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column
 
 from models.base import Base
@@ -24,4 +24,6 @@ class Career(Base):
     pk_opportunities: Mapped[str | None] = mapped_column(String, nullable=True)  # JSON array
     top_pk_universities: Mapped[str | None] = mapped_column(String, nullable=True)  # JSON array
     risks: Mapped[str | None] = mapped_column(String, nullable=True)  # JSON array
+    category: Mapped[str | None] = mapped_column(String, nullable=True)  # e.g. Engineering, Business
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     last_updated: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)

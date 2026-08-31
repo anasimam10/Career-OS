@@ -12,6 +12,8 @@ from sqlalchemy.pool import StaticPool
 from models.base import Base
 from database import get_db
 from main import app
+from cache import cache
+from retrieval.fts import ensure_fts
 
 # In-memory SQLite for tests
 TEST_DB_URL = "sqlite:///:memory:"
@@ -44,6 +46,12 @@ def db_session():
     import models  # noqa: F401
 
     Base.metadata.create_all(bind=engine)
+    # FTS tables + triggers are raw-SQL objects: (re)create and rebuild them
+    # against the freshly recreated content tables so each test starts with
+    # a consistent, empty full-text index.
+    ensure_fts(engine)
+    # Retrieval caches must never leak results between tests.
+    cache.clear()
     session = TestingSessionLocal()
     try:
         yield session

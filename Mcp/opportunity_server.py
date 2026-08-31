@@ -1,9 +1,12 @@
 """
-Pakistan Opportunities & Sports MCP server (Phase 5, Server 2 of 2).
+Pakistan Opportunities, Sports, Alumni & Learning MCP server (Phase 5,
+Server 2 of 2).
 
-Six read-only tools exposing the project's SQLite opportunity data over
-the MCP protocol (SSE transport, mounted at /mcp/opportunity in
-BackEnd/main.py).
+Eight read-only tools exposing the project's SQLite data over the MCP
+protocol (SSE transport, mounted at /mcp/opportunity in BackEnd/main.py):
+opportunity search/matching, sports search, alumni journeys, and learning
+resources. The alumni and learning tools (master §16) reuse the Phase 2
+retrieval layer — no duplicate query logic.
 
 Data-trust rule (spec §4/§10): every value returned by these tools comes
 from the database or is a deterministic derivation of database values.
@@ -38,15 +41,17 @@ from Mcp.records import (
     sports_opportunity_to_dict,
 )
 from models.opportunity import Opportunity, SportsOpportunity
+from retrieval import alumni_retrieval, learning_retrieval, visibility
 
 opportunity_server = MCPServer(
     name="pakistan_opportunity",
     instructions=(
         "Pakistan Opportunities & Sports server. Read-only search over the "
         "A&H Careers verified database: internships, jobs, scholarships, "
-        "sports tournaments, trials, and university sports programmes. "
-        "All data comes from the project database — never external sources. "
-        "When no records match, say so plainly; never invent opportunities."
+        "sports tournaments, trials, university sports programmes, alumni "
+        "career journeys, and learning resources. All data comes from the "
+        "project database — never external sources. When no records match, "
+        "say so plainly; never invent opportunities."
     ),
 )
 
@@ -104,14 +109,16 @@ def _search_opportunities(
     field: str = "",
     experience_level: str = "",
 ) -> list[Opportunity]:
-    """Shared deterministic search: active records of a type, city/skill filtered."""
+    """Shared deterministic search: student-visible records of a type, city/skill filtered.
+
+    Student-facing trust filters (master §11/§22): VALIDATED/VERIFIED,
+    active, and non-expired records only.
+    """
     session = get_session()
     try:
-        rows = (
-            session.query(Opportunity)
-            .filter(Opportunity.is_active.is_(True), Opportunity.type == opp_type)
-            .all()
-        )
+        rows = visibility.apply_opportunity_visibility(
+            session.query(Opportunity).filter(Opportunity.type == opp_type)
+        ).all()
     finally:
         session.close()
 
@@ -143,15 +150,23 @@ def _search_opportunities(
     return sorted(rows, key=deadline_sort_key)
 
 
-def _wrap_results(records: list[dict], **extra) -> dict:
+def _wrap_results(
+    records: list[dict],
+    message: str = NO_RESULTS_MESSAGE,
+    **extra,
+) -> dict:
     """Build a safe search result; empty results carry an explicit message."""
     result = {"count": len(records), **extra}
     if records:
         result["results"] = records
     else:
         result["results"] = []
-        result["message"] = NO_RESULTS_MESSAGE
+        result["message"] = message
     return result
+
+
+NO_ALUMNI_MESSAGE = "No matching alumni journeys found in our database right now."
+NO_RESOURCES_MESSAGE = "No matching learning resources found in our database right now."
 
 
 # ---------------------------------------------------------------------------
@@ -211,7 +226,7 @@ def match_opportunity(student_profile: dict, opportunity_id: int) -> dict:
     session = get_session()
     try:
         opportunity = session.get(Opportunity, opportunity_id)
-        if opportunity is None or not opportunity.is_active:
+        if opportunity is None or not visibility.is_opportunity_visible(opportunity):
             return {
                 "error": "not_found",
                 "message": (
@@ -284,14 +299,11 @@ def search_sports_opportunities(sport: str, city: str = "") -> dict:
 
     session = get_session()
     try:
-        rows = (
-            session.query(SportsOpportunity)
-            .filter(
-                SportsOpportunity.is_active.is_(True),
-                SportsOpportunity.sport.ilike(sport_clean),
+        rows = visibility.apply_sports_visibility(
+            session.query(SportsOpportunity).filter(
+                SportsOpportunity.sport.ilike(sport_clean)
             )
-            .all()
-        )
+        ).all()
     finally:
         session.close()
 
@@ -316,14 +328,11 @@ def search_sports_scholarships(sport: str, level: str = "") -> dict:
 
     session = get_session()
     try:
-        rows = (
-            session.query(SportsOpportunity)
-            .filter(
-                SportsOpportunity.is_active.is_(True),
-                SportsOpportunity.sport.ilike(sport_clean),
+        rows = visibility.apply_sports_visibility(
+            session.query(SportsOpportunity).filter(
+                SportsOpportunity.sport.ilike(sport_clean)
             )
-            .all()
-        )
+        ).all()
     finally:
         session.close()
 
@@ -354,14 +363,11 @@ def search_university_sports(sport: str, city: str = "") -> dict:
 
     session = get_session()
     try:
-        rows = (
-            session.query(SportsOpportunity)
-            .filter(
-                SportsOpportunity.is_active.is_(True),
-                SportsOpportunity.sport.ilike(sport_clean),
+        rows = visibility.apply_sports_visibility(
+            session.query(SportsOpportunity).filter(
+                SportsOpportunity.sport.ilike(sport_clean)
             )
-            .all()
-        )
+        ).all()
     finally:
         session.close()
 
@@ -374,4 +380,68 @@ def search_university_sports(sport: str, city: str = "") -> dict:
         [sports_opportunity_to_dict(s) for s in programmes],
         sport=sport_clean,
         city=city_clean or None,
+    )
+
+
+@opportunity_server.tool()
+def find_alumni(
+    field: str, career_id: int | None = None, university_id: int | None = None
+) -> dict:
+    """Find alumni career journeys in a field, optionally narrowed by career or university id (verified journeys first)."""
+    field_clean = (field or "").strip()
+    if not field_clean:
+        return _invalid_input("field must be a non-empty string.")
+    if career_id is not None and (not isinstance(career_id, int) or career_id <= 0):
+        return _invalid_input("career_id must be a positive integer.")
+    if university_id is not None and (
+        not isinstance(university_id, int) or university_id <= 0
+    ):
+        return _invalid_input("university_id must be a positive integer.")
+
+    # Reuses the retrieval layer (master §16: no duplicate query logic).
+    # Verified journeys are ordered first; each record carries is_verified
+    # so unverified (community/template) journeys are labeled honestly.
+    session = get_session()
+    try:
+        records = alumni_retrieval.find_alumni(
+            session,
+            field=field_clean,
+            career_id=career_id,
+            university_id=university_id,
+        )
+    finally:
+        session.close()
+
+    return _wrap_results(
+        records,
+        message=NO_ALUMNI_MESSAGE,
+        field=field_clean,
+        career_id=career_id,
+        university_id=university_id,
+    )
+
+
+@opportunity_server.tool()
+def get_learning_resources(skill: str, level: str = "") -> dict:
+    """Find verified learning resources for a skill, optionally filtered by level (beginner/intermediate/advanced)."""
+    skill_clean = (skill or "").strip()
+    if not skill_clean:
+        return _invalid_input("skill must be a non-empty string.")
+    level_clean = (level or "").strip()
+
+    # Reuses the retrieval layer (master §16): VALIDATED/VERIFIED + active
+    # records only; records with a NULL level match every level filter.
+    session = get_session()
+    try:
+        records = learning_retrieval.get_resources_for_skill(
+            session, skill_clean, level=level_clean or None
+        )
+    finally:
+        session.close()
+
+    return _wrap_results(
+        records,
+        message=NO_RESOURCES_MESSAGE,
+        skill=skill_clean,
+        level=level_clean or None,
     )

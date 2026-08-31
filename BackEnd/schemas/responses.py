@@ -17,6 +17,7 @@ from schemas.shared import (
     CareerTrialPlan,
     OpportunityMatch,
     SportsOpportunityMatch,
+    AlumniCard,
 )
 
 
@@ -157,3 +158,96 @@ class SportsMatchResponse(BaseModel):
     summary: Optional[str] = None
     note: Optional[str] = None
     message: Optional[str] = None
+
+
+# ---------------------------------------------------------------------------
+# Universities / Programs (master §17)
+# ---------------------------------------------------------------------------
+
+
+class UniversitySummary(BaseModel):
+    """One verified university (GET /universities)."""
+
+    id: int
+    name: str
+    short_name: Optional[str] = None
+    slug: str
+    city: Optional[str] = None
+    province: Optional[str] = None
+    type: Optional[str] = None  # PUBLIC / PRIVATE
+    hec_recognized: Optional[bool] = None  # NULL = unknown, never guessed
+    hec_category: Optional[str] = None
+    website_url: Optional[str] = None
+    admissions_url: Optional[str] = None
+
+
+class UniversityListResponse(BaseModel):
+    """GET /universities — master §17 envelope."""
+
+    universities: list[UniversitySummary]
+    total: int
+
+
+class ProgramSummary(BaseModel):
+    """One verified program (GET /universities/{id}/programs)."""
+
+    id: int
+    university_id: int
+    name: str
+    degree_type: Optional[str] = None
+    field: Optional[str] = None
+    duration_years: Optional[float] = None
+    annual_fee_pkr: Optional[int] = None  # verified only; NULL = unknown
+    admission_link: Optional[str] = None
+    career_ids: list[int] = []
+
+
+class ProgramListResponse(BaseModel):
+    """GET /universities/{id}/programs — master §17 envelope."""
+
+    programs: list[ProgramSummary]
+
+
+# ---------------------------------------------------------------------------
+# Alumni (master §17/§18/§24)
+# ---------------------------------------------------------------------------
+
+
+class AlumniDetail(AlumniCard):
+    """GET /alumni/{id} — the journey card plus provenance columns."""
+
+    university_id: Optional[int] = None
+    career_id: Optional[int] = None
+    source_url: Optional[str] = None
+
+
+class AlumniListResponse(BaseModel):
+    """GET /alumni — master §17 envelope (verified journeys first)."""
+
+    alumni: list[AlumniCard]
+
+
+# ---------------------------------------------------------------------------
+# Learning resources (master §17/§25)
+# ---------------------------------------------------------------------------
+
+
+class LearningResourceOut(BaseModel):
+    """One verified learning resource (GET /learning)."""
+
+    id: int
+    skill_name: Optional[str] = None
+    title: str
+    type: Optional[str] = None  # course/tutorial/video/project/book/other
+    provider: Optional[str] = None
+    url: str
+    language: Optional[str] = None
+    level: Optional[str] = None  # beginner/intermediate/advanced
+    is_free: Optional[bool] = None  # verified only; NULL = unknown
+    duration_hours: Optional[float] = None  # verified only; NULL = unknown
+
+
+class LearningResourceListResponse(BaseModel):
+    """GET /learning — master §17 envelope."""
+
+    resources: list[LearningResourceOut]

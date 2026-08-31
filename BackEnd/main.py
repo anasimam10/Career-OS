@@ -20,14 +20,18 @@ from fastapi.responses import JSONResponse
 
 from config import REQUIRED_QWEN_MODELS, settings
 from database import init_db
+from routers.admin import router as admin_router
+from routers.alumni import router as alumni_router
 from routers.careers import router as careers_router
 from routers.coach import router as coach_router
 from routers.health import router as health_router
 from routers.job_readiness import router as job_readiness_router
 from routers.journey import router as journey_router
+from routers.learning import router as learning_router
 from routers.onboarding import router as onboarding_router
 from routers.opportunities import router as opportunities_router
 from routers.sports import router as sports_router
+from routers.universities import router as universities_router
 from services.ai_service import _model_chain  # single source of chain resolution
 
 # --- MCP servers (Phase 5) ---------------------------------------------
@@ -85,6 +89,11 @@ app.include_router(opportunities_router, prefix="/api/v1")
 app.include_router(sports_router, prefix="/api/v1")
 app.include_router(coach_router, prefix="/api/v1")
 app.include_router(job_readiness_router, prefix="/api/v1")
+app.include_router(universities_router, prefix="/api/v1")
+app.include_router(alumni_router, prefix="/api/v1")
+app.include_router(learning_router, prefix="/api/v1")
+# Admin routes stay out of the public Swagger UI (include_in_schema=False).
+app.include_router(admin_router, prefix="/api/v1")
 
 # ---------------------------------------------------------------------------
 # MCP SSE transports (Phase 5)

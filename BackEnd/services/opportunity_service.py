@@ -33,6 +33,7 @@ from sqlalchemy.orm import Session
 from models.opportunity import Opportunity, SportsOpportunity, StudentOpportunityMatch
 from models.student import Student
 from repositories.student_repo import StudentRepository
+from retrieval import visibility
 from schemas.requests import OpportunityMatchRequest, SportsMatchRequest
 from schemas.responses import (
     OpportunityMatchResponse,
@@ -91,8 +92,13 @@ def list_opportunities(
     field: Optional[str] = None,
     skills: Optional[list[str]] = None,
 ) -> list[OpportunityOut]:
-    """Active opportunity records, filtered per architecture §8 (DB only)."""
-    query = db.query(Opportunity).filter(Opportunity.is_active.is_(True))
+    """Active opportunity records, filtered per architecture §8 (DB only).
+
+    Student-facing trust filters (master §11/§22) are applied through the
+    shared retrieval visibility helpers: only VALIDATED/VERIFIED, active,
+    non-expired records are ever listed.
+    """
+    query = visibility.apply_opportunity_visibility(db.query(Opportunity))
     if opp_type:
         query = query.filter(Opportunity.type == opp_type)
     rows = query.all()
@@ -130,7 +136,7 @@ def list_sports(
     sports_type: Optional[str] = None,
 ) -> list[SportsOpportunityOut]:
     """Active sports opportunity records, filtered per architecture §8 (DB only)."""
-    query = db.query(SportsOpportunity).filter(SportsOpportunity.is_active.is_(True))
+    query = visibility.apply_sports_visibility(db.query(SportsOpportunity))
     if sport:
         query = query.filter(SportsOpportunity.sport.ilike(sport.strip()))
     if sports_type:

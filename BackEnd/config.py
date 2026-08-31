@@ -46,6 +46,12 @@ class Settings:
     CORS_ORIGINS: list[str] = os.getenv("CORS_ORIGINS", "http://localhost:3000").split(",")
     LOG_LEVEL: str = os.getenv("LOG_LEVEL", "INFO")
 
+    # --- Admin / ingestion (architecture_master §12/§17) ---
+    # Bearer token for /api/v1/admin/* endpoints. Empty default is FAIL-CLOSED:
+    # when unset, every admin request is rejected with 401. Never hardcode a
+    # real value here — set it in BackEnd/.env (gitignored).
+    ADMIN_TOKEN: str = os.getenv("ADMIN_TOKEN", "")
+
 
 # Mandated deployment chain (four-model fallback, 2026-08-30). Application
 # startup validates that every model below is present in the resolved

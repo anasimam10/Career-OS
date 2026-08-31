@@ -31,6 +31,7 @@ from prompts.trial_plan import (
 )
 from repositories.career_repo import CareerRepository
 from repositories.student_repo import StudentRepository
+from retrieval import career_retrieval
 from schemas.responses import CareerDetail, CareerListItem
 from schemas.shared import CareerRealityResponse, CareerTrialPlan
 from services.ai_service import get_ai_service
@@ -63,17 +64,45 @@ class CareerNotFoundError(Exception):
 # ---------------------------------------------------------------------------
 
 
-def get_career_list(db: Session) -> list[CareerListItem]:
-    """All careers in the database, for the Career Explorer UI."""
+def get_career_list(
+    db: Session,
+    *,
+    search: str = "",
+    field: Optional[str] = None,
+) -> list[CareerListItem]:
+    """All active careers for the Career Explorer UI.
+
+    Optional ``search`` (FTS5 over name/field/category, LIKE fallback) and
+    ``field`` filters narrow the list (master §17). Both params are
+    additive: when neither is given the legacy unfiltered listing —
+    unchanged for the existing frontend — is returned.
+    """
     repo = CareerRepository(db)
+    search_clean = (search or "").strip()
+    field_clean = (field or "").strip()
+    if not search_clean and not field_clean:
+        # Legacy listing path: computed fresh exactly as before (uncached).
+        return [
+            CareerListItem(
+                slug=career.slug,
+                name=career.name,
+                field=career.field,
+                demand_level=career.demand_level,
+            )
+            for career in repo.get_all_careers()
+        ]
+    # Filtered search path: retrieval layer returns cached plain dicts.
+    careers = career_retrieval.search_careers(
+        db, query=search_clean, field=field_clean or None, limit=50
+    )
     return [
         CareerListItem(
-            slug=career.slug,
-            name=career.name,
-            field=career.field,
-            demand_level=career.demand_level,
+            slug=career["slug"],
+            name=career["name"],
+            field=career["field"],
+            demand_level=career["demand_level"],
         )
-        for career in repo.get_all_careers()
+        for career in careers
     ]
 
 

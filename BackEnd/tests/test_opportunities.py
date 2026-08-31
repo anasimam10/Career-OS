@@ -53,6 +53,17 @@ from Mcp import db_access  # noqa: E402
 from services import mcp_client, mcp_search_service  # noqa: E402
 
 
+def soon(days: int) -> date:
+    """A deadline ``days`` from today.
+
+    Fixture deadlines must stay relative to the current date: the
+    freshness rule (master §22) hides records whose deadline has passed,
+    so hard-coded dates would silently flip these fixtures to expired.
+    Relative offsets preserve the ordering the assertions rely on.
+    """
+    return date.today() + timedelta(days=days)
+
+
 # ---------------------------------------------------------------------------
 # Mock helpers (same spirit as tests/test_mcp.py)
 # ---------------------------------------------------------------------------
@@ -152,6 +163,8 @@ def opp_db(db_session):
     """
     fresh = date.today() - timedelta(days=5)
     stale = date.today() - timedelta(days=400)
+    # Long-past deadline for the deliberately expired examples.
+    past = date.today() - timedelta(days=200)
 
     _add(
         db_session,
@@ -180,11 +193,12 @@ def opp_db(db_session):
             title="Python Developer Intern",
             organization="TechBridge Solutions (template)",
             location="Karachi",
-            deadline=date(2026, 10, 15),
+            deadline=soon(50),
             required_skills=json.dumps(["Python", "Git"]),
             description="Summer internship for beginner Python developers.",
             source_url="https://example.com/internships/techbridge-python",
             last_verified=fresh,
+            verification_status="VALIDATED",
             is_active=True,
         ),
     )
@@ -195,11 +209,12 @@ def opp_db(db_session):
             title="Software Engineering Intern",
             organization="KarachiSoft Labs (template)",
             location="Karachi",
-            deadline=date(2026, 9, 30),
+            deadline=soon(30),
             required_skills=json.dumps(["Python", "Data Structures", "Git"]),
             description="Six-week engineering internship.",
             source_url="https://example.com/internships/karachisoft-swe",
             last_verified=fresh,
+            verification_status="VALIDATED",
             is_active=True,
         ),
     )
@@ -210,11 +225,12 @@ def opp_db(db_session):
             title="Data Analytics Intern",
             organization="Insight Analytics PK (template)",
             location="Lahore",
-            deadline=date(2026, 11, 1),
+            deadline=soon(70),
             required_skills=json.dumps(["SQL", "Python"]),
             description="Internship supporting the analytics team.",
             source_url="https://example.com/internships/insight-analytics",
             last_verified=fresh,
+            verification_status="VALIDATED",
             is_active=True,
         ),
     )
@@ -225,11 +241,12 @@ def opp_db(db_session):
             title="Expired Internship (Inactive Example)",
             organization="Old Internships Co. (template)",
             location="Karachi",
-            deadline=date(2026, 1, 15),
+            deadline=past,
             required_skills=json.dumps(["Communication"]),
             description="Inactive record that must never appear in results.",
             source_url="https://example.com/internships/old",
             last_verified=stale,
+            verification_status="VALIDATED",
             is_active=False,
         ),
     )
@@ -240,11 +257,12 @@ def opp_db(db_session):
             title="Legacy Marketing Intern",
             organization="Old Campaigns Co. (template)",
             location="Karachi",
-            deadline=date(2026, 1, 20),
+            deadline=soon(10),
             required_skills=json.dumps(["Communication"]),
             description="Active record with a stale last_verified date.",
             source_url="https://example.com/internships/legacy-marketing",
             last_verified=stale,
+            verification_status="VALIDATED",
             is_active=True,
         ),
     )
@@ -255,11 +273,12 @@ def opp_db(db_session):
             title="Junior Software Developer",
             organization="PakDev Studio (template)",
             location="Karachi",
-            deadline=date(2026, 10, 1),
+            deadline=soon(40),
             required_skills=json.dumps(["Python", "Django", "Git"]),
             description="Entry-level developer role for fresh graduates.",
             source_url="https://example.com/jobs/pakdev-junior-dev",
             last_verified=fresh,
+            verification_status="VALIDATED",
             is_active=True,
         ),
     )
@@ -270,11 +289,12 @@ def opp_db(db_session):
             title="Merit Scholarship for Computer Science",
             organization="EduFuture Foundation (template)",
             location="Nationwide",
-            deadline=date(2026, 12, 1),
+            deadline=soon(90),
             required_skills=json.dumps([]),
             description="Tuition support scholarship for high-scoring CS students.",
             source_url="https://example.com/scholarships/edufuture-cs",
             last_verified=fresh,
+            verification_status="VALIDATED",
             is_active=True,
         ),
     )
@@ -288,13 +308,14 @@ def opp_db(db_session):
             title="Karachi Open Badminton Trials",
             organization="Karachi Badminton Association (template)",
             location="Karachi",
-            deadline=date(2026, 9, 20),
+            deadline=soon(25),
             eligibility=json.dumps(
                 {"age_min": 14, "age_max": 22, "level": "intermediate"}
             ),
             description="Open trials for the Karachi district youth squad.",
             source_url="https://example.com/sports/karachi-badminton-trials",
             last_verified=fresh,
+            verification_status="VALIDATED",
             is_active=True,
         ),
     )
@@ -306,13 +327,14 @@ def opp_db(db_session):
             title="National Badminton Talent Scholarship",
             organization="Pakistan Badminton Federation (template)",
             location="Nationwide",
-            deadline=date(2026, 11, 30),
+            deadline=soon(80),
             eligibility=json.dumps(
                 {"age_min": 14, "age_max": 20, "level": "advanced"}
             ),
             description="Training support for nationally ranked junior players.",
             source_url="https://example.com/sports/pbf-talent-scholarship",
             last_verified=fresh,
+            verification_status="VALIDATED",
             is_active=True,
         ),
     )
@@ -324,13 +346,14 @@ def opp_db(db_session):
             title="Lahore Under-19 Cricket Cup",
             organization="Lahore Region Cricket Board (template)",
             location="Lahore",
-            deadline=date(2026, 10, 10),
+            deadline=soon(45),
             eligibility=json.dumps(
                 {"age_min": 15, "age_max": 19, "level": "intermediate"}
             ),
             description="Annual district under-19 tournament.",
             source_url="https://example.com/sports/lahore-u19-cup",
             last_verified=stale,
+            verification_status="VALIDATED",
             is_active=True,
         ),
     )
@@ -342,13 +365,14 @@ def opp_db(db_session):
             title="University Cricket Development Programme",
             organization="University Sports Directorate (template)",
             location="Lahore",
-            deadline=date(2026, 9, 5),
+            deadline=soon(15),
             eligibility=json.dumps(
                 {"enrollment": "university_student", "level": "beginner"}
             ),
             description="Year-round cricket development programme.",
             source_url="https://example.com/sports/university-cricket-programme",
             last_verified=fresh,
+            verification_status="VALIDATED",
             is_active=True,
         ),
     )
@@ -360,11 +384,12 @@ def opp_db(db_session):
             title="Islamabad Badminton League (Inactive Example)",
             organization="Old Sports Club (template)",
             location="Islamabad",
-            deadline=date(2026, 2, 1),
+            deadline=past,
             eligibility=json.dumps({"level": "advanced"}),
             description="Inactive record that must never appear in results.",
             source_url="https://example.com/sports/islamabad-league",
             last_verified=stale,
+            verification_status="VALIDATED",
             is_active=False,
         ),
     )
@@ -382,7 +407,7 @@ def opp_record(**overrides):
         "title": "Python Developer Intern",
         "organization": "TechBridge Solutions (template)",
         "location": "Karachi",
-        "deadline": "2026-10-15",
+        "deadline": soon(50).isoformat(),
         "required_skills": ["Python", "Git"],
         "description": "Summer internship for beginner Python developers.",
         "source_url": "https://example.com/internships/techbridge-python",
@@ -402,7 +427,7 @@ def sports_record(**overrides):
         "title": "Karachi Open Badminton Trials",
         "organization": "Karachi Badminton Association (template)",
         "location": "Karachi",
-        "deadline": "2026-09-20",
+        "deadline": soon(25).isoformat(),
         "eligibility": {"age_min": 14, "age_max": 22, "level": "intermediate"},
         "description": "Open trials for the Karachi district youth squad.",
         "source_url": "https://example.com/sports/karachi-badminton-trials",
@@ -429,7 +454,7 @@ class TestMatchingService:
         assert "2 of 2 required skills" in match.match_reasons[0]
         assert "All 2 required skills" in match.next_action
         assert match.opportunity_id == 1
-        assert match.deadline == date(2026, 10, 15)
+        assert match.deadline == soon(50)
 
     def test_score_opportunity_partial_skill_match(self):
         match = matching_service.score_opportunity(opp_record(), ["Python"])
@@ -502,8 +527,8 @@ class TestMatchingService:
             )
 
         matches = [
-            _match(0.5, date(2026, 10, 15)),
-            _match(0.5, date(2026, 9, 30)),
+            _match(0.5, soon(50)),
+            _match(0.5, soon(30)),
             _match(1.0, None),
         ]
         ranked = matching_service.sort_opportunity_matches(matches)
@@ -612,8 +637,8 @@ class TestListOpportunities:
 
     def test_sorted_by_soonest_deadline(self, opp_db, client):
         items = client.get("/api/v1/opportunities").json()
-        assert items[0]["title"] == "Legacy Marketing Intern"  # 2026-01-20
-        assert items[1]["title"] == "Software Engineering Intern"  # 2026-09-30
+        assert items[0]["title"] == "Legacy Marketing Intern"  # soon(10)
+        assert items[1]["title"] == "Software Engineering Intern"  # soon(30)
 
     def test_type_filter(self, opp_db, client):
         internships = client.get("/api/v1/opportunities", params={"type": "internship"}).json()

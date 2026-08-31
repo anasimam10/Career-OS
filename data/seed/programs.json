@@ -1,0 +1,416 @@
+{
+  "_meta": {
+    "label": "MANUAL-ENTRY MODE D - BASIC VERIFIED PUBLIC FACTS",
+    "note": "Well-known undergraduate programmes at the seeded universities. Degree names/durations are standard public facts (BS/BBA = 4 years, MBBS/Pharm-D = 5 years, BEd = 1.5 years). Annual fees are deliberately NULL - never guessed. career_slugs are resolved to career ids by the seeder; unknown slugs are skipped with a warning.",
+    "verification_mode": "manual_entry_D",
+    "last_verified": "today",
+    "record_count": 45
+  },
+  "programs": [
+    {
+      "university_slug": "nust",
+      "name": "BS Computer Science",
+      "degree_type": "BS",
+      "field": "Computer Science",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "career_slugs": ["software-engineering", "data-science"]
+    },
+    {
+      "university_slug": "nust",
+      "name": "BS Electrical Engineering",
+      "degree_type": "BS",
+      "field": "Electrical Engineering",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "career_slugs": ["electrical-engineering"]
+    },
+    {
+      "university_slug": "nust",
+      "name": "BS Mechanical Engineering",
+      "degree_type": "BS",
+      "field": "Mechanical Engineering",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "career_slugs": ["mechanical-engineering"]
+    },
+    {
+      "university_slug": "nust",
+      "name": "BS Civil Engineering",
+      "degree_type": "BS",
+      "field": "Civil Engineering",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "career_slugs": ["civil-engineering"]
+    },
+    {
+      "university_slug": "fast-nuces",
+      "name": "BS Computer Science",
+      "degree_type": "BS",
+      "field": "Computer Science",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "career_slugs": ["software-engineering", "mobile-development"]
+    },
+    {
+      "university_slug": "fast-nuces",
+      "name": "BS Data Science",
+      "degree_type": "BS",
+      "field": "Data Science",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "career_slugs": ["data-science"]
+    },
+    {
+      "university_slug": "fast-nuces",
+      "name": "BS Cyber Security",
+      "degree_type": "BS",
+      "field": "Cyber Security",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "career_slugs": ["cybersecurity"]
+    },
+    {
+      "university_slug": "lums",
+      "name": "BSc Computer Science",
+      "degree_type": "BSc",
+      "field": "Computer Science",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "career_slugs": ["software-engineering", "data-science"]
+    },
+    {
+      "university_slug": "lums",
+      "name": "BBA",
+      "degree_type": "BBA",
+      "field": "Business Administration",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "career_slugs": ["business-administration", "marketing"]
+    },
+    {
+      "university_slug": "lums",
+      "name": "BSc Accounting and Finance",
+      "degree_type": "BSc",
+      "field": "Accounting and Finance",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "career_slugs": ["accounting", "finance-banking"]
+    },
+    {
+      "university_slug": "comsats",
+      "name": "BS Computer Science",
+      "degree_type": "BS",
+      "field": "Computer Science",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "career_slugs": ["software-engineering"]
+    },
+    {
+      "university_slug": "comsats",
+      "name": "BS Electrical Engineering",
+      "degree_type": "BS",
+      "field": "Electrical Engineering",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "career_slugs": ["electrical-engineering"]
+    },
+    {
+      "university_slug": "iba-karachi",
+      "name": "BS Computer Science",
+      "degree_type": "BS",
+      "field": "Computer Science",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "career_slugs": ["software-engineering"]
+    },
+    {
+      "university_slug": "iba-karachi",
+      "name": "BBA",
+      "degree_type": "BBA",
+      "field": "Business Administration",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "career_slugs": ["business-administration", "finance-banking"]
+    },
+    {
+      "university_slug": "iba-karachi",
+      "name": "BS Accounting and Finance",
+      "degree_type": "BS",
+      "field": "Accounting and Finance",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "career_slugs": ["accounting"]
+    },
+    {
+      "university_slug": "uet-lahore",
+      "name": "BS Computer Science",
+      "degree_type": "BS",
+      "field": "Computer Science",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "career_slugs": ["software-engineering"]
+    },
+    {
+      "university_slug": "uet-lahore",
+      "name": "BSc Electrical Engineering",
+      "degree_type": "BSc",
+      "field": "Electrical Engineering",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "career_slugs": ["electrical-engineering"]
+    },
+    {
+      "university_slug": "uet-lahore",
+      "name": "BSc Civil Engineering",
+      "degree_type": "BSc",
+      "field": "Civil Engineering",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "career_slugs": ["civil-engineering"]
+    },
+    {
+      "university_slug": "uet-lahore",
+      "name": "BSc Mechanical Engineering",
+      "degree_type": "BSc",
+      "field": "Mechanical Engineering",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "career_slugs": ["mechanical-engineering"]
+    },
+    {
+      "university_slug": "ned",
+      "name": "BE Electrical Engineering",
+      "degree_type": "BE",
+      "field": "Electrical Engineering",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "career_slugs": ["electrical-engineering"]
+    },
+    {
+      "university_slug": "ned",
+      "name": "BE Civil Engineering",
+      "degree_type": "BE",
+      "field": "Civil Engineering",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "career_slugs": ["civil-engineering"]
+    },
+    {
+      "university_slug": "ned",
+      "name": "BE Mechanical Engineering",
+      "degree_type": "BE",
+      "field": "Mechanical Engineering",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "career_slugs": ["mechanical-engineering"]
+    },
+    {
+      "university_slug": "punjab",
+      "name": "BS Information Technology",
+      "degree_type": "BS",
+      "field": "Information Technology",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "career_slugs": ["software-engineering"]
+    },
+    {
+      "university_slug": "punjab",
+      "name": "Pharm-D",
+      "degree_type": "Pharm-D",
+      "field": "Pharmacy",
+      "duration_years": 5,
+      "annual_fee_pkr": null,
+      "career_slugs": ["pharmacy"]
+    },
+    {
+      "university_slug": "gcu-lahore",
+      "name": "BSc Computer Science",
+      "degree_type": "BSc",
+      "field": "Computer Science",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "career_slugs": ["software-engineering"]
+    },
+    {
+      "university_slug": "gcu-lahore",
+      "name": "BSc Electrical Engineering",
+      "degree_type": "BSc",
+      "field": "Electrical Engineering",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "career_slugs": ["electrical-engineering"]
+    },
+    {
+      "university_slug": "aku",
+      "name": "MBBS",
+      "degree_type": "MBBS",
+      "field": "Medicine",
+      "duration_years": 5,
+      "annual_fee_pkr": null,
+      "career_slugs": ["medicine"]
+    },
+    {
+      "university_slug": "kemu",
+      "name": "MBBS",
+      "degree_type": "MBBS",
+      "field": "Medicine",
+      "duration_years": 5,
+      "annual_fee_pkr": null,
+      "career_slugs": ["medicine"]
+    },
+    {
+      "university_slug": "duhs",
+      "name": "MBBS",
+      "degree_type": "MBBS",
+      "field": "Medicine",
+      "duration_years": 5,
+      "annual_fee_pkr": null,
+      "career_slugs": ["medicine"]
+    },
+    {
+      "university_slug": "duhs",
+      "name": "Pharm-D",
+      "degree_type": "Pharm-D",
+      "field": "Pharmacy",
+      "duration_years": 5,
+      "annual_fee_pkr": null,
+      "career_slugs": ["pharmacy"]
+    },
+    {
+      "university_slug": "habib",
+      "name": "BS Computer Science",
+      "degree_type": "BS",
+      "field": "Computer Science",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "career_slugs": ["software-engineering"]
+    },
+    {
+      "university_slug": "habib",
+      "name": "BS Communication and Design",
+      "degree_type": "BS",
+      "field": "Communication and Design",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "career_slugs": ["ui-ux-design", "marketing"]
+    },
+    {
+      "university_slug": "iqra",
+      "name": "BS Computer Science",
+      "degree_type": "BS",
+      "field": "Computer Science",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "career_slugs": ["software-engineering", "mobile-development"]
+    },
+    {
+      "university_slug": "szabist",
+      "name": "BBA",
+      "degree_type": "BBA",
+      "field": "Business Administration",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "career_slugs": ["business-administration", "marketing"]
+    },
+    {
+      "university_slug": "szabist",
+      "name": "BS Computer Science",
+      "degree_type": "BS",
+      "field": "Computer Science",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "career_slugs": ["software-engineering"]
+    },
+    {
+      "university_slug": "bzu",
+      "name": "BS Computer Science",
+      "degree_type": "BS",
+      "field": "Computer Science",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "career_slugs": ["software-engineering"]
+    },
+    {
+      "university_slug": "giki",
+      "name": "BS Computer Science",
+      "degree_type": "BS",
+      "field": "Computer Science",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "career_slugs": ["software-engineering"]
+    },
+    {
+      "university_slug": "giki",
+      "name": "BS Electrical Engineering",
+      "degree_type": "BS",
+      "field": "Electrical Engineering",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "career_slugs": ["electrical-engineering"]
+    },
+    {
+      "university_slug": "giki",
+      "name": "BS Mechanical Engineering",
+      "degree_type": "BS",
+      "field": "Mechanical Engineering",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "career_slugs": ["mechanical-engineering"]
+    },
+    {
+      "university_slug": "pieas",
+      "name": "BS Electrical Engineering",
+      "degree_type": "BS",
+      "field": "Electrical Engineering",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "career_slugs": ["electrical-engineering"]
+    },
+    {
+      "university_slug": "muet",
+      "name": "BE Civil Engineering",
+      "degree_type": "BE",
+      "field": "Civil Engineering",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "career_slugs": ["civil-engineering"]
+    },
+    {
+      "university_slug": "muet",
+      "name": "BE Mechanical Engineering",
+      "degree_type": "BE",
+      "field": "Mechanical Engineering",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "career_slugs": ["mechanical-engineering"]
+    },
+    {
+      "university_slug": "bahria",
+      "name": "BS Computer Science",
+      "degree_type": "BS",
+      "field": "Computer Science",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "career_slugs": ["software-engineering", "cybersecurity"]
+    },
+    {
+      "university_slug": "peshawar",
+      "name": "BS Computer Science",
+      "degree_type": "BS",
+      "field": "Computer Science",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "career_slugs": ["software-engineering"]
+    },
+    {
+      "university_slug": "aiou",
+      "name": "BEd",
+      "degree_type": "BEd",
+      "field": "Education",
+      "duration_years": 1.5,
+      "annual_fee_pkr": null,
+      "career_slugs": ["teaching"]
+    }
+  ]
+}

@@ -37,6 +37,7 @@ from Mcp.records import (
 from models.career import Career
 from models.opportunity import Opportunity
 from repositories.career_repo import CareerRepository
+from retrieval import visibility
 from services.career_service import CAREER_DATA_SOURCE_LABEL, UNKNOWN_METRIC
 
 career_server = MCPServer(
@@ -207,12 +208,11 @@ def get_university_opportunities(field: str, city: str) -> dict:
 
     session = get_session()
     try:
-        # University programme records (type "education") in the city or nationwide
-        programmes = (
-            session.query(Opportunity)
-            .filter(Opportunity.is_active.is_(True), Opportunity.type == "education")
-            .all()
-        )
+        # University programme records (type "education") in the city or nationwide.
+        # Student-facing trust filters (master §11/§22) via the shared helpers.
+        programmes = visibility.apply_opportunity_visibility(
+            session.query(Opportunity).filter(Opportunity.type == "education")
+        ).all()
         programmes = [o for o in programmes if city_matches(o.location, city_clean)]
         programmes = sorted(programmes, key=deadline_sort_key)
         university_programmes = [opportunity_to_dict(o) for o in programmes]
@@ -258,11 +258,10 @@ def get_scholarships(criteria: str = "") -> dict:
 
     session = get_session()
     try:
-        rows = (
-            session.query(Opportunity)
-            .filter(Opportunity.is_active.is_(True), Opportunity.type == "scholarship")
-            .all()
-        )
+        # Student-facing trust filters (master §11/§22) via the shared helpers.
+        rows = visibility.apply_opportunity_visibility(
+            session.query(Opportunity).filter(Opportunity.type == "scholarship")
+        ).all()
         if criteria_clean:
             needle = criteria_clean.lower()
             rows = [

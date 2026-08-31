@@ -1,0 +1,143 @@
+{
+  "_meta": {
+    "label": "MANUAL-ENTRY MODE D - FAMOUS PUBLIC RESOURCES",
+    "note": "Widely known, long-established free learning resources for skills the seeded careers require. is_free is true only where the resource is famously free to complete; null where access is mixed (e.g. Coursera audit vs paid certificate). duration_hours is deliberately NULL - never guessed. All URLs are the official public sites.",
+    "verification_mode": "manual_entry_D",
+    "last_verified": "today",
+    "record_count": 12
+  },
+  "learning_resources": [
+    {
+      "skill_name": "Python",
+      "title": "Python for Everybody",
+      "type": "course",
+      "provider": "Dr. Charles Severance (py4e.com)",
+      "url": "https://www.py4e.com",
+      "language": "English",
+      "level": "beginner",
+      "is_free": true,
+      "duration_hours": null
+    },
+    {
+      "skill_name": "Python",
+      "title": "CS50's Introduction to Programming with Python",
+      "type": "course",
+      "provider": "Harvard University",
+      "url": "https://cs50.harvard.edu/python",
+      "language": "English",
+      "level": "beginner",
+      "is_free": true,
+      "duration_hours": null
+    },
+    {
+      "skill_name": "Data Structures",
+      "title": "CS50's Introduction to Computer Science",
+      "type": "course",
+      "provider": "Harvard University",
+      "url": "https://cs50.harvard.edu/x",
+      "language": "English",
+      "level": "beginner",
+      "is_free": true,
+      "duration_hours": null
+    },
+    {
+      "skill_name": "Algorithms",
+      "title": "Algorithms, Part I",
+      "type": "course",
+      "provider": "Princeton University (Coursera)",
+      "url": "https://www.coursera.org/learn/algorithms-part1",
+      "language": "English",
+      "level": "intermediate",
+      "is_free": null,
+      "duration_hours": null
+    },
+    {
+      "skill_name": "Git",
+      "title": "Pro Git (Book)",
+      "type": "book",
+      "provider": "Scott Chacon and Ben Straub (git-scm.com)",
+      "url": "https://git-scm.com/book",
+      "language": "English",
+      "level": "beginner",
+      "is_free": true,
+      "duration_hours": null
+    },
+    {
+      "skill_name": "SQL",
+      "title": "Introduction to SQL",
+      "type": "course",
+      "provider": "Kaggle Learn",
+      "url": "https://www.kaggle.com/learn/intro-to-sql",
+      "language": "English",
+      "level": "beginner",
+      "is_free": true,
+      "duration_hours": null
+    },
+    {
+      "skill_name": "Data Visualisation",
+      "title": "Data Visualization",
+      "type": "course",
+      "provider": "Kaggle Learn",
+      "url": "https://www.kaggle.com/learn/data-visualization",
+      "language": "English",
+      "level": "beginner",
+      "is_free": true,
+      "duration_hours": null
+    },
+    {
+      "skill_name": "Statistics",
+      "title": "Statistics and Probability",
+      "type": "course",
+      "provider": "Khan Academy",
+      "url": "https://www.khanacademy.org/math/statistics-probability",
+      "language": "English",
+      "level": "beginner",
+      "is_free": true,
+      "duration_hours": null
+    },
+    {
+      "skill_name": "Machine Learning",
+      "title": "Machine Learning Specialization",
+      "type": "course",
+      "provider": "DeepLearning.AI and Stanford Online (Coursera)",
+      "url": "https://www.coursera.org/specializations/machine-learning-introduction",
+      "language": "English",
+      "level": "intermediate",
+      "is_free": null,
+      "duration_hours": null
+    },
+    {
+      "skill_name": "JavaScript",
+      "title": "JavaScript Algorithms and Data Structures",
+      "type": "course",
+      "provider": "freeCodeCamp",
+      "url": "https://www.freecodecamp.org/learn/javascript-algorithms-and-data-structures",
+      "language": "English",
+      "level": "beginner",
+      "is_free": true,
+      "duration_hours": null
+    },
+    {
+      "skill_name": "JavaScript",
+      "title": "The Odin Project - Full Stack JavaScript Path",
+      "type": "course",
+      "provider": "The Odin Project",
+      "url": "https://www.theodinproject.com",
+      "language": "English",
+      "level": "beginner",
+      "is_free": true,
+      "duration_hours": null
+    },
+    {
+      "skill_name": "Python",
+      "title": "Python Track (Practice Exercises)",
+      "type": "practice",
+      "provider": "Exercism",
+      "url": "https://exercism.org/tracks/python",
+      "language": "English",
+      "level": "beginner",
+      "is_free": true,
+      "duration_hours": null
+    }
+  ]
+}

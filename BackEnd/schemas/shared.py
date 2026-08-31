@@ -152,12 +152,19 @@ class JobReadiness(BaseModel):
 
 
 class AlumniCard(BaseModel):
+    """Alumni journey card (§18). Core fields keep the model's column
+    names (university/role/company) per the existing frontend contract;
+    NULL columns serialize as None — journeys are seeded templates.
+    """
+
     id: int
     name: str
-    university: str
-    field: str
-    role: str
-    company: str
-    career_path_summary: str
-    key_advice: str
-    tags: list[str]
+    university: Optional[str] = None
+    field: Optional[str] = None
+    role: Optional[str] = None
+    company: Optional[str] = None
+    career_path_summary: Optional[str] = None
+    key_advice: Optional[str] = None
+    tags: list[str] = []
+    # Additive: unverified (community/template) journeys must be labeled.
+    is_verified: bool = False

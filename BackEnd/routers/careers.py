@@ -15,6 +15,8 @@ Error contract (architecture §10):
 
 from __future__ import annotations
 
+from typing import Optional
+
 from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
@@ -35,9 +37,18 @@ router = APIRouter(tags=["careers"])
 
 
 @router.get("/careers", response_model=list[CareerListItem])
-def list_careers(db: Session = Depends(get_db)) -> list[CareerListItem]:
-    """All available careers for the Career Explorer UI."""
-    return career_service.get_career_list(db)
+def list_careers(
+    search: str = "",
+    field: Optional[str] = None,
+    db: Session = Depends(get_db),
+) -> list[CareerListItem]:
+    """All available careers for the Career Explorer UI.
+
+    Optional additive filters (master §17): ``search`` matches career
+    name/field/category (FTS-backed), ``field`` narrows to one field.
+    Omitting both keeps the legacy unfiltered listing.
+    """
+    return career_service.get_career_list(db, search=search, field=field)
 
 
 @router.get("/careers/{slug}", response_model=CareerDetail)

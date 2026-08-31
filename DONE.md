@@ -1,6 +1,6 @@
 # A&H Career — DONE.md
 
-**Last updated:** 2026-08-30 (Four-model Qwen fallback chain — qwen3.7-plus → qwen3.6-plus → qwen-plus-2025-07-28 → qwen3-vl-235b-a22b-thinking, 311 tests passing)
+**Last updated:** 2026-09-01 (Final master-doc implementation — universities/alumni/learning endpoints, retrieval layer + FTS5 + cache, 8-stage ingestion pipeline + admin API, MCP expanded to 13 tools, controlled starter dataset, 534 tests passing)
 
 ---
 
@@ -156,6 +156,57 @@
 - [x] Full regression: 311 passed, 0 failed, 0 skipped (291 existing + 20 new); frontend lint 0 warnings/errors; build 11 pages
 - [x] Security re-verified: `BackEnd/.env` not tracked by git; 165 source files + 197 `.next` files scanned — zero secret matches; multi-model fallback logs carry model names / operation / error category only
 
+### Master-Doc Schema, Trust Filters & Starter Dataset (Phase 11 — COMPLETED)
+- [x] New models (architecture_master §10): `models/university.py` (University, Campus, Program), `models/learning.py` (LearningResource), `models/source.py` (Source, SourceDocument, IngestionRun, IngestionItem) — 17 models total
+- [x] Additive-only migration in `database.py` (`_migrate_missing_columns()`): PRAGMA check + `ALTER TABLE ADD COLUMN`, idempotent, live `ah_career.db` keeps working; existing rows backfilled `verification_status='VALIDATED'` (opportunities/sports) and `is_active=1` (careers)
+- [x] Additive columns: Opportunity (+verification_status, status, source_id, content_hash, dedup_key, retrieved_at, field, province, is_remote, organization_type, required_education_stage, required_degree_type, required_cgpa, stipend_pkr, eligibility_notes), SportsOpportunity (+verification_status, source_id, content_hash, dedup_key, retrieved_at), Career (+category, is_active), Alumni (+university_id, career_id, source_id, source_url)
+- [x] SQLite FTS5 (master §14) in `retrieval/fts.py`: six external-content virtual tables (careers/opportunities/universities/programs/alumni/learning_resources) kept in sync by INSERT/UPDATE/DELETE triggers + idempotent rebuild at startup; quoted-token MATCH expressions (user input can never break FTS syntax); automatic LIKE fallback when FTS5 is unavailable
+- [x] Student-visibility trust gates (master §11/§22) via shared `retrieval/visibility.py`: `verification_status IN (VALIDATED, VERIFIED)` + `is_active` + non-expired deadline filters applied in opportunity_service listings, MCP opportunity/sports tools + `match_opportunity`, career_service, and the new retrieval layer
+- [x] `routers/careers.py`: additive optional `search` + `field` query params (FTS-backed) — frontend unaffected
+- [x] Test fixtures strengthened in place (`VALIDATED` statuses, dynamic deadlines `today + timedelta`) — 311-baseline test count preserved exactly
+- [x] Controlled starter dataset: `universities.json` (24 real universities, VERIFIED manual-entry mode D), `programs.json` (45, career links resolved at seed time), `learning_resources.json` (12 famous public resources, VERIFIED), `alumni.json` (6 TEMPLATE, is_verified=false), `opportunities.json` expanded to 22 records (future deadlines, fresh last_verified), `sports_opportunities.json` expanded to 8 records — each catalogue keeps one deliberate inactive/expired negative example proving the visibility gates; `data/seed_db.py` extended (insert-only, curated seeds seeded as VALIDATED — ingestion-created records always start CANDIDATE)
+
+### Retrieval Layer + Cache (Phase 12 — COMPLETED)
+- [x] `BackEnd/retrieval/` package (master §14): career/opportunity/university/sports/alumni/learning/student retrieval modules — typed dicts, trust + freshness filters everywhere, bounded result sets; no caller ever sends the whole knowledge base to Qwen
+- [x] `BackEnd/cache.py`: `SimpleCache` with per-entry TTL (master §15), wired into career + university retrieval searches; cleared per test in `conftest.py`
+- [x] `tests/test_retrieval.py` — 51 tests (FTS indexing/search, cache TTL, per-module retrieval + trust gates); 362 total passing
+
+### Universities / Alumni / Learning Endpoints (Phase 13 — COMPLETED)
+- [x] `routers/universities.py`: `GET /universities` (field/city/type/hec_recognized filters, `{universities, total}` envelope) + `GET /universities/{id}/programs` (field/degree_type filters)
+- [x] `routers/alumni.py`: `GET /alumni` (field/career_id/university_id filters, verified-first ordering) + `GET /alumni/{id}` (card + provenance)
+- [x] `routers/learning.py`: `GET /learning` (skill/level/type/is_free filters) — verified-only, NULL means unknown, never "free"
+- [x] Schemas added additively (`schemas/responses.py`): UniversitySummary/List, ProgramSummary/List, AlumniDetail, LearningResourceOut/List; `AlumniCard` extended with Optional fields + is_verified (existing column names kept for the frontend contract)
+- [x] Tests: `test_universities.py` (16) + `test_alumni.py` (12) + `test_learning.py` (12) — 402 total passing
+
+### MCP Expansion — 13 Tools (Phase 14 — COMPLETED)
+- [x] `Mcp/opportunity_server.py`: `find_alumni(field, career_id?, university_id?)` + `get_learning_resources(skill, level?)` added (master §16 → 8 tools on the opportunity server; 13 project-wide), both reusing the Phase 12 retrieval layer — no duplicate query logic
+- [x] `tests/test_mcp.py` extended: `TestAlumniAndLearningTools` (11 tests) + SSE eight-tools listing + alumni tool round-trip (62 tests in file) — 414 total passing
+
+### Ingestion Pipeline + Admin API (Phase 15 — COMPLETED)
+- [x] 8-stage pipeline (master §12) in `BackEnd/ingestion/`:
+  - `dedup_service.py` — text normalization, `type|title|organization` dedup_key, SHA-256 content_hash
+  - `extraction_service.py` — Pattern A via the protected `ai_service` with the extraction-only prompt (`prompts/extraction.py`: "Return null for any field not explicitly stated"); deterministic HTML→text cleanup, 40k-char bound
+  - `ingestion_service.py` — DISCOVER → RETRIEVE (httpx GET, User-Agent, 15s timeout, 512 KiB cap, unchanged-hash skip) → EXTRACT → VALIDATE (title + valid type + parseable deadline) → NORMALIZE → DEDUPLICATE (duplicates associate the source, never create a second record) → PERSIST (`verification_status='CANDIDATE'` — never auto-verified) → INDEX (FTS triggers) + stage 9 manual verification + mode C refresh (stale when `COALESCE(last_verified, retrieved_at) < now - 7 days`) + per-run/per-item status tracking + data-quality counters
+- [x] `routers/admin.py` — 5 endpoints behind a constant-time, FAIL-CLOSED bearer gate (`ADMIN_TOKEN`, empty default rejects everything), hidden from Swagger (`include_in_schema=False`): `POST /admin/ingest/url` (max 50 URLs), `POST /admin/ingest/refresh`, `GET /admin/ingest/runs/{id}`, `GET /admin/data-quality`, `POST /admin/opportunities/{id}/verify`
+- [x] Config: `ADMIN_TOKEN` in `config.py` + `.env` (random value) + `.env.example` (documentation only)
+- [x] Tests: `test_ingestion.py` (42) + `test_deduplication.py` (24) + `test_freshness.py` (16) + `test_security.py` (38 — admin auth incl. fail-closed, Swagger hiding, secret hygiene, ingestion write protection, CORS, log sanitisation) — 534 total passing; Qwen/HTTP fully mocked
+- [x] Live-verified (2026-09-01): 401 without token, 200 with token, admin absent from `/openapi.json`
+
+### Final Regression + Live E2E (Phase 16 — COMPLETED)
+- [x] Full pytest: 534 passed, 0 failed, 0 skipped (311 baseline preserved + 223 new); frontend `npm run lint` (0 warnings/errors) + `npm run build` (11 pages)
+- [x] Security: `BackEnd/.env` untracked + gitignored; workspace secret scans clean; no real tokens anywhere except `.env`
+- [x] Live E2E script `BackEnd/live_e2e.py` (2026-09-01, real app on a free port, real `ah_career.db`): full student journey with REAL Qwen — onboarding NBA → careers → reality check → trial plan → journey (cached NBA, zero AI) → progress (NBA recalc + backend-validated stage transition HIGH_SCHOOL → CAREER_DISCOVERY) → journey refresh → opportunity match + sports match over the real MCP SSE transport → universities → alumni → learning → coach chat → job-readiness
+- [x] Live E2E result: 61/62 checks passed with exactly 9 real Qwen operations (all qwen3.7-plus, attempts=1); the one flagged check was the E2E's own first sports query (cricket-in-Karachi — the seed catalogue honestly has no such records; corrected query cricket-in-Lahore re-verified 3/3 with `data_quality=ai_interpreted`, 2 ranked matches)
+- [x] Real ingestion proof in the same run: `POST /admin/ingest/url` with https://www.python.org/jobs/ → run COMPLETED, item STORED, new record CANDIDATE with linked source + content hash, **hidden from `GET /opportunities` (bare and type=job filtered)**, reported by `GET /admin/data-quality` as candidate_records=1 — students never see unverified data
+
+### Documented Deviations (protected working code wins — master's final rule)
+- [x] Sports opportunities stay in `sports_opportunities` (not unified into `opportunities`); NBA stays in `student_profiles.next_best_action` (no `next_best_actions` table); journey state stays in `students.education_stage` + roadmaps (no `journey_states` table)
+- [x] No `skills`/`career_skills` registry tables — `careers.required_skills` JSON is the source of truth; learning resources use `skill_name` (master's own allowance)
+- [x] No `opportunity_details`/`sports` registry tables; auth endpoints deferred (frontend has no auth UI; demo-student session is the protected contract)
+- [x] No Qwen web_search discovery mode (mode B) — mode A (URL batch), mode C (refresh), mode D (manual entry via seeds) are implemented
+- [x] Ingestion runs execute synchronously within the admin request instead of background tasks (bounded: max 50 URLs, immediately queryable)
+- [x] `data_freshness` keeps the "unverified" label (semantics = master's STALE > 30 days); AlumniCard keeps model column names per the existing frontend contract
+
 ## Not Yet Implemented
 
 ### Backend (Phase 10)
@@ -171,18 +222,20 @@
 ### Qwen Integration
 - [x] Pattern B (MCP tool calls) — DONE (Phase 5)
 - [x] Feature-level prompt: coach — DONE (Phase 8)
+- [x] Feature-level prompt: ingestion extraction — DONE (Phase 15, `prompts/extraction.py`)
 - [x] Real-Qwen smoke test of /career/analyze and /career/trial-plan — DONE (Phase 6)
 - [x] Real-Qwen smoke test of /coach/chat and /job-readiness — DONE (Phase 8)
+- [x] Real-Qwen full-journey live E2E incl. ingestion extraction — DONE (Phase 16, `BackEnd/live_e2e.py`, 9 AI operations)
 
 ### MCP
 - [x] Pakistan Career & Education MCP server — DONE (Phase 5, 5 tools)
-- [x] Pakistan Opportunities & Sports MCP server — DONE (Phase 5, 6 tools)
+- [x] Pakistan Opportunities & Sports MCP server — DONE (Phase 5, 6 tools; +`find_alumni` +`get_learning_resources` in Phase 14 → 8 tools; 13 project-wide)
 
 ### Data
-- [x] Seed JSON files — DONE: careers.json (15), opportunities.json (10), sports_opportunities.json (7) — all clearly labeled TEMPLATE data
-- [ ] Seed files for universities + alumni
-- [ ] Verified Pakistan-specific seed data (replaces template labels) — data phase
-- [x] Database seeding script — DONE for careers + demo student + opportunities + sports (data/seed_db.py)
+- [x] Seed JSON files — DONE: careers.json (15), universities.json (24, VERIFIED manual-entry), programs.json (45), learning_resources.json (12, VERIFIED), alumni.json (6, TEMPLATE), opportunities.json (22), sports_opportunities.json (8) — opportunity/sports/alumni files carry honest TEMPLATE labels
+- [x] Seed files for universities + alumni — DONE (Phase 11)
+- [ ] Verified Pakistan-specific data replacing the remaining TEMPLATE labels (opportunities/sports/alumni) — data phase; universities/programs/learning are manual-entry VERIFIED facts already
+- [x] Database seeding script — DONE for every seed file + demo student (`data/seed_db.py`, insert-only, never overwrites)
 
 ### Frontend Integration (Phase 7 — COMPLETED)
 - [x] `NEXT_PUBLIC_USE_MOCK=false` switched — frontend now calls real FastAPI backend
@@ -201,7 +254,7 @@
 - [x] Backend pytest: 256 passed, 0 failed — zero regressions
 
 ### Infrastructure
-- [ ] Root-level .gitignore (BackEnd/.gitignore exists and protects .env, *.db, __pycache__/, *.pyc); no git repository initialized yet
+- [x] Root-level .gitignore (BackEnd/.gitignore also protects .env, *.db, __pycache__/, *.pyc); git repository initialized — `BackEnd/.env` verified untracked and ignored
 
 ---
 
@@ -220,3 +273,9 @@
 | 8 | Coach Chat + Job Readiness (2 endpoints, rate limiting, deterministic scoring) | DONE (27 new tests; 256 total passing; real Qwen smoke verified; frontend job-readiness page added) |
 | 9 | Full QA + Security Hardening (endpoint QA, build/lint, E2E browser test, log sanitisation) | DONE (256 backend tests; 25/25 endpoint QA; 11/11 browser pages; npm build + lint clean; security verified) |
 | 10 | Deployment Prep (Dockerfile, render.yaml, seed hook, .gitignore) | DONE (Dockerfile verified, render.yaml ready, seed_if_empty hook wired, root .gitignore created; deployment itself is manual) |
+| 11 | Master-Doc Schema, Trust Filters & Starter Dataset (models, migration, FTS5, verification gates, seed expansion) | DONE (additive migration verified on live DB; 6 FTS tables; 24/45/12/6/22/8 seed records; 362 total passing) |
+| 12 | Retrieval Layer + Cache (master §14/§15) | DONE (7 retrieval modules + SimpleCache TTL; 51 tests in test_retrieval.py) |
+| 13 | Universities / Alumni / Learning endpoints | DONE (5 new endpoints; 40 tests; 402 total passing) |
+| 14 | MCP expansion — find_alumni + get_learning_resources | DONE (13 tools project-wide; 12 new MCP tests; 414 total passing) |
+| 15 | Ingestion pipeline + admin API (master §12/§17) | DONE (8 stages + stage 9 verify + refresh; 5 admin endpoints, fail-closed auth; 120 new tests; 534 total passing) |
+| 16 | Final regression + live E2E + docs | DONE (534 pytest; lint/build clean; security re-verified; live E2E 61/62 + corrected sports query 3/3 with 9+1 real Qwen operations; one real URL ingested as CANDIDATE, hidden from students) |
