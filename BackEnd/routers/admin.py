@@ -23,12 +23,17 @@ from sqlalchemy.orm import Session
 from config import settings
 from database import get_db
 from ingestion import ingestion_service
+from knowledge_engine import staging_service
 from schemas.admin import (
     DataQualityResponse,
     IngestQueuedResponse,
     IngestRefreshRequest,
     IngestUrlRequest,
     IngestionRunStatus,
+    StagingListResponse,
+    StagingPromoteResponse,
+    StagingRecordResponse,
+    StagingRecordReviewRequest,
     VerifiedOpportunityResponse,
     VerifyOpportunityRequest,
 )
@@ -181,3 +186,113 @@ def verify_opportunity(
         if record.last_verified
         else None,
     )
+
+
+# ---------------------------------------------------------------------------
+# PKE Staging endpoints (Step 5)
+# ---------------------------------------------------------------------------
+
+
+def _staging_to_response(item) -> StagingRecordResponse:
+    return StagingRecordResponse(
+        id=item.id,
+        domain=item.domain,
+        extracted_json=item.extracted_json,
+        source_url=item.source_url,
+        source_id=item.source_id,
+        content_hash=item.content_hash,
+        dedup_key=item.dedup_key,
+        verification_status=item.verification_status,
+        created_at=item.created_at.isoformat() if item.created_at else "",
+    )
+
+
+@router.get(
+    "/admin/pke/staging",
+    response_model=StagingListResponse,
+    dependencies=[Depends(require_admin)],
+)
+def list_pke_staging(
+    domain: Optional[str] = None,
+    verification_status: Optional[str] = None,
+    skip: int = 0,
+    limit: int = 50,
+    db: Session = Depends(get_db),
+) -> StagingListResponse:
+    """List candidate staging records with optional domain/status filters."""
+    items, total = staging_service.list_staging_records(
+        db,
+        domain=domain,
+        status=verification_status,
+        skip=skip,
+        limit=limit,
+    )
+    return StagingListResponse(
+        total=total,
+        skip=skip,
+        limit=limit,
+        items=[_staging_to_response(it) for it in items],
+    )
+
+
+@router.get(
+    "/admin/pke/staging/{record_id}",
+    response_model=StagingRecordResponse,
+    dependencies=[Depends(require_admin)],
+)
+def get_pke_staging_record(
+    record_id: int,
+    db: Session = Depends(get_db),
+) -> StagingRecordResponse | JSONResponse:
+    """Get a single staging record by ID."""
+    item = staging_service.get_staging_record(db, record_id)
+    if item is None:
+        return JSONResponse(
+            status_code=404,
+            content={"error": f"Staging record {record_id} not found"},
+        )
+    return _staging_to_response(item)
+
+
+@router.post(
+    "/admin/pke/staging/{record_id}/review",
+    response_model=StagingRecordResponse,
+    dependencies=[Depends(require_admin)],
+)
+def review_pke_staging_record(
+    record_id: int,
+    request: StagingRecordReviewRequest,
+    db: Session = Depends(get_db),
+) -> StagingRecordResponse | JSONResponse:
+    """Review a staging record (VERIFY, REJECT, RESET)."""
+    try:
+        updated = staging_service.review_staging_record(
+            db, record_id, request.action, request.reviewer_notes
+        )
+    except staging_service.StagingServiceError as exc:
+        return JSONResponse(
+            status_code=400,
+            content={"error": str(exc)},
+        )
+    return _staging_to_response(updated)
+
+
+@router.post(
+    "/admin/pke/staging/{record_id}/promote",
+    response_model=StagingPromoteResponse,
+    dependencies=[Depends(require_admin)],
+)
+def promote_pke_staging_record(
+    record_id: int,
+    db: Session = Depends(get_db),
+) -> StagingPromoteResponse | JSONResponse:
+    """Promote a VERIFIED staging record into its operational table."""
+    try:
+        result = staging_service.promote_staging_record(db, record_id)
+    except staging_service.StagingServiceError as exc:
+        return JSONResponse(
+            status_code=400,
+            content={"error": str(exc)},
+        )
+    return StagingPromoteResponse(**result)
+

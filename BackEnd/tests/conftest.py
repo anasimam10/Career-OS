@@ -52,6 +52,11 @@ def db_session():
     ensure_fts(engine)
     # Retrieval caches must never leak results between tests.
     cache.clear()
+    try:
+        import Mcp.db_access as db_access
+        db_access.set_session_factory(TestingSessionLocal)
+    except Exception:
+        pass
     session = TestingSessionLocal()
     try:
         yield session

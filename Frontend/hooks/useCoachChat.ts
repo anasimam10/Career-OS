@@ -1,4 +1,4 @@
-﻿"use client"
+"use client"
 
 import { useState, useCallback } from "react"
 import { sendChatMessage } from "@/lib/api/coach"
@@ -37,7 +37,15 @@ export function useCoachChat() {
           message: text.trim(),
           conversation_history: newHistory,
         })
-        const botMsg: ChatMessage = { role: "assistant", content: response.message }
+        const botMsg: ChatMessage = {
+          role: "assistant",
+          content: response.message,
+          next_best_action: response.next_best_action,
+          next_best_action_type: response.next_best_action_type,
+          reasoning_summary: response.reasoning_summary,
+          sources: response.sources,
+          confidence: response.confidence,
+        }
         setMessages((prev) => [...prev, botMsg])
         if (response.quick_actions?.length) {
           setQuickActions(response.quick_actions)

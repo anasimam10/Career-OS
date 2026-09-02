@@ -47,6 +47,7 @@ class IngestUrlRequest(BaseModel):
 
     urls: list[str] = Field(min_length=1, max_length=50)
     source_type: str = "UNKNOWN"  # OFFICIAL_*/SECONDARY_PORTAL/SOCIAL/UNKNOWN
+    domain: Optional[str] = "jobs"  # Which PKE domain to extract (default: jobs)
     run_label: Optional[str] = None
 
 
@@ -104,3 +105,50 @@ class VerifiedOpportunityResponse(BaseModel):
     title: str
     verification_status: str
     last_verified: Optional[str] = None
+
+
+# ---------------------------------------------------------------------------
+# PKE Staging schemas (Step 5)
+# ---------------------------------------------------------------------------
+
+
+class StagingRecordReviewRequest(BaseModel):
+    """POST /admin/pke/staging/{id}/review body."""
+
+    action: Literal["VERIFY", "REJECT", "RESET"]
+    reviewer_notes: Optional[str] = None
+
+
+class StagingRecordResponse(BaseModel):
+    """PKE Staging Record representation."""
+
+    id: int
+    domain: str
+    extracted_json: str
+    source_url: str
+    source_id: Optional[int] = None
+    content_hash: Optional[str] = None
+    dedup_key: Optional[str] = None
+    verification_status: str
+    created_at: str
+
+
+class StagingListResponse(BaseModel):
+    """GET /admin/pke/staging response."""
+
+    total: int
+    skip: int
+    limit: int
+    items: list[StagingRecordResponse]
+
+
+class StagingPromoteResponse(BaseModel):
+    """POST /admin/pke/staging/{id}/promote response."""
+
+    promoted: bool
+    staging_id: int
+    target_table: Optional[str] = None
+    target_id: Optional[int] = None
+    title: Optional[str] = None
+    message: Optional[str] = None
+

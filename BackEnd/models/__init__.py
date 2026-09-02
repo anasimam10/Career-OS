@@ -7,6 +7,8 @@ from models.alumni import Alumni
 from models.university import University, Campus, Program
 from models.learning import LearningResource
 from models.source import Source, SourceDocument, IngestionRun, IngestionItem
+from knowledge_engine.pke_source_registry import PKESource
+from knowledge_engine.staging import PKEStagingRecord
 
 __all__ = [
     "Base",
@@ -27,4 +29,6 @@ __all__ = [
     "SourceDocument",
     "IngestionRun",
     "IngestionItem",
+    "PKESource",
+    "PKEStagingRecord",
 ]

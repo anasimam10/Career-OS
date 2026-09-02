@@ -191,7 +191,7 @@ def _mock_extract(monkeypatch, extraction: dict):
     client = MagicMock()
     client.chat.completions.create.return_value = response
     monkeypatch.setattr(
-        "ingestion.extraction_service.get_ai_service",
+        "knowledge_engine.extractor.get_ai_service",
         lambda: AIService(client=client),
     )
 

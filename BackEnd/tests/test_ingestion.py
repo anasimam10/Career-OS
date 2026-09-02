@@ -82,7 +82,7 @@ def _mock_extract(monkeypatch, extraction: dict | Exception):
     else:
         ai = AIService(client=mock_ai_client([text_response(json.dumps(extraction))]))
     monkeypatch.setattr(
-        "ingestion.extraction_service.get_ai_service", lambda: ai
+        "knowledge_engine.extractor.get_ai_service", lambda: ai
     )
 
 
@@ -333,7 +333,7 @@ class TestUnchangedContent:
         ai = MagicMock()
         ai.call_structured.side_effect = AssertionError("must not extract")
         monkeypatch.setattr(
-            "ingestion.extraction_service.get_ai_service", lambda: ai
+            "knowledge_engine.extractor.get_ai_service", lambda: ai
         )
 
         result = ingestion_service.run_url_ingestion(

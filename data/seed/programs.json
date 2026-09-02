@@ -4,7 +4,7 @@
     "note": "Well-known undergraduate programmes at the seeded universities. Degree names/durations are standard public facts (BS/BBA = 4 years, MBBS/Pharm-D = 5 years, BEd = 1.5 years). Annual fees are deliberately NULL - never guessed. career_slugs are resolved to career ids by the seeder; unknown slugs are skipped with a warning.",
     "verification_mode": "manual_entry_D",
     "last_verified": "today",
-    "record_count": 45
+    "record_count": 63
   },
   "programs": [
     {
@@ -411,6 +411,150 @@
       "duration_years": 1.5,
       "annual_fee_pkr": null,
       "career_slugs": ["teaching"]
+    },
+    {
+      "university_slug": "ssuet",
+      "name": "BE Computer Systems Engineering",
+      "degree_type": "BE",
+      "field": "Computer Systems Engineering",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "career_slugs": ["software-engineering", "electrical-engineering"]
+    },
+    {
+      "university_slug": "ssuet",
+      "name": "BE Electronic Engineering",
+      "degree_type": "BE",
+      "field": "Electronic Engineering",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "career_slugs": ["electrical-engineering"]
+    },
+    {
+      "university_slug": "ubit",
+      "name": "BBA",
+      "degree_type": "BBA",
+      "field": "Business Administration",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "career_slugs": ["business-administration", "marketing"]
+    },
+    {
+      "university_slug": "ubit",
+      "name": "BS Commerce",
+      "degree_type": "BS",
+      "field": "Commerce",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "career_slugs": ["accounting", "finance-banking"]
+    },
+    {
+      "university_slug": "fccu",
+      "name": "BS Computer Science",
+      "degree_type": "BS",
+      "field": "Computer Science",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "career_slugs": ["software-engineering", "data-science"]
+    },
+    {
+      "university_slug": "fccu",
+      "name": "BBA",
+      "degree_type": "BBA",
+      "field": "Business Administration",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "career_slugs": ["business-administration", "finance-banking"]
+    },
+    {
+      "university_slug": "ucp",
+      "name": "BS Computer Science",
+      "degree_type": "BS",
+      "field": "Computer Science",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "career_slugs": ["software-engineering", "mobile-development"]
+    },
+    {
+      "university_slug": "ucp",
+      "name": "BBA",
+      "degree_type": "BBA",
+      "field": "Business Administration",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "career_slugs": ["business-administration", "marketing"]
+    },
+    {
+      "university_slug": "uol",
+      "name": "BS Computer Science",
+      "degree_type": "BS",
+      "field": "Computer Science",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "career_slugs": ["software-engineering"]
+    },
+    {
+      "university_slug": "uol",
+      "name": "MBBS",
+      "degree_type": "MBBS",
+      "field": "Medicine",
+      "duration_years": 5,
+      "annual_fee_pkr": null,
+      "career_slugs": ["medicine"]
+    },
+    {
+      "university_slug": "umt",
+      "name": "BS Computer Science",
+      "degree_type": "BS",
+      "field": "Computer Science",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "career_slugs": ["software-engineering", "data-science"]
+    },
+    {
+      "university_slug": "umt",
+      "name": "BBA",
+      "degree_type": "BBA",
+      "field": "Business Administration",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "career_slugs": ["business-administration", "finance-banking"]
+    },
+    {
+      "university_slug": "air-university",
+      "name": "BS Computer Science",
+      "degree_type": "BS",
+      "field": "Computer Science",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "career_slugs": ["software-engineering", "cybersecurity"]
+    },
+    {
+      "university_slug": "air-university",
+      "name": "BS Electrical Engineering",
+      "degree_type": "BS",
+      "field": "Electrical Engineering",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "career_slugs": ["electrical-engineering"]
+    },
+    {
+      "university_slug": "cust",
+      "name": "BS Computer Science",
+      "degree_type": "BS",
+      "field": "Computer Science",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "career_slugs": ["software-engineering"]
+    },
+    {
+      "university_slug": "cust",
+      "name": "BS Electrical Engineering",
+      "degree_type": "BS",
+      "field": "Electrical Engineering",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "career_slugs": ["electrical-engineering"]
     }
   ]
 }

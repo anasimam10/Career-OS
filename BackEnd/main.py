@@ -44,6 +44,7 @@ if str(_REPO_ROOT) not in sys.path:
 
 from Mcp.career_server import career_server  # noqa: E402
 from Mcp.opportunity_server import opportunity_server  # noqa: E402
+from Mcp.pke_server import pke_server  # noqa: E402
 
 # ---------------------------------------------------------------------------
 # Logging
@@ -101,6 +102,7 @@ app.include_router(admin_router, prefix="/api/v1")
 
 app.mount("/mcp/career", career_server.sse_app())
 app.mount("/mcp/opportunity", opportunity_server.sse_app())
+app.mount("/mcp/pke", pke_server.sse_app())
 
 # ---------------------------------------------------------------------------
 # Log sanitisation — never log API keys (architecture §9.2)

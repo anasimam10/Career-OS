@@ -4,7 +4,7 @@
     "note": "Widely known, long-established free learning resources for skills the seeded careers require. is_free is true only where the resource is famously free to complete; null where access is mixed (e.g. Coursera audit vs paid certificate). duration_hours is deliberately NULL - never guessed. All URLs are the official public sites.",
     "verification_mode": "manual_entry_D",
     "last_verified": "today",
-    "record_count": 12
+    "record_count": 18
   },
   "learning_resources": [
     {
@@ -136,6 +136,72 @@
       "url": "https://exercism.org/tracks/python",
       "language": "English",
       "level": "beginner",
+      "is_free": true,
+      "duration_hours": null
+    },
+    {
+      "skill_name": "Freelancing",
+      "title": "DigiSkills Free Freelancing Training Programme",
+      "type": "course",
+      "provider": "Pakistan Software Export Board (DigiSkills.pk)",
+      "url": "https://digiskills.pk",
+      "language": "Urdu/English",
+      "level": "beginner",
+      "is_free": true,
+      "duration_hours": null
+    },
+    {
+      "skill_name": "Data Science",
+      "title": "AI and Data Science Course (NAVTTC)",
+      "type": "course",
+      "provider": "National Vocational and Technical Training Commission (navttc.gov.pk)",
+      "url": "https://www.navttc.gov.pk",
+      "language": "English",
+      "level": "beginner",
+      "is_free": true,
+      "duration_hours": null
+    },
+    {
+      "skill_name": "Python",
+      "title": "PSEB Free Developer Resources and Training Portal",
+      "type": "course",
+      "provider": "Pakistan Software Export Board (pseb.org.pk)",
+      "url": "https://pseb.org.pk",
+      "language": "English",
+      "level": "beginner",
+      "is_free": true,
+      "duration_hours": null
+    },
+    {
+      "skill_name": "Software Engineering",
+      "title": "Virtual University Free Open Courseware",
+      "type": "course",
+      "provider": "Virtual University of Pakistan (vu.edu.pk)",
+      "url": "https://ocw.vu.edu.pk",
+      "language": "Urdu",
+      "level": "beginner",
+      "is_free": true,
+      "duration_hours": null
+    },
+    {
+      "skill_name": "JavaScript",
+      "title": "Alison Free Diploma in Web Development",
+      "type": "course",
+      "provider": "Alison (alison.com — HEC-recognized certificate)",
+      "url": "https://alison.com/courses/web-development",
+      "language": "English",
+      "level": "beginner",
+      "is_free": true,
+      "duration_hours": null
+    },
+    {
+      "skill_name": "Machine Learning",
+      "title": "Google ML Crash Course",
+      "type": "course",
+      "provider": "Google (developers.google.com/machine-learning/crash-course)",
+      "url": "https://developers.google.com/machine-learning/crash-course",
+      "language": "English",
+      "level": "intermediate",
       "is_free": true,
       "duration_hours": null
     }

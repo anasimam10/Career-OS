@@ -96,10 +96,24 @@ class CareerTrialPlan(BaseModel):
     reflection_prompt: str
 
 
+class SourceCitation(BaseModel):
+    title: str
+    source_url: Optional[str] = None
+    source_id: Optional[str] = None
+
+
 class CoachResponse(BaseModel):
     message: str
-    quick_actions: list[str]
+    quick_actions: list[str] = []
     suggested_resource: Optional[str] = None
+    next_best_action: str = ""
+    next_best_action_type: Optional[str] = None
+    reasoning_summary: Optional[str] = None
+    sources: list[SourceCitation] = []
+    confidence: Optional[str] = None
+
+
+MentorResponse = CoachResponse
 
 
 class OpportunityMatch(BaseModel):

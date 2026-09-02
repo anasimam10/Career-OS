@@ -66,6 +66,18 @@ def coach_chat(
     # --- build context from DB ---
     context = _build_student_context(db, student)
 
+    # --- check if PKE factual retrieval is needed ---
+    from services.mentor_service import _needs_pke_retrieval, _retrieve_pke_knowledge, _PKE_AVAILABLE
+    verified_data = {}
+    citations = []
+    if _needs_pke_retrieval(message) and _PKE_AVAILABLE:
+        try:
+            verified_data, citations = _retrieve_pke_knowledge(message, student, db)
+            if verified_data:
+                context["verified_pke_data"] = verified_data
+        except Exception as exc:
+            logger.warning("PKE retrieval in coach_chat failed: %s", exc)
+
     # --- trim history ---
     trimmed = _trim_history(history)
 
@@ -98,7 +110,7 @@ def coach_chat(
     )
 
     # --- post-validation ---
-    result = _post_validate(db, response)
+    result = _post_validate(db, response, student=student, citations=citations)
     return result
 
 
@@ -200,20 +212,56 @@ def _trim_history(history: list[dict]) -> list[dict]:
     return trimmed
 
 
-def _post_validate(db: Session, response: CoachResponse) -> CoachResponse:
+def _post_validate(
+    db: Session,
+    response: CoachResponse,
+    student: Student | None = None,
+    citations: list | None = None,
+) -> CoachResponse:
     """Enforce backend constraints the LLM cannot be trusted to follow."""
     # Trim quick_actions to max 3
-    quick_actions = response.quick_actions[:_MAX_QUICK_ACTIONS]
+    quick_actions = (response.quick_actions or [])[:_MAX_QUICK_ACTIONS]
+
+    # Enforce ONE Next Best Action
+    nba = (response.next_best_action or "").strip()
+    if not nba:
+        if quick_actions:
+            nba = quick_actions[0]
+        else:
+            goal = (getattr(student, "career_goal", None) or "your career goal").replace("-", " ").title()
+            nba = f"Explore verified skills and milestones for {goal} in Career Explorer."
+
+    nba_type = response.next_best_action_type or "EXPLORE"
 
     # Validate suggested_resource against DB
     suggested = response.suggested_resource
     if suggested:
         suggested = _validate_resource(db, suggested)
 
+    # Process and preserve citations
+    valid_sources = []
+    citations = citations or []
+    known_urls = {c.source_url: c for c in citations if getattr(c, "source_url", None)}
+
+    if response.sources:
+        for src in response.sources:
+            if src.source_url and src.source_url in known_urls:
+                valid_sources.append(src)
+            elif not src.source_url and src.title:
+                valid_sources.append(src)
+
+    if not valid_sources and citations:
+        valid_sources = citations[:5]
+
     return CoachResponse(
         message=response.message,
         quick_actions=quick_actions,
         suggested_resource=suggested,
+        next_best_action=nba,
+        next_best_action_type=nba_type,
+        reasoning_summary=response.reasoning_summary or "Grounded guidance personalized to your pathway.",
+        sources=valid_sources,
+        confidence=response.confidence or "high",
     )
 
 

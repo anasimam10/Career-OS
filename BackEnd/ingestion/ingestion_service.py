@@ -47,10 +47,8 @@ from ingestion.dedup_service import (
     make_content_hash,
     make_dedup_key,
 )
-from ingestion.extraction_service import (
-    extract_opportunity,
-    extraction_to_json,
-)
+from knowledge_engine.extractor import route_extraction, OPPORTUNITY_DOMAINS
+from knowledge_engine.staging import PKEStagingRecord
 from models.opportunity import Opportunity, SportsOpportunity
 from models.source import IngestionItem, IngestionRun, Source, SourceDocument
 from services.ai_service import AIValidationError, AIUnavailableError
@@ -168,22 +166,27 @@ def _validate_extraction(extraction) -> tuple[bool, Optional[str]]:
 def _normalize_extraction(extraction) -> dict:
     """Map an extraction onto Opportunity column values (stage 5)."""
     deadline = None
-    if extraction.deadline:
+    if getattr(extraction, "deadline", None):
         deadline = date.fromisoformat(extraction.deadline)  # validated already
     skills = None
-    if extraction.required_skills is not None:
-        skills = json.dumps([s for s in extraction.required_skills if (s or "").strip()])
+    req_skills = getattr(extraction, "required_skills", None)
+    if req_skills is not None:
+        skills = json.dumps([s for s in req_skills if (s or "").strip()])
+    
+    is_remote_val = getattr(extraction, "is_remote", None)
+    is_remote = bool(is_remote_val) if is_remote_val is not None else False
+    
     return {
         "type": extraction.type,
-        "title": (extraction.title or "").strip(),
-        "organization": _clean(extraction.organization),
-        "location": _clean(extraction.location),
+        "title": (getattr(extraction, "title", "") or "").strip(),
+        "organization": _clean(getattr(extraction, "organization", None)),
+        "location": _clean(getattr(extraction, "location", None)),
         "deadline": deadline,
         "required_skills": skills,
-        "description": _clean(extraction.description),
-        "stipend_pkr": extraction.stipend_pkr,
-        "eligibility_notes": _clean(extraction.eligibility_notes),
-        "is_remote": bool(extraction.is_remote) if extraction.is_remote is not None else False,
+        "description": _clean(getattr(extraction, "description", None)),
+        "stipend_pkr": getattr(extraction, "stipend_pkr", None),
+        "eligibility_notes": _clean(getattr(extraction, "eligibility_notes", None)),
+        "is_remote": is_remote,
     }
 
 
@@ -200,7 +203,7 @@ def _clean(value: Optional[str]) -> Optional[str]:
 # ---------------------------------------------------------------------------
 
 
-def _process_item(db: Session, item: IngestionItem, source_type: str) -> None:
+def _process_item(db: Session, item: IngestionItem, source_type: str, domain: str = "jobs") -> None:
     """Run stages 2–8 for one item. Never raises: failures mark the item."""
     item.started_at = datetime.utcnow()
     try:
@@ -232,68 +235,81 @@ def _process_item(db: Session, item: IngestionItem, source_type: str) -> None:
 
         # Stage 3 — EXTRACT ---------------------------------------------
         try:
-            extraction = extract_opportunity(raw_content, item.source_url)
-        except (AIUnavailableError, AIValidationError) as exc:
+            extraction = route_extraction(domain, raw_content, item.source_url)
+        except (AIUnavailableError, AIValidationError, ValueError) as exc:
             document.processing_status = "FAILED"
             item.status = "FAILED"
-            item.error_message = f"extraction failed: {type(exc).__name__}"
+            item.error_message = f"extraction failed: {type(exc).__name__} - {exc}"
             item.completed_at = datetime.utcnow()
             db.commit()
             return
 
-        document.extracted_json = extraction_to_json(extraction)
+        document.extracted_json = extraction.model_dump_json(exclude_none=False)
         document.extraction_model = settings.QWEN_MODEL
         document.extraction_at = datetime.utcnow()
         document.processing_status = "EXTRACTED"
         item.status = "EXTRACTED"
 
         # Stage 4 — VALIDATE --------------------------------------------
-        ok, reason = _validate_extraction(extraction)
-        if not ok:
-            document.processing_status = "FAILED"
-            item.status = "FAILED"
-            item.error_message = f"validation failed: {reason}"
-            item.completed_at = datetime.utcnow()
-            db.commit()
-            return
+        if domain in OPPORTUNITY_DOMAINS:
+            ok, reason = _validate_extraction(extraction)
+            if not ok:
+                document.processing_status = "FAILED"
+                item.status = "FAILED"
+                item.error_message = f"validation failed: {reason}"
+                item.completed_at = datetime.utcnow()
+                db.commit()
+                return
         document.processing_status = "VALIDATED"
         item.status = "VALIDATED"
 
-        # Stage 5 — NORMALIZE -------------------------------------------
-        values = _normalize_extraction(extraction)
+        # Stage 5–7 — NORMALIZE, DEDUPLICATE, PERSIST -------------------
+        if domain in OPPORTUNITY_DOMAINS:
+            # Legacy Opportunity persistence
+            values = _normalize_extraction(extraction)
+            dedup_key = make_dedup_key(
+                values["type"], values["title"], values["organization"]
+            )
+            duplicate = find_duplicate(db, dedup_key)
+            if duplicate is not None:
+                if duplicate.source_id is None:
+                    duplicate.source_id = source.id
+                    duplicate.retrieved_at = datetime.utcnow()
+                item.opportunity_id = duplicate.id
+                item.status = "DUPLICATE"
+                item.completed_at = datetime.utcnow()
+                db.commit()
+                return
 
-        # Stage 6 — DEDUPLICATE -----------------------------------------
-        dedup_key = make_dedup_key(
-            values["type"], values["title"], values["organization"]
-        )
-        duplicate = find_duplicate(db, dedup_key)
-        if duplicate is not None:
-            # Associate the source with the existing record; never create
-            # a second record for the same real-world opportunity.
-            if duplicate.source_id is None:
-                duplicate.source_id = source.id
-                duplicate.retrieved_at = datetime.utcnow()
-            item.opportunity_id = duplicate.id
-            item.status = "DUPLICATE"
-            item.completed_at = datetime.utcnow()
-            db.commit()
-            return
-
-        # Stage 7 — PERSIST (CANDIDATE, never VERIFIED) ------------------
-        opportunity = Opportunity(
-            **values,
-            source_url=item.source_url,
-            is_active=True,
-            verification_status="CANDIDATE",
-            status="ACTIVE",
-            source_id=source.id,
-            content_hash=content_hash,
-            dedup_key=dedup_key,
-            retrieved_at=datetime.utcnow(),
-        )
-        db.add(opportunity)
-        db.flush()
-        item.opportunity_id = opportunity.id
+            opportunity = Opportunity(
+                **values,
+                source_url=item.source_url,
+                is_active=True,
+                verification_status="CANDIDATE",
+                status="ACTIVE",
+                source_id=source.id,
+                content_hash=content_hash,
+                dedup_key=dedup_key,
+                retrieved_at=datetime.utcnow(),
+            )
+            db.add(opportunity)
+            db.flush()
+            item.opportunity_id = opportunity.id
+        else:
+            # PKE Staging persistence for new domains
+            staging_record = PKEStagingRecord(
+                domain=domain,
+                extracted_json=extraction.model_dump_json(exclude_none=False),
+                source_url=item.source_url,
+                source_id=source.id,
+                content_hash=content_hash,
+                dedup_key=None,  # basic dedup logic to be added if needed
+                verification_status="CANDIDATE"
+            )
+            db.add(staging_record)
+            db.flush()
+            # Staging items are technically stored successfully
+            
         item.status = "STORED"
 
         # Stage 8 — INDEX ------------------------------------------------
@@ -364,6 +380,7 @@ def run_url_ingestion(
     *,
     urls: list[str],
     source_type: str = "UNKNOWN",
+    domain: str = "jobs",
     run_label: Optional[str] = None,
 ) -> dict:
     """Mode A (URL batch): create a run and process every URL (§12)."""
@@ -376,7 +393,7 @@ def run_url_ingestion(
     )
     items = db.query(IngestionItem).filter(IngestionItem.run_id == run.id).all()
     for item in items:
-        _process_item(db, item, source_type)
+        _process_item(db, item, source_type, domain)
     _finalize_run(db, run)
     return {"run_id": run.id, "queued_count": len(urls)}
 
@@ -417,7 +434,7 @@ def refresh_sources(
     items = db.query(IngestionItem).filter(IngestionItem.run_id == run.id).all()
     for item in items:
         item_type = type_by_url.get(item.source_url, "UNKNOWN")
-        _process_item(db, item, item_type)
+        _process_item(db, item, item_type, domain="jobs")  # default to jobs for refresh
     _finalize_run(db, run)
     return {"run_id": run.id, "queued_count": len(urls)}
 
