@@ -76,7 +76,7 @@ class PKESource(Base):
 
     # Finer-grained source type (mirrors the existing Source.source_type taxonomy)
     # OFFICIAL_GOVERNMENT / OFFICIAL_UNIVERSITY / OFFICIAL_COMPANY /
-    # OFFICIAL_SPORTS / SECONDARY_PORTAL / PUBLIC_DATASET / SOCIAL / UNKNOWN
+    # OFFICIAL_SPORTS / SECONDARY_PORTAL / PUBLIC_DATASET / EXTERNAL_SECONDARY / SOCIAL / UNKNOWN
     source_type: Mapped[str] = mapped_column(String(64), nullable=False, default="UNKNOWN")
 
     # -----------------------------------------------------------------------

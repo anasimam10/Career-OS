@@ -12,7 +12,8 @@ Error contract (architecture §10):
 
 from __future__ import annotations
 
-from fastapi import APIRouter, Depends
+from typing import Optional
+from fastapi import APIRouter, Depends, Header
 from sqlalchemy.orm import Session
 
 from database import get_db
@@ -25,7 +26,21 @@ router = APIRouter(tags=["onboarding"])
 
 @router.post("/onboarding", response_model=OnboardingResponse)
 def complete_onboarding(
-    payload: OnboardingPayload, db: Session = Depends(get_db)
+    payload: OnboardingPayload,
+    db: Session = Depends(get_db),
+    x_student_id: Optional[str] = Header(default=None, alias="X-Student-Id"),
 ) -> OnboardingResponse:
     """Store the onboarding answers, bootstrap the journey, return the first NBA."""
-    return onboarding_service.complete_onboarding(db, payload)
+    is_new = False
+    student_id = None
+    if x_student_id:
+        val = x_student_id.strip().lower()
+        if val == "new":
+            is_new = True
+        elif val.isdigit() and int(val) > 0:
+            student_id = int(val)
+
+    return onboarding_service.complete_onboarding(
+        db, payload, student_id=student_id, is_new=is_new
+    )
+

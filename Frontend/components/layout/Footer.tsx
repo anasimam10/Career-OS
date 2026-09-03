@@ -5,7 +5,7 @@ export function Footer() {
     <footer className="border-t border-border bg-background py-10 pb-24 md:pb-10">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
         <div className="flex items-center gap-2">
-          <span className="font-semibold text-foreground">A&H Careers</span>
+          <span className="font-semibold text-foreground">Career OS</span>
           <span>•</span>
           <span>AI-Powered Student Career Journey</span>
         </div>

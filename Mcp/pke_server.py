@@ -123,6 +123,48 @@ def search_verified_institutions(
 
 
 # ---------------------------------------------------------------------------
+# Tool 1b: get_university_faculty_intellectual_capital (Secondary Dataset)
+# ---------------------------------------------------------------------------
+
+
+@pke_server.tool()
+def get_university_faculty_intellectual_capital(
+    university_name_or_slug: str,
+) -> dict:
+    """Retrieve supplementary external faculty intellectual capital (CS department).
+
+    NOTE: This data is sourced from an external secondary dataset (L2 Authority Level).
+    It is NOT primary HEC verified truth and must be presented as supplementary context.
+    """
+    target = (university_name_or_slug or "").strip()
+    if not target:
+        return _invalid_input("university_name_or_slug parameter is required.")
+
+    session = get_session()
+    try:
+        data = university_retrieval.get_university_secondary_intellectual_capital(
+            session, target
+        )
+    finally:
+        session.close()
+
+    if not data:
+        return {
+            "found": False,
+            "message": f"No secondary faculty intellectual capital record found for '{target}'.",
+            "source_type": "EXTERNAL_SECONDARY",
+            "authority_level": "L2",
+        }
+
+    return {
+        "found": True,
+        "_provenance_notice": "[EXTERNAL SECONDARY DATA - NOT PRIMARY HEC TRUTH. For research context only.]",
+        "data": data,
+    }
+
+
+
+# ---------------------------------------------------------------------------
 # Tool 2: search_verified_opportunities
 # ---------------------------------------------------------------------------
 

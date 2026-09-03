@@ -53,7 +53,7 @@ function CoachChatContent() {
           </div>
           <div>
             <h3 className="font-bold text-foreground text-base leading-none">
-              A&H Careers AI Mentor
+              Career OS AI Mentor
             </h3>
             <span className="text-xs text-muted-foreground mt-0.5 block">
               Context-aware guidance for your career journey in Pakistan

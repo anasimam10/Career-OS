@@ -1,4 +1,4 @@
-﻿import { cn } from "@/lib/utils/cn"
+import { cn } from "@/lib/utils/cn"
 
 interface StepIndicatorProps {
   currentStep: number
@@ -6,20 +6,28 @@ interface StepIndicatorProps {
 }
 
 export function StepIndicator({ currentStep, totalSteps }: StepIndicatorProps) {
-  const percentage = (currentStep / totalSteps) * 100
-
   return (
-    <div className="space-y-2 mb-8">
-      <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-        <span>Step {currentStep} of {totalSteps}</span>
-        <span>{Math.round(percentage)}% completed</span>
-      </div>
-      <div className="h-1.5 w-full overflow-hidden rounded-full bg-secondary">
-        <div
-          className="h-full bg-primary transition-all duration-300 ease-out"
-          style={{ width: `${percentage}%` }}
-        />
-      </div>
+    <div className="flex items-center justify-center space-x-2">
+      {Array.from({ length: totalSteps }).map((_, i) => {
+        const stepNum = i + 1
+        const isActive = currentStep === stepNum
+        const isPast = currentStep > stepNum
+
+        return (
+          <div key={i} className="flex items-center">
+            <div
+              className={cn(
+                "h-1.5 rounded-full transition-all duration-500",
+                isActive ? "w-8 bg-indigo-500 shadow-[0_0_8px_rgba(99,102,241,0.8)]" : 
+                isPast ? "w-4 bg-indigo-500/50" : "w-2 bg-slate-800"
+              )}
+            />
+            {i < totalSteps - 1 && (
+              <div className="w-1.5" /> /* Gap between dots */
+            )}
+          </div>
+        )
+      })}
     </div>
   )
 }

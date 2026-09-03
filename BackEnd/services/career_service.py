@@ -45,7 +45,7 @@ DEMO_STUDENT_ID = 1
 # Honest label for the current seed records — they are template data
 # converted from the frontend mock, NOT independently verified Pakistani data.
 # Update this label when verified seed data lands (data phase).
-CAREER_DATA_SOURCE_LABEL = "A&H Careers template seed data (not independently verified)"
+CAREER_DATA_SOURCE_LABEL = "Career OS template seed data (not independently verified)"
 
 # MVP contract: trial plans always cover exactly 7 days.
 TRIAL_DURATION_DAYS = 7
@@ -120,9 +120,12 @@ def get_career_detail(db: Session, slug: str) -> Optional[CareerDetail]:
 # ---------------------------------------------------------------------------
 
 
-def analyze_career(db: Session, career_slug: str) -> CareerRealityResponse:
+def analyze_career(
+    db: Session, career_slug: str, student_id: int = DEMO_STUDENT_ID
+) -> CareerRealityResponse:
+
     """
-    Career Reality Check: student profile + database career data -> Qwen ->
+    Career reality check: student profile + database career data -> Qwen ->
     validated CareerRealityResponse.
 
     Raises:
@@ -135,14 +138,14 @@ def analyze_career(db: Session, career_slug: str) -> CareerRealityResponse:
         raise CareerNotFoundError(career_slug)
 
     career_data = repo.to_dict(career)
-    student_context = _get_demo_student_context(db)
+    student_context = _get_student_context(db, student_id=student_id)
 
     system_prompt = build_career_analysis_system_prompt(
         student_profile_json=json.dumps(student_context, ensure_ascii=False),
         career_data_json=json.dumps(career_data, ensure_ascii=False),
     )
 
-    logger.info("Career analysis: slug=%s (student=%s)", career_slug, DEMO_STUDENT_ID)
+    logger.info("Career analysis: slug=%s (student=%s)", career_slug, student_id)
     result = get_ai_service().call_structured(
         prompt=build_career_analysis_user_prompt(),
         response_model=CareerRealityResponse,
@@ -164,7 +167,9 @@ def analyze_career(db: Session, career_slug: str) -> CareerRealityResponse:
     return result
 
 
-def generate_trial_plan(db: Session, career_slug: str) -> CareerTrialPlan:
+def generate_trial_plan(
+    db: Session, career_slug: str, student_id: int = DEMO_STUDENT_ID
+) -> CareerTrialPlan:
     """
     7-day trial plan: student profile + database career data -> Qwen ->
     validated CareerTrialPlan.
@@ -179,14 +184,14 @@ def generate_trial_plan(db: Session, career_slug: str) -> CareerTrialPlan:
         raise CareerNotFoundError(career_slug)
 
     career_data = repo.to_dict(career)
-    student_context = _get_demo_student_context(db)
+    student_context = _get_student_context(db, student_id=student_id)
 
     system_prompt = build_trial_plan_system_prompt(
         student_profile_json=json.dumps(student_context, ensure_ascii=False),
         career_data_json=json.dumps(career_data, ensure_ascii=False),
     )
 
-    logger.info("Trial plan: slug=%s (student=%s)", career_slug, DEMO_STUDENT_ID)
+    logger.info("Trial plan: slug=%s (student=%s)", career_slug, student_id)
     plan = get_ai_service().call_structured(
         prompt=build_trial_plan_user_prompt(),
         response_model=CareerTrialPlan,
@@ -205,18 +210,18 @@ def generate_trial_plan(db: Session, career_slug: str) -> CareerTrialPlan:
 # ---------------------------------------------------------------------------
 
 
-def _get_demo_student_context(db: Session) -> dict:
+def _get_student_context(db: Session, student_id: int = DEMO_STUDENT_ID) -> dict:
     """
     Build the active student's context for AI prompts.
 
-    Uses the MVP demo-student session (id=1). When the student has not been
-    onboarded yet, a minimal honest context is returned instead — the AI is
-    told the profile is unavailable rather than receiving invented data.
+    When the student has not been onboarded yet, a minimal honest context
+    is returned instead — the AI is told the profile is unavailable rather
+    than receiving invented data.
     """
-    student = db.get(Student, DEMO_STUDENT_ID)
+    student = db.get(Student, student_id)
     if student is None:
         return {
-            "student_id": DEMO_STUDENT_ID,
+            "student_id": student_id,
             "note": "student profile not yet onboarded",
         }
 
@@ -229,11 +234,12 @@ def _get_demo_student_context(db: Session) -> dict:
         "motivation_tags": _loads(student.motivation_tags),
     }
 
-    profile = StudentRepository(db).get_profile(DEMO_STUDENT_ID)
+    profile = StudentRepository(db).get_profile(student_id)
     if profile is not None:
         context["interests"] = _loads(profile.interests)
         context["skills"] = _loads(profile.skills)
     return context
+
 
 
 def _metric(value: Optional[str]) -> str:

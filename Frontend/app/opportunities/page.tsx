@@ -12,6 +12,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card"
 import { PageTransition } from "@/components/layout/PageTransition"
+import { getSession } from "@/lib/session"
 import type { Opportunity, OpportunityMatch, OpportunityMatchResponse } from "@/lib/types/opportunity.types"
 
 const TYPE_OPTIONS = [
@@ -29,11 +30,17 @@ export default function OpportunitiesPage() {
   const [search, setSearch] = useState("")
   const [selectedType, setSelectedType] = useState("")
 
-  // Matching state
+  // Matching state — defaults to active student's persisted city
   const [matchLoading, setMatchLoading] = useState(false)
   const [matchResult, setMatchResult] = useState<OpportunityMatchResponse | null>(null)
   const [matchError, setMatchError] = useState<string | null>(null)
-  const [matchCity, setMatchCity] = useState("Karachi")
+  const [matchCity, setMatchCity] = useState(() => {
+    if (typeof window !== "undefined") {
+      const session = getSession()
+      return session?.city || "Karachi"
+    }
+    return "Karachi"
+  })
   const [matchType, setMatchType] = useState<"internship" | "job">("internship")
 
   useEffect(() => {

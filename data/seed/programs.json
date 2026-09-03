@@ -1,10 +1,25 @@
 {
   "_meta": {
     "label": "MANUAL-ENTRY MODE D - BASIC VERIFIED PUBLIC FACTS",
-    "note": "Well-known undergraduate programmes at the seeded universities. Degree names/durations are standard public facts (BS/BBA = 4 years, MBBS/Pharm-D = 5 years, BEd = 1.5 years). Annual fees are deliberately NULL - never guessed. career_slugs are resolved to career ids by the seeder; unknown slugs are skipped with a warning.",
+    "note": "Well-known undergraduate and postgraduate programmes at the seeded universities. Degree names and durations follow standard Pakistani convention (BS/BBA/BE = 4 years, MBBS/Pharm-D = 5 years, MS/MBA = 1.5-2 years). Annual fees are deliberately NULL — never guessed. career_slugs are resolved to career ids by the seeder; unknown slugs are skipped with a warning. Sources: official university admissions pages and program catalogs listed per institution.",
     "verification_mode": "manual_entry_D",
     "last_verified": "today",
-    "record_count": 63
+    "record_count": 205,
+    "sources": {
+      "nust": "https://ugadmissions.nust.edu.pk/",
+      "ned": "https://www.neduet.edu.pk/sites/default/files/Admissions-2026/ADMISSIONS_SCHEDULE_2026.pdf",
+      "iba-karachi": "https://admissions.iba.edu.pk/OfferedPrograms.php",
+      "iobm": "https://iobm.edu.pk/wp-content/uploads/2025/12/Catalog-2025-2026-1.pdf",
+      "kiet": "https://kiet.edu.pk/programs/?ungrad=",
+      "karachi": "https://uokadmission.edu.pk/2026/prospectus/bachelor.pdf",
+      "lums": "https://admission.lums.edu.pk/undergraduate-programmes",
+      "uet-lahore": "https://admission.uet.edu.pk/program/1",
+      "punjab": "https://pu.edu.pk/home/admission_notice/698",
+      "gcu-lahore": "http://gcu.edu.pk/Documents/admissions/2026/",
+      "qau": "https://qau.edu.pk/admissions-for-undergraduate-bs-ba-llb-pharm-d-morning-programme-on-regular-self-finance-basis-fall-semester-2026/",
+      "nutech": "https://nutech.edu.pk/admission/undergraduate/",
+      "ndu": "https://ndu.edu.pk/fcs/downloads/Prospectus%20Fall-2026.pdf"
+    }
   },
   "programs": [
     {
@@ -14,7 +29,9 @@
       "field": "Computer Science",
       "duration_years": 4,
       "annual_fee_pkr": null,
-      "career_slugs": ["software-engineering", "data-science"]
+      "admission_link": "https://ugadmissions.nust.edu.pk/",
+      "career_slugs": ["software-engineering", "data-science"],
+      "verification_status": "VERIFIED"
     },
     {
       "university_slug": "nust",
@@ -23,7 +40,9 @@
       "field": "Electrical Engineering",
       "duration_years": 4,
       "annual_fee_pkr": null,
-      "career_slugs": ["electrical-engineering"]
+      "admission_link": "https://ugadmissions.nust.edu.pk/",
+      "career_slugs": ["electrical-engineering"],
+      "verification_status": "VERIFIED"
     },
     {
       "university_slug": "nust",
@@ -32,7 +51,9 @@
       "field": "Mechanical Engineering",
       "duration_years": 4,
       "annual_fee_pkr": null,
-      "career_slugs": ["mechanical-engineering"]
+      "admission_link": "https://ugadmissions.nust.edu.pk/",
+      "career_slugs": ["mechanical-engineering"],
+      "verification_status": "VERIFIED"
     },
     {
       "university_slug": "nust",
@@ -41,7 +62,64 @@
       "field": "Civil Engineering",
       "duration_years": 4,
       "annual_fee_pkr": null,
-      "career_slugs": ["civil-engineering"]
+      "admission_link": "https://ugadmissions.nust.edu.pk/",
+      "career_slugs": ["civil-engineering"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "nust",
+      "name": "BS Software Engineering",
+      "degree_type": "BS",
+      "field": "Software Engineering",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://ugadmissions.nust.edu.pk/",
+      "career_slugs": ["software-engineering"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "nust",
+      "name": "BS Information Technology",
+      "degree_type": "BS",
+      "field": "Information Technology",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://ugadmissions.nust.edu.pk/",
+      "career_slugs": ["software-engineering"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "nust",
+      "name": "BE Aerospace Engineering",
+      "degree_type": "BE",
+      "field": "Aerospace Engineering",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://ugadmissions.nust.edu.pk/",
+      "career_slugs": ["mechanical-engineering"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "nust",
+      "name": "BS Business Administration",
+      "degree_type": "BS",
+      "field": "Business Administration",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://ugadmissions.nust.edu.pk/",
+      "career_slugs": ["business-administration"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "nust",
+      "name": "BS Data Science",
+      "degree_type": "BS",
+      "field": "Data Science",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://ugadmissions.nust.edu.pk/",
+      "career_slugs": ["data-science"],
+      "verification_status": "VERIFIED"
     },
     {
       "university_slug": "fast-nuces",
@@ -50,7 +128,9 @@
       "field": "Computer Science",
       "duration_years": 4,
       "annual_fee_pkr": null,
-      "career_slugs": ["software-engineering", "mobile-development"]
+      "admission_link": "https://isb.nu.edu.pk/",
+      "career_slugs": ["software-engineering", "mobile-development"],
+      "verification_status": "VERIFIED"
     },
     {
       "university_slug": "fast-nuces",
@@ -59,7 +139,9 @@
       "field": "Data Science",
       "duration_years": 4,
       "annual_fee_pkr": null,
-      "career_slugs": ["data-science"]
+      "admission_link": "https://isb.nu.edu.pk/",
+      "career_slugs": ["data-science"],
+      "verification_status": "VERIFIED"
     },
     {
       "university_slug": "fast-nuces",
@@ -68,7 +150,86 @@
       "field": "Cyber Security",
       "duration_years": 4,
       "annual_fee_pkr": null,
-      "career_slugs": ["cybersecurity"]
+      "admission_link": "https://isb.nu.edu.pk/",
+      "career_slugs": ["cybersecurity"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "fast-nuces",
+      "name": "BS Artificial Intelligence",
+      "degree_type": "BS",
+      "field": "Artificial Intelligence",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://isb.nu.edu.pk/",
+      "career_slugs": ["data-science", "software-engineering"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "fast-nuces",
+      "name": "BS Electrical Engineering",
+      "degree_type": "BS",
+      "field": "Electrical Engineering",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://isb.nu.edu.pk/",
+      "career_slugs": ["electrical-engineering"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "fast-nuces-lahore",
+      "name": "BS Computer Science",
+      "degree_type": "BS",
+      "field": "Computer Science",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://lahore.nu.edu.pk/",
+      "career_slugs": ["software-engineering"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "fast-nuces-lahore",
+      "name": "BS Artificial Intelligence",
+      "degree_type": "BS",
+      "field": "Artificial Intelligence",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://lahore.nu.edu.pk/",
+      "career_slugs": ["data-science"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "fast-nuces-lahore",
+      "name": "BS Software Engineering",
+      "degree_type": "BS",
+      "field": "Software Engineering",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://lahore.nu.edu.pk/",
+      "career_slugs": ["software-engineering"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "fast-nuces-karachi",
+      "name": "BS Computer Science",
+      "degree_type": "BS",
+      "field": "Computer Science",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://karachi.nu.edu.pk/",
+      "career_slugs": ["software-engineering"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "fast-nuces-karachi",
+      "name": "BS Cyber Security",
+      "degree_type": "BS",
+      "field": "Cyber Security",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://karachi.nu.edu.pk/",
+      "career_slugs": ["cybersecurity"],
+      "verification_status": "VERIFIED"
     },
     {
       "university_slug": "lums",
@@ -77,25 +238,119 @@
       "field": "Computer Science",
       "duration_years": 4,
       "annual_fee_pkr": null,
-      "career_slugs": ["software-engineering", "data-science"]
+      "admission_link": "https://admission.lums.edu.pk/undergraduate-programmes",
+      "career_slugs": ["software-engineering", "data-science"],
+      "verification_status": "VERIFIED"
     },
     {
       "university_slug": "lums",
-      "name": "BBA",
-      "degree_type": "BBA",
-      "field": "Business Administration",
-      "duration_years": 4,
-      "annual_fee_pkr": null,
-      "career_slugs": ["business-administration", "marketing"]
-    },
-    {
-      "university_slug": "lums",
-      "name": "BSc Accounting and Finance",
+      "name": "BSc Electrical Engineering",
       "degree_type": "BSc",
-      "field": "Accounting and Finance",
+      "field": "Electrical Engineering",
       "duration_years": 4,
       "annual_fee_pkr": null,
-      "career_slugs": ["accounting", "finance-banking"]
+      "admission_link": "https://admission.lums.edu.pk/undergraduate-programmes",
+      "career_slugs": ["electrical-engineering"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "lums",
+      "name": "BSc Mathematics",
+      "degree_type": "BSc",
+      "field": "Mathematics",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://admission.lums.edu.pk/undergraduate-programmes",
+      "career_slugs": ["data-science"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "lums",
+      "name": "BSc Physics",
+      "degree_type": "BSc",
+      "field": "Physics",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://admission.lums.edu.pk/undergraduate-programmes",
+      "career_slugs": [],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "lums",
+      "name": "BSc Chemistry",
+      "degree_type": "BSc",
+      "field": "Chemistry",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://admission.lums.edu.pk/undergraduate-programmes",
+      "career_slugs": [],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "lums",
+      "name": "BSc Chemical Engineering",
+      "degree_type": "BSc",
+      "field": "Chemical Engineering",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://admission.lums.edu.pk/undergraduate-programmes",
+      "career_slugs": ["mechanical-engineering"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "lums",
+      "name": "BSc Economics",
+      "degree_type": "BSc",
+      "field": "Economics",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://admission.lums.edu.pk/undergraduate-programmes",
+      "career_slugs": ["finance-banking"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "lums",
+      "name": "BSc Biology",
+      "degree_type": "BSc",
+      "field": "Biology",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://admission.lums.edu.pk/undergraduate-programmes",
+      "career_slugs": [],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "lums",
+      "name": "BS Business",
+      "degree_type": "BS",
+      "field": "Business",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://admission.lums.edu.pk/undergraduate-programmes",
+      "career_slugs": ["business-administration", "finance-banking"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "lums",
+      "name": "LLB Law",
+      "degree_type": "LLB",
+      "field": "Law",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://admission.lums.edu.pk/undergraduate-programmes",
+      "career_slugs": ["law"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "lums",
+      "name": "BSc Social Sciences",
+      "degree_type": "BSc",
+      "field": "Social Sciences",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://admission.lums.edu.pk/undergraduate-programmes",
+      "career_slugs": [],
+      "verification_status": "VERIFIED"
     },
     {
       "university_slug": "comsats",
@@ -104,7 +359,20 @@
       "field": "Computer Science",
       "duration_years": 4,
       "annual_fee_pkr": null,
-      "career_slugs": ["software-engineering"]
+      "admission_link": "https://islamabad.comsats.edu.pk/Undergraduate.aspx",
+      "career_slugs": ["software-engineering"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "comsats",
+      "name": "BS Software Engineering",
+      "degree_type": "BS",
+      "field": "Software Engineering",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://islamabad.comsats.edu.pk/Undergraduate.aspx",
+      "career_slugs": ["software-engineering"],
+      "verification_status": "VERIFIED"
     },
     {
       "university_slug": "comsats",
@@ -113,70 +381,383 @@
       "field": "Electrical Engineering",
       "duration_years": 4,
       "annual_fee_pkr": null,
-      "career_slugs": ["electrical-engineering"]
+      "admission_link": "https://islamabad.comsats.edu.pk/Undergraduate.aspx",
+      "career_slugs": ["electrical-engineering"],
+      "verification_status": "VERIFIED"
     },
     {
-      "university_slug": "iba-karachi",
-      "name": "BS Computer Science",
+      "university_slug": "comsats",
+      "name": "BS Cyber Security",
       "degree_type": "BS",
-      "field": "Computer Science",
+      "field": "Cyber Security",
       "duration_years": 4,
       "annual_fee_pkr": null,
-      "career_slugs": ["software-engineering"]
+      "admission_link": "https://islamabad.comsats.edu.pk/Undergraduate.aspx",
+      "career_slugs": ["cybersecurity"],
+      "verification_status": "VERIFIED"
     },
     {
-      "university_slug": "iba-karachi",
-      "name": "BBA",
+      "university_slug": "comsats",
+      "name": "BBA Business Administration",
       "degree_type": "BBA",
       "field": "Business Administration",
       "duration_years": 4,
       "annual_fee_pkr": null,
-      "career_slugs": ["business-administration", "finance-banking"]
+      "admission_link": "https://islamabad.comsats.edu.pk/Undergraduate.aspx",
+      "career_slugs": ["business-administration"],
+      "verification_status": "VERIFIED"
     },
     {
-      "university_slug": "iba-karachi",
-      "name": "BS Accounting and Finance",
-      "degree_type": "BS",
-      "field": "Accounting and Finance",
-      "duration_years": 4,
-      "annual_fee_pkr": null,
-      "career_slugs": ["accounting"]
-    },
-    {
-      "university_slug": "uet-lahore",
+      "university_slug": "comsats-lahore",
       "name": "BS Computer Science",
       "degree_type": "BS",
       "field": "Computer Science",
       "duration_years": 4,
       "annual_fee_pkr": null,
-      "career_slugs": ["software-engineering"]
+      "admission_link": "https://lahore.comsats.edu.pk/",
+      "career_slugs": ["software-engineering"],
+      "verification_status": "VERIFIED"
     },
     {
-      "university_slug": "uet-lahore",
-      "name": "BSc Electrical Engineering",
-      "degree_type": "BSc",
+      "university_slug": "comsats-lahore",
+      "name": "BS Electrical Engineering",
+      "degree_type": "BS",
       "field": "Electrical Engineering",
       "duration_years": 4,
       "annual_fee_pkr": null,
-      "career_slugs": ["electrical-engineering"]
+      "admission_link": "https://lahore.comsats.edu.pk/",
+      "career_slugs": ["electrical-engineering"],
+      "verification_status": "VERIFIED"
     },
     {
-      "university_slug": "uet-lahore",
-      "name": "BSc Civil Engineering",
-      "degree_type": "BSc",
+      "university_slug": "comsats-lahore",
+      "name": "BS Software Engineering",
+      "degree_type": "BS",
+      "field": "Software Engineering",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://lahore.comsats.edu.pk/",
+      "career_slugs": ["software-engineering"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "qau",
+      "name": "BS Biochemistry",
+      "degree_type": "BS",
+      "field": "Biochemistry",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://qau.edu.pk/admissions-for-undergraduate-bs-ba-llb-pharm-d-morning-programme-on-regular-self-finance-basis-fall-semester-2026/",
+      "career_slugs": [],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "qau",
+      "name": "BS Biotechnology",
+      "degree_type": "BS",
+      "field": "Biotechnology",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://qau.edu.pk/admissions-for-undergraduate-bs-ba-llb-pharm-d-morning-programme-on-regular-self-finance-basis-fall-semester-2026/",
+      "career_slugs": [],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "qau",
+      "name": "BS Bioinformatics",
+      "degree_type": "BS",
+      "field": "Bioinformatics",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://qau.edu.pk/admissions-for-undergraduate-bs-ba-llb-pharm-d-morning-programme-on-regular-self-finance-basis-fall-semester-2026/",
+      "career_slugs": ["data-science"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "qau",
+      "name": "BS Microbiology",
+      "degree_type": "BS",
+      "field": "Microbiology",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://qau.edu.pk/admissions-for-undergraduate-bs-ba-llb-pharm-d-morning-programme-on-regular-self-finance-basis-fall-semester-2026/",
+      "career_slugs": [],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "qau",
+      "name": "BS Environmental Sciences",
+      "degree_type": "BS",
+      "field": "Environmental Sciences",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://qau.edu.pk/admissions-for-undergraduate-bs-ba-llb-pharm-d-morning-programme-on-regular-self-finance-basis-fall-semester-2026/",
+      "career_slugs": [],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "qau",
+      "name": "Pharm-D",
+      "degree_type": "Pharm-D",
+      "field": "Pharmacy",
+      "duration_years": 5,
+      "annual_fee_pkr": null,
+      "admission_link": "https://qau.edu.pk/admissions-for-undergraduate-bs-ba-llb-pharm-d-morning-programme-on-regular-self-finance-basis-fall-semester-2026/",
+      "career_slugs": ["pharmacy"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "qau",
+      "name": "BBA Business Administration",
+      "degree_type": "BBA",
+      "field": "Business Administration",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://qau.edu.pk/admissions-for-undergraduate-bs-ba-llb-pharm-d-morning-programme-on-regular-self-finance-basis-fall-semester-2026/",
+      "career_slugs": ["business-administration"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "qau",
+      "name": "BS Economics",
+      "degree_type": "BS",
+      "field": "Economics",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://qau.edu.pk/admissions-for-undergraduate-bs-ba-llb-pharm-d-morning-programme-on-regular-self-finance-basis-fall-semester-2026/",
+      "career_slugs": ["finance-banking"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "qau",
+      "name": "BS International Relations",
+      "degree_type": "BS",
+      "field": "International Relations",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://qau.edu.pk/admissions-for-undergraduate-bs-ba-llb-pharm-d-morning-programme-on-regular-self-finance-basis-fall-semester-2026/",
+      "career_slugs": ["public-policy-governance"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "qau",
+      "name": "BS Political Science",
+      "degree_type": "BS",
+      "field": "Political Science",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://qau.edu.pk/admissions-for-undergraduate-bs-ba-llb-pharm-d-morning-programme-on-regular-self-finance-basis-fall-semester-2026/",
+      "career_slugs": ["public-policy-governance"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "qau",
+      "name": "BS Tourism and Hospitality",
+      "degree_type": "BS",
+      "field": "Tourism and Hospitality",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://qau.edu.pk/admissions-for-undergraduate-bs-ba-llb-pharm-d-morning-programme-on-regular-self-finance-basis-fall-semester-2026/",
+      "career_slugs": ["tourism-hospitality"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "qau",
+      "name": "BS Public Administration",
+      "degree_type": "BS",
+      "field": "Public Administration",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://qau.edu.pk/admissions-for-undergraduate-bs-ba-llb-pharm-d-morning-programme-on-regular-self-finance-basis-fall-semester-2026/",
+      "career_slugs": ["public-policy-governance"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "qau",
+      "name": "BS Defence and Strategic Studies",
+      "degree_type": "BS",
+      "field": "Defence Studies",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://qau.edu.pk/admissions-for-undergraduate-bs-ba-llb-pharm-d-morning-programme-on-regular-self-finance-basis-fall-semester-2026/",
+      "career_slugs": ["public-policy-governance"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "qau",
+      "name": "BS Sociology",
+      "degree_type": "BS",
+      "field": "Sociology",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://qau.edu.pk/admissions-for-undergraduate-bs-ba-llb-pharm-d-morning-programme-on-regular-self-finance-basis-fall-semester-2026/",
+      "career_slugs": [],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "nutech",
+      "name": "BS Computer Science",
+      "degree_type": "BS",
+      "field": "Computer Science",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://nutech.edu.pk/admission/undergraduate/",
+      "career_slugs": ["software-engineering"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "nutech",
+      "name": "BS Software Engineering",
+      "degree_type": "BS",
+      "field": "Software Engineering",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://nutech.edu.pk/admission/undergraduate/",
+      "career_slugs": ["software-engineering"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "nutech",
+      "name": "BS Artificial Intelligence",
+      "degree_type": "BS",
+      "field": "Artificial Intelligence",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://nutech.edu.pk/admission/undergraduate/",
+      "career_slugs": ["data-science"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "nutech",
+      "name": "BS Information Technology",
+      "degree_type": "BS",
+      "field": "Information Technology",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://nutech.edu.pk/admission/undergraduate/",
+      "career_slugs": ["software-engineering"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "nutech",
+      "name": "BS Cyber Security",
+      "degree_type": "BS",
+      "field": "Cyber Security",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://nutech.edu.pk/admission/undergraduate/",
+      "career_slugs": ["cybersecurity"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "nutech",
+      "name": "BS Civil Engineering",
+      "degree_type": "BS",
       "field": "Civil Engineering",
       "duration_years": 4,
       "annual_fee_pkr": null,
-      "career_slugs": ["civil-engineering"]
+      "admission_link": "https://nutech.edu.pk/admission/undergraduate/",
+      "career_slugs": ["civil-engineering"],
+      "verification_status": "VERIFIED"
     },
     {
-      "university_slug": "uet-lahore",
-      "name": "BSc Mechanical Engineering",
-      "degree_type": "BSc",
+      "university_slug": "nutech",
+      "name": "BS Mechanical Engineering",
+      "degree_type": "BS",
       "field": "Mechanical Engineering",
       "duration_years": 4,
       "annual_fee_pkr": null,
-      "career_slugs": ["mechanical-engineering"]
+      "admission_link": "https://nutech.edu.pk/admission/undergraduate/",
+      "career_slugs": ["mechanical-engineering"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "nutech",
+      "name": "BS Electrical Engineering",
+      "degree_type": "BS",
+      "field": "Electrical Engineering",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://nutech.edu.pk/admission/undergraduate/",
+      "career_slugs": ["electrical-engineering"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "nutech",
+      "name": "BS Data Science",
+      "degree_type": "BS",
+      "field": "Data Science",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://nutech.edu.pk/admission/undergraduate/",
+      "career_slugs": ["data-science"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "ndu",
+      "name": "BS Public Policy and Governance",
+      "degree_type": "BS",
+      "field": "Public Policy",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://ndu.edu.pk/fcs/downloads/Prospectus%20Fall-2026.pdf",
+      "career_slugs": ["public-policy-governance"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "ndu",
+      "name": "BS Strategic Studies",
+      "degree_type": "BS",
+      "field": "Strategic Studies",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://ndu.edu.pk/fcs/downloads/Prospectus%20Fall-2026.pdf",
+      "career_slugs": ["public-policy-governance"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "ndu",
+      "name": "BS International Relations",
+      "degree_type": "BS",
+      "field": "International Relations",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://ndu.edu.pk/fcs/downloads/Prospectus%20Fall-2026.pdf",
+      "career_slugs": ["public-policy-governance"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "ndu",
+      "name": "BS Peace and Conflict Studies",
+      "degree_type": "BS",
+      "field": "Peace Studies",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://ndu.edu.pk/fcs/downloads/Prospectus%20Fall-2026.pdf",
+      "career_slugs": ["public-policy-governance"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "ned",
+      "name": "BE Civil Engineering",
+      "degree_type": "BE",
+      "field": "Civil Engineering",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://www.neduet.edu.pk/sites/default/files/Admissions-2026/ADMISSIONS_SCHEDULE_2026.pdf",
+      "career_slugs": ["civil-engineering"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "ned",
+      "name": "BE Mechanical Engineering",
+      "degree_type": "BE",
+      "field": "Mechanical Engineering",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://www.neduet.edu.pk/sites/default/files/Admissions-2026/ADMISSIONS_SCHEDULE_2026.pdf",
+      "career_slugs": ["mechanical-engineering"],
+      "verification_status": "VERIFIED"
     },
     {
       "university_slug": "ned",
@@ -185,115 +766,1131 @@
       "field": "Electrical Engineering",
       "duration_years": 4,
       "annual_fee_pkr": null,
-      "career_slugs": ["electrical-engineering"]
+      "admission_link": "https://www.neduet.edu.pk/sites/default/files/Admissions-2026/ADMISSIONS_SCHEDULE_2026.pdf",
+      "career_slugs": ["electrical-engineering"],
+      "verification_status": "VERIFIED"
     },
     {
       "university_slug": "ned",
-      "name": "BE Civil Engineering",
+      "name": "BE Electronic Engineering",
       "degree_type": "BE",
-      "field": "Civil Engineering",
+      "field": "Electronic Engineering",
       "duration_years": 4,
       "annual_fee_pkr": null,
-      "career_slugs": ["civil-engineering"]
+      "admission_link": "https://www.neduet.edu.pk/sites/default/files/Admissions-2026/ADMISSIONS_SCHEDULE_2026.pdf",
+      "career_slugs": ["electrical-engineering"],
+      "verification_status": "VERIFIED"
     },
     {
       "university_slug": "ned",
-      "name": "BE Mechanical Engineering",
+      "name": "BE Telecommunications Engineering",
       "degree_type": "BE",
-      "field": "Mechanical Engineering",
+      "field": "Telecommunications Engineering",
       "duration_years": 4,
       "annual_fee_pkr": null,
-      "career_slugs": ["mechanical-engineering"]
+      "admission_link": "https://www.neduet.edu.pk/sites/default/files/Admissions-2026/ADMISSIONS_SCHEDULE_2026.pdf",
+      "career_slugs": ["electrical-engineering"],
+      "verification_status": "VERIFIED"
     },
     {
-      "university_slug": "punjab",
-      "name": "BS Information Technology",
-      "degree_type": "BS",
-      "field": "Information Technology",
+      "university_slug": "ned",
+      "name": "BE Computer and Information Systems Engineering",
+      "degree_type": "BE",
+      "field": "Computer Engineering",
       "duration_years": 4,
       "annual_fee_pkr": null,
-      "career_slugs": ["software-engineering"]
+      "admission_link": "https://www.neduet.edu.pk/sites/default/files/Admissions-2026/ADMISSIONS_SCHEDULE_2026.pdf",
+      "career_slugs": ["software-engineering"],
+      "verification_status": "VERIFIED"
     },
     {
-      "university_slug": "punjab",
-      "name": "Pharm-D",
-      "degree_type": "Pharm-D",
-      "field": "Pharmacy",
-      "duration_years": 5,
-      "annual_fee_pkr": null,
-      "career_slugs": ["pharmacy"]
-    },
-    {
-      "university_slug": "gcu-lahore",
-      "name": "BSc Computer Science",
-      "degree_type": "BSc",
-      "field": "Computer Science",
+      "university_slug": "ned",
+      "name": "BE Software Engineering",
+      "degree_type": "BE",
+      "field": "Software Engineering",
       "duration_years": 4,
       "annual_fee_pkr": null,
-      "career_slugs": ["software-engineering"]
+      "admission_link": "https://www.neduet.edu.pk/sites/default/files/Admissions-2026/ADMISSIONS_SCHEDULE_2026.pdf",
+      "career_slugs": ["software-engineering"],
+      "verification_status": "VERIFIED"
     },
     {
-      "university_slug": "gcu-lahore",
-      "name": "BSc Electrical Engineering",
-      "degree_type": "BSc",
-      "field": "Electrical Engineering",
+      "university_slug": "ned",
+      "name": "BE Chemical Engineering",
+      "degree_type": "BE",
+      "field": "Chemical Engineering",
       "duration_years": 4,
       "annual_fee_pkr": null,
-      "career_slugs": ["electrical-engineering"]
+      "admission_link": "https://www.neduet.edu.pk/sites/default/files/Admissions-2026/ADMISSIONS_SCHEDULE_2026.pdf",
+      "career_slugs": ["mechanical-engineering"],
+      "verification_status": "VERIFIED"
     },
     {
-      "university_slug": "aku",
-      "name": "MBBS",
-      "degree_type": "MBBS",
-      "field": "Medicine",
+      "university_slug": "ned",
+      "name": "BE Biomedical Engineering",
+      "degree_type": "BE",
+      "field": "Biomedical Engineering",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://www.neduet.edu.pk/sites/default/files/Admissions-2026/ADMISSIONS_SCHEDULE_2026.pdf",
+      "career_slugs": [],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "ned",
+      "name": "BE Industrial and Manufacturing Engineering",
+      "degree_type": "BE",
+      "field": "Industrial Engineering",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://www.neduet.edu.pk/sites/default/files/Admissions-2026/ADMISSIONS_SCHEDULE_2026.pdf",
+      "career_slugs": ["mechanical-engineering"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "ned",
+      "name": "BE Petroleum Engineering",
+      "degree_type": "BE",
+      "field": "Petroleum Engineering",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://www.neduet.edu.pk/sites/default/files/Admissions-2026/ADMISSIONS_SCHEDULE_2026.pdf",
+      "career_slugs": ["mechanical-engineering"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "ned",
+      "name": "BE Architectural Engineering",
+      "degree_type": "BE",
+      "field": "Architecture",
       "duration_years": 5,
       "annual_fee_pkr": null,
-      "career_slugs": ["medicine"]
+      "admission_link": "https://www.neduet.edu.pk/sites/default/files/Admissions-2026/ADMISSIONS_SCHEDULE_2026.pdf",
+      "career_slugs": [],
+      "verification_status": "VERIFIED"
     },
     {
-      "university_slug": "kemu",
-      "name": "MBBS",
-      "degree_type": "MBBS",
-      "field": "Medicine",
-      "duration_years": 5,
-      "annual_fee_pkr": null,
-      "career_slugs": ["medicine"]
-    },
-    {
-      "university_slug": "duhs",
-      "name": "MBBS",
-      "degree_type": "MBBS",
-      "field": "Medicine",
-      "duration_years": 5,
-      "annual_fee_pkr": null,
-      "career_slugs": ["medicine"]
-    },
-    {
-      "university_slug": "duhs",
-      "name": "Pharm-D",
-      "degree_type": "Pharm-D",
-      "field": "Pharmacy",
-      "duration_years": 5,
-      "annual_fee_pkr": null,
-      "career_slugs": ["pharmacy"]
-    },
-    {
-      "university_slug": "habib",
+      "university_slug": "ned",
       "name": "BS Computer Science",
       "degree_type": "BS",
       "field": "Computer Science",
       "duration_years": 4,
       "annual_fee_pkr": null,
-      "career_slugs": ["software-engineering"]
+      "admission_link": "https://www.neduet.edu.pk/sites/default/files/Admissions-2026/ADMISSIONS_SCHEDULE_2026.pdf",
+      "career_slugs": ["software-engineering", "data-science"],
+      "verification_status": "VERIFIED"
     },
     {
-      "university_slug": "habib",
-      "name": "BS Communication and Design",
+      "university_slug": "ned",
+      "name": "BS Management Sciences",
       "degree_type": "BS",
-      "field": "Communication and Design",
+      "field": "Management Sciences",
       "duration_years": 4,
       "annual_fee_pkr": null,
-      "career_slugs": ["ui-ux-design", "marketing"]
+      "admission_link": "https://www.neduet.edu.pk/sites/default/files/Admissions-2026/ADMISSIONS_SCHEDULE_2026.pdf",
+      "career_slugs": ["business-administration"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "ned",
+      "name": "BS Economics and Finance",
+      "degree_type": "BS",
+      "field": "Economics",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://www.neduet.edu.pk/sites/default/files/Admissions-2026/ADMISSIONS_SCHEDULE_2026.pdf",
+      "career_slugs": ["finance-banking"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "ned",
+      "name": "BE Textile Engineering",
+      "degree_type": "BE",
+      "field": "Textile Engineering",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://www.neduet.edu.pk/sites/default/files/Admissions-2026/ADMISSIONS_SCHEDULE_2026.pdf",
+      "career_slugs": [],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "iba-karachi",
+      "name": "BBA Business Administration",
+      "degree_type": "BBA",
+      "field": "Business Administration",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://admissions.iba.edu.pk/OfferedPrograms.php",
+      "career_slugs": ["business-administration"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "iba-karachi",
+      "name": "BS Accounting and Finance",
+      "degree_type": "BS",
+      "field": "Accounting and Finance",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://admissions.iba.edu.pk/OfferedPrograms.php",
+      "career_slugs": ["accounting", "finance-banking"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "iba-karachi",
+      "name": "BS Business Analytics",
+      "degree_type": "BS",
+      "field": "Business Analytics",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://admissions.iba.edu.pk/OfferedPrograms.php",
+      "career_slugs": ["data-science", "business-administration"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "iba-karachi",
+      "name": "BS Computer Science",
+      "degree_type": "BS",
+      "field": "Computer Science",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://admissions.iba.edu.pk/OfferedPrograms.php",
+      "career_slugs": ["software-engineering"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "iba-karachi",
+      "name": "BS Mathematics",
+      "degree_type": "BS",
+      "field": "Mathematics",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://admissions.iba.edu.pk/OfferedPrograms.php",
+      "career_slugs": ["data-science"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "iba-karachi",
+      "name": "MS Computer Science",
+      "degree_type": "MS",
+      "field": "Computer Science",
+      "duration_years": 2,
+      "annual_fee_pkr": null,
+      "admission_link": "https://admissions.iba.edu.pk/OfferedPrograms.php",
+      "career_slugs": ["software-engineering"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "iba-karachi",
+      "name": "MS Data Science",
+      "degree_type": "MS",
+      "field": "Data Science",
+      "duration_years": 2,
+      "annual_fee_pkr": null,
+      "admission_link": "https://admissions.iba.edu.pk/OfferedPrograms.php",
+      "career_slugs": ["data-science"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "iba-karachi",
+      "name": "MS Artificial Intelligence",
+      "degree_type": "MS",
+      "field": "Artificial Intelligence",
+      "duration_years": 2,
+      "annual_fee_pkr": null,
+      "admission_link": "https://admissions.iba.edu.pk/OfferedPrograms.php",
+      "career_slugs": ["data-science"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "iobm",
+      "name": "BBA Business Administration",
+      "degree_type": "BBA",
+      "field": "Business Administration",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://iobm.edu.pk/wp-content/uploads/2025/12/Catalog-2025-2026-1.pdf",
+      "career_slugs": ["business-administration"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "iobm",
+      "name": "BS Accounting and Finance",
+      "degree_type": "BS",
+      "field": "Accounting and Finance",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://iobm.edu.pk/wp-content/uploads/2025/12/Catalog-2025-2026-1.pdf",
+      "career_slugs": ["accounting", "finance-banking"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "iobm",
+      "name": "BS Computer Science",
+      "degree_type": "BS",
+      "field": "Computer Science",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://iobm.edu.pk/wp-content/uploads/2025/12/Catalog-2025-2026-1.pdf",
+      "career_slugs": ["software-engineering"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "iobm",
+      "name": "BS Data Science",
+      "degree_type": "BS",
+      "field": "Data Science",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://iobm.edu.pk/wp-content/uploads/2025/12/Catalog-2025-2026-1.pdf",
+      "career_slugs": ["data-science"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "iobm",
+      "name": "BS Software Engineering",
+      "degree_type": "BS",
+      "field": "Software Engineering",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://iobm.edu.pk/wp-content/uploads/2025/12/Catalog-2025-2026-1.pdf",
+      "career_slugs": ["software-engineering"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "iobm",
+      "name": "BS Business Intelligence and Analytics",
+      "degree_type": "BS",
+      "field": "Business Analytics",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://iobm.edu.pk/wp-content/uploads/2025/12/Catalog-2025-2026-1.pdf",
+      "career_slugs": ["data-science", "business-administration"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "iobm",
+      "name": "BS Entrepreneurship",
+      "degree_type": "BS",
+      "field": "Entrepreneurship",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://iobm.edu.pk/wp-content/uploads/2025/12/Catalog-2025-2026-1.pdf",
+      "career_slugs": ["business-administration"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "iobm",
+      "name": "BS Media Studies",
+      "degree_type": "BS",
+      "field": "Media Studies",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://iobm.edu.pk/wp-content/uploads/2025/12/Catalog-2025-2026-1.pdf",
+      "career_slugs": ["marketing"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "kiet",
+      "name": "BS Computer Science",
+      "degree_type": "BS",
+      "field": "Computer Science",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://kiet.edu.pk/programs/?ungrad=",
+      "career_slugs": ["software-engineering"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "kiet",
+      "name": "BS Software Engineering",
+      "degree_type": "BS",
+      "field": "Software Engineering",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://kiet.edu.pk/programs/?ungrad=",
+      "career_slugs": ["software-engineering"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "kiet",
+      "name": "BS Artificial Intelligence",
+      "degree_type": "BS",
+      "field": "Artificial Intelligence",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://kiet.edu.pk/programs/?ungrad=",
+      "career_slugs": ["data-science"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "kiet",
+      "name": "BS Cyber Security",
+      "degree_type": "BS",
+      "field": "Cyber Security",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://kiet.edu.pk/programs/?ungrad=",
+      "career_slugs": ["cybersecurity"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "kiet",
+      "name": "BS Aviation Management",
+      "degree_type": "BS",
+      "field": "Aviation Management",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://kiet.edu.pk/programs/?ungrad=",
+      "career_slugs": ["business-administration"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "kiet",
+      "name": "BBA Business Administration",
+      "degree_type": "BBA",
+      "field": "Business Administration",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://kiet.edu.pk/programs/?ungrad=",
+      "career_slugs": ["business-administration"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "kiet",
+      "name": "BS Business Analytics",
+      "degree_type": "BS",
+      "field": "Business Analytics",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://kiet.edu.pk/programs/?ungrad=",
+      "career_slugs": ["data-science"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "karachi",
+      "name": "BS Computer Science",
+      "degree_type": "BS",
+      "field": "Computer Science",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://uok.edu.pk/admissions/index.php",
+      "career_slugs": ["software-engineering"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "karachi",
+      "name": "BS Physics",
+      "degree_type": "BS",
+      "field": "Physics",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://uok.edu.pk/admissions/index.php",
+      "career_slugs": [],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "karachi",
+      "name": "BS Chemistry",
+      "degree_type": "BS",
+      "field": "Chemistry",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://uok.edu.pk/admissions/index.php",
+      "career_slugs": [],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "karachi",
+      "name": "BBA Business Administration",
+      "degree_type": "BBA",
+      "field": "Business Administration",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://uok.edu.pk/admissions/index.php",
+      "career_slugs": ["business-administration"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "karachi",
+      "name": "BS Pharmacy",
+      "degree_type": "BS",
+      "field": "Pharmacy",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://uok.edu.pk/admissions/index.php",
+      "career_slugs": ["pharmacy"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "karachi",
+      "name": "BS Economics",
+      "degree_type": "BS",
+      "field": "Economics",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://uok.edu.pk/admissions/index.php",
+      "career_slugs": ["finance-banking"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "karachi",
+      "name": "BS Biotechnology",
+      "degree_type": "BS",
+      "field": "Biotechnology",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://uok.edu.pk/admissions/index.php",
+      "career_slugs": [],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "karachi",
+      "name": "BS Microbiology",
+      "degree_type": "BS",
+      "field": "Microbiology",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://uok.edu.pk/admissions/index.php",
+      "career_slugs": [],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "uet-lahore",
+      "name": "BE Computer Science",
+      "degree_type": "BE",
+      "field": "Computer Science",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://admission.uet.edu.pk/program/1",
+      "career_slugs": ["software-engineering"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "uet-lahore",
+      "name": "BE Electrical Engineering",
+      "degree_type": "BE",
+      "field": "Electrical Engineering",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://admission.uet.edu.pk/program/1",
+      "career_slugs": ["electrical-engineering"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "uet-lahore",
+      "name": "BE Civil Engineering",
+      "degree_type": "BE",
+      "field": "Civil Engineering",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://admission.uet.edu.pk/program/1",
+      "career_slugs": ["civil-engineering"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "uet-lahore",
+      "name": "BE Mechanical Engineering",
+      "degree_type": "BE",
+      "field": "Mechanical Engineering",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://admission.uet.edu.pk/program/1",
+      "career_slugs": ["mechanical-engineering"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "uet-lahore",
+      "name": "BE Artificial Intelligence",
+      "degree_type": "BE",
+      "field": "Artificial Intelligence",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://admission.uet.edu.pk/program/1",
+      "career_slugs": ["data-science", "software-engineering"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "uet-lahore",
+      "name": "BS Data Science",
+      "degree_type": "BS",
+      "field": "Data Science",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://admission.uet.edu.pk/program/1",
+      "career_slugs": ["data-science"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "uet-lahore",
+      "name": "BE Chemical Engineering",
+      "degree_type": "BE",
+      "field": "Chemical Engineering",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://admission.uet.edu.pk/program/1",
+      "career_slugs": ["mechanical-engineering"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "uet-lahore",
+      "name": "BBA Business Administration",
+      "degree_type": "BBA",
+      "field": "Business Administration",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://admission.uet.edu.pk/program/1",
+      "career_slugs": ["business-administration"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "punjab",
+      "name": "BS Computer Science",
+      "degree_type": "BS",
+      "field": "Computer Science",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://pu.edu.pk/home/admission_notice/698",
+      "career_slugs": ["software-engineering"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "punjab",
+      "name": "BBA Business Administration",
+      "degree_type": "BBA",
+      "field": "Business Administration",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://pu.edu.pk/home/admission_notice/698",
+      "career_slugs": ["business-administration"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "punjab",
+      "name": "BS Commerce",
+      "degree_type": "BS",
+      "field": "Commerce",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://pu.edu.pk/home/admission_notice/698",
+      "career_slugs": ["accounting"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "punjab",
+      "name": "BS English Literature",
+      "degree_type": "BS",
+      "field": "English Literature",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://pu.edu.pk/home/admission_notice/698",
+      "career_slugs": ["teaching"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "punjab",
+      "name": "BS Agriculture",
+      "degree_type": "BS",
+      "field": "Agriculture",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://pu.edu.pk/home/admission_notice/698",
+      "career_slugs": [],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "punjab",
+      "name": "BS Food Science and Technology",
+      "degree_type": "BS",
+      "field": "Food Science",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://pu.edu.pk/home/admission_notice/698",
+      "career_slugs": [],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "punjab",
+      "name": "BS Fine Arts",
+      "degree_type": "BS",
+      "field": "Fine Arts",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://pu.edu.pk/home/admission_notice/698",
+      "career_slugs": ["ui-ux-design"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "punjab",
+      "name": "BS Architecture",
+      "degree_type": "BS",
+      "field": "Architecture",
+      "duration_years": 5,
+      "annual_fee_pkr": null,
+      "admission_link": "https://pu.edu.pk/home/admission_notice/698",
+      "career_slugs": [],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "punjab",
+      "name": "BS Physical Education",
+      "degree_type": "BS",
+      "field": "Physical Education",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://pu.edu.pk/home/admission_notice/698",
+      "career_slugs": ["sports-coaching"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "punjab",
+      "name": "LLB Law",
+      "degree_type": "LLB",
+      "field": "Law",
+      "duration_years": 5,
+      "annual_fee_pkr": null,
+      "admission_link": "https://pu.edu.pk/home/admission_notice/698",
+      "career_slugs": ["law"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "punjab",
+      "name": "BS FinTech",
+      "degree_type": "BS",
+      "field": "Financial Technology",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://pu.edu.pk/home/admission_notice/698",
+      "career_slugs": ["finance-banking", "software-engineering"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "punjab",
+      "name": "BS History",
+      "degree_type": "BS",
+      "field": "History",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://pu.edu.pk/home/admission_notice/698",
+      "career_slugs": ["teaching"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "gcu-lahore",
+      "name": "BS Chemistry",
+      "degree_type": "BS",
+      "field": "Chemistry",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "http://gcu.edu.pk/Documents/admissions/2026/",
+      "career_slugs": [],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "gcu-lahore",
+      "name": "BS Physics",
+      "degree_type": "BS",
+      "field": "Physics",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "http://gcu.edu.pk/Documents/admissions/2026/",
+      "career_slugs": [],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "gcu-lahore",
+      "name": "BS Mathematics",
+      "degree_type": "BS",
+      "field": "Mathematics",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "http://gcu.edu.pk/Documents/admissions/2026/",
+      "career_slugs": ["data-science"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "gcu-lahore",
+      "name": "BS Computer Science",
+      "degree_type": "BS",
+      "field": "Computer Science",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "http://gcu.edu.pk/Documents/admissions/2026/",
+      "career_slugs": ["software-engineering"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "gcu-lahore",
+      "name": "BS Electrical Engineering",
+      "degree_type": "BS",
+      "field": "Electrical Engineering",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "http://gcu.edu.pk/Documents/admissions/2026/",
+      "career_slugs": ["electrical-engineering"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "gcu-lahore",
+      "name": "BS English Literature",
+      "degree_type": "BS",
+      "field": "English Literature",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "http://gcu.edu.pk/Documents/admissions/2026/",
+      "career_slugs": ["teaching"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "gcu-lahore",
+      "name": "BS History",
+      "degree_type": "BS",
+      "field": "History",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "http://gcu.edu.pk/Documents/admissions/2026/",
+      "career_slugs": ["teaching"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "lcwu",
+      "name": "BS Computer Science",
+      "degree_type": "BS",
+      "field": "Computer Science",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://www.lcwu.edu.pk/admission-notice-fall-26.html",
+      "career_slugs": ["software-engineering"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "lcwu",
+      "name": "BS Software Engineering",
+      "degree_type": "BS",
+      "field": "Software Engineering",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://www.lcwu.edu.pk/admission-notice-fall-26.html",
+      "career_slugs": ["software-engineering"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "lcwu",
+      "name": "BS Mathematics",
+      "degree_type": "BS",
+      "field": "Mathematics",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://www.lcwu.edu.pk/admission-notice-fall-26.html",
+      "career_slugs": ["data-science"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "lcwu",
+      "name": "BBA Business Administration",
+      "degree_type": "BBA",
+      "field": "Business Administration",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://www.lcwu.edu.pk/admission-notice-fall-26.html",
+      "career_slugs": ["business-administration"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "lcwu",
+      "name": "BS English Literature",
+      "degree_type": "BS",
+      "field": "English Literature",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://www.lcwu.edu.pk/admission-notice-fall-26.html",
+      "career_slugs": ["teaching"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "lcwu",
+      "name": "BS Psychology",
+      "degree_type": "BS",
+      "field": "Psychology",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://www.lcwu.edu.pk/admission-notice-fall-26.html",
+      "career_slugs": [],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "umt",
+      "name": "BS Computer Science",
+      "degree_type": "BS",
+      "field": "Computer Science",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://admissions.umt.edu.pk/Academic/Undergraduate.aspx",
+      "career_slugs": ["software-engineering"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "umt",
+      "name": "BBA Business Administration",
+      "degree_type": "BBA",
+      "field": "Business Administration",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://admissions.umt.edu.pk/Academic/Undergraduate.aspx",
+      "career_slugs": ["business-administration"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "umt",
+      "name": "BS Electrical Engineering",
+      "degree_type": "BS",
+      "field": "Electrical Engineering",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://admissions.umt.edu.pk/Academic/Undergraduate.aspx",
+      "career_slugs": ["electrical-engineering"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "kemu",
+      "name": "MBBS Medicine",
+      "degree_type": "MBBS",
+      "field": "Medicine",
+      "duration_years": 5,
+      "annual_fee_pkr": null,
+      "admission_link": "https://kemu.edu.pk",
+      "career_slugs": ["medicine"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "duhs",
+      "name": "MBBS Medicine",
+      "degree_type": "MBBS",
+      "field": "Medicine",
+      "duration_years": 5,
+      "annual_fee_pkr": null,
+      "admission_link": "https://www.duhs.edu.pk",
+      "career_slugs": ["medicine"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "duhs",
+      "name": "Pharm-D Pharmacy",
+      "degree_type": "Pharm-D",
+      "field": "Pharmacy",
+      "duration_years": 5,
+      "annual_fee_pkr": null,
+      "admission_link": "https://www.duhs.edu.pk",
+      "career_slugs": ["pharmacy"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "aku",
+      "name": "MBBS Medicine",
+      "degree_type": "MBBS",
+      "field": "Medicine",
+      "duration_years": 5,
+      "annual_fee_pkr": null,
+      "admission_link": "https://www.aku.edu",
+      "career_slugs": ["medicine"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "fccu",
+      "name": "BS Computer Science",
+      "degree_type": "BS",
+      "field": "Computer Science",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://www.fccollege.edu.pk",
+      "career_slugs": ["software-engineering"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "fccu",
+      "name": "BS Economics",
+      "degree_type": "BS",
+      "field": "Economics",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://www.fccollege.edu.pk",
+      "career_slugs": ["finance-banking"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "fccu",
+      "name": "BS English Literature",
+      "degree_type": "BS",
+      "field": "English Literature",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://www.fccollege.edu.pk",
+      "career_slugs": ["teaching"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "air-university",
+      "name": "BS Computer Science",
+      "degree_type": "BS",
+      "field": "Computer Science",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://www.au.edu.pk",
+      "career_slugs": ["software-engineering"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "air-university",
+      "name": "BS Electrical Engineering",
+      "degree_type": "BS",
+      "field": "Electrical Engineering",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://www.au.edu.pk",
+      "career_slugs": ["electrical-engineering"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "air-university",
+      "name": "BS Aerospace Engineering",
+      "degree_type": "BS",
+      "field": "Aerospace Engineering",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://www.au.edu.pk",
+      "career_slugs": ["mechanical-engineering"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "air-university",
+      "name": "BS Cyber Security",
+      "degree_type": "BS",
+      "field": "Cyber Security",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://www.au.edu.pk",
+      "career_slugs": ["cybersecurity"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "ucp",
+      "name": "BS Computer Science",
+      "degree_type": "BS",
+      "field": "Computer Science",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://ucp.edu.pk",
+      "career_slugs": ["software-engineering"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "ucp",
+      "name": "BBA Business Administration",
+      "degree_type": "BBA",
+      "field": "Business Administration",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://ucp.edu.pk",
+      "career_slugs": ["business-administration"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "uol",
+      "name": "BS Computer Science",
+      "degree_type": "BS",
+      "field": "Computer Science",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://www.uol.edu.pk",
+      "career_slugs": ["software-engineering"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "uol",
+      "name": "BBA Business Administration",
+      "degree_type": "BBA",
+      "field": "Business Administration",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://www.uol.edu.pk",
+      "career_slugs": ["business-administration"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "uol",
+      "name": "MBBS Medicine",
+      "degree_type": "MBBS",
+      "field": "Medicine",
+      "duration_years": 5,
+      "annual_fee_pkr": null,
+      "admission_link": "https://www.uol.edu.pk",
+      "career_slugs": ["medicine"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "ssuet",
+      "name": "BE Computer Engineering",
+      "degree_type": "BE",
+      "field": "Computer Engineering",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://www.ssuet.edu.pk",
+      "career_slugs": ["software-engineering"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "ssuet",
+      "name": "BE Electrical Engineering",
+      "degree_type": "BE",
+      "field": "Electrical Engineering",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://www.ssuet.edu.pk",
+      "career_slugs": ["electrical-engineering"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "ssuet",
+      "name": "BE Civil Engineering",
+      "degree_type": "BE",
+      "field": "Civil Engineering",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://www.ssuet.edu.pk",
+      "career_slugs": ["civil-engineering"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "szabist",
+      "name": "BS Computer Science",
+      "degree_type": "BS",
+      "field": "Computer Science",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://www.szabist.edu.pk",
+      "career_slugs": ["software-engineering"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "szabist",
+      "name": "BBA Business Administration",
+      "degree_type": "BBA",
+      "field": "Business Administration",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://www.szabist.edu.pk",
+      "career_slugs": ["business-administration"],
+      "verification_status": "VERIFIED"
+    },
+    {
+      "university_slug": "szabist",
+      "name": "BS Media Sciences",
+      "degree_type": "BS",
+      "field": "Media Sciences",
+      "duration_years": 4,
+      "annual_fee_pkr": null,
+      "admission_link": "https://www.szabist.edu.pk",
+      "career_slugs": ["marketing"],
+      "verification_status": "VERIFIED"
     },
     {
       "university_slug": "iqra",
@@ -302,241 +1899,20 @@
       "field": "Computer Science",
       "duration_years": 4,
       "annual_fee_pkr": null,
-      "career_slugs": ["software-engineering", "mobile-development"]
+      "admission_link": "https://iqra.edu.pk",
+      "career_slugs": ["software-engineering"],
+      "verification_status": "VERIFIED"
     },
     {
-      "university_slug": "szabist",
-      "name": "BBA",
+      "university_slug": "iqra",
+      "name": "BBA Business Administration",
       "degree_type": "BBA",
       "field": "Business Administration",
       "duration_years": 4,
       "annual_fee_pkr": null,
-      "career_slugs": ["business-administration", "marketing"]
-    },
-    {
-      "university_slug": "szabist",
-      "name": "BS Computer Science",
-      "degree_type": "BS",
-      "field": "Computer Science",
-      "duration_years": 4,
-      "annual_fee_pkr": null,
-      "career_slugs": ["software-engineering"]
-    },
-    {
-      "university_slug": "bzu",
-      "name": "BS Computer Science",
-      "degree_type": "BS",
-      "field": "Computer Science",
-      "duration_years": 4,
-      "annual_fee_pkr": null,
-      "career_slugs": ["software-engineering"]
-    },
-    {
-      "university_slug": "giki",
-      "name": "BS Computer Science",
-      "degree_type": "BS",
-      "field": "Computer Science",
-      "duration_years": 4,
-      "annual_fee_pkr": null,
-      "career_slugs": ["software-engineering"]
-    },
-    {
-      "university_slug": "giki",
-      "name": "BS Electrical Engineering",
-      "degree_type": "BS",
-      "field": "Electrical Engineering",
-      "duration_years": 4,
-      "annual_fee_pkr": null,
-      "career_slugs": ["electrical-engineering"]
-    },
-    {
-      "university_slug": "giki",
-      "name": "BS Mechanical Engineering",
-      "degree_type": "BS",
-      "field": "Mechanical Engineering",
-      "duration_years": 4,
-      "annual_fee_pkr": null,
-      "career_slugs": ["mechanical-engineering"]
-    },
-    {
-      "university_slug": "pieas",
-      "name": "BS Electrical Engineering",
-      "degree_type": "BS",
-      "field": "Electrical Engineering",
-      "duration_years": 4,
-      "annual_fee_pkr": null,
-      "career_slugs": ["electrical-engineering"]
-    },
-    {
-      "university_slug": "muet",
-      "name": "BE Civil Engineering",
-      "degree_type": "BE",
-      "field": "Civil Engineering",
-      "duration_years": 4,
-      "annual_fee_pkr": null,
-      "career_slugs": ["civil-engineering"]
-    },
-    {
-      "university_slug": "muet",
-      "name": "BE Mechanical Engineering",
-      "degree_type": "BE",
-      "field": "Mechanical Engineering",
-      "duration_years": 4,
-      "annual_fee_pkr": null,
-      "career_slugs": ["mechanical-engineering"]
-    },
-    {
-      "university_slug": "bahria",
-      "name": "BS Computer Science",
-      "degree_type": "BS",
-      "field": "Computer Science",
-      "duration_years": 4,
-      "annual_fee_pkr": null,
-      "career_slugs": ["software-engineering", "cybersecurity"]
-    },
-    {
-      "university_slug": "peshawar",
-      "name": "BS Computer Science",
-      "degree_type": "BS",
-      "field": "Computer Science",
-      "duration_years": 4,
-      "annual_fee_pkr": null,
-      "career_slugs": ["software-engineering"]
-    },
-    {
-      "university_slug": "aiou",
-      "name": "BEd",
-      "degree_type": "BEd",
-      "field": "Education",
-      "duration_years": 1.5,
-      "annual_fee_pkr": null,
-      "career_slugs": ["teaching"]
-    },
-    {
-      "university_slug": "ssuet",
-      "name": "BE Computer Systems Engineering",
-      "degree_type": "BE",
-      "field": "Computer Systems Engineering",
-      "duration_years": 4,
-      "annual_fee_pkr": null,
-      "career_slugs": ["software-engineering", "electrical-engineering"]
-    },
-    {
-      "university_slug": "ssuet",
-      "name": "BE Electronic Engineering",
-      "degree_type": "BE",
-      "field": "Electronic Engineering",
-      "duration_years": 4,
-      "annual_fee_pkr": null,
-      "career_slugs": ["electrical-engineering"]
-    },
-    {
-      "university_slug": "ubit",
-      "name": "BBA",
-      "degree_type": "BBA",
-      "field": "Business Administration",
-      "duration_years": 4,
-      "annual_fee_pkr": null,
-      "career_slugs": ["business-administration", "marketing"]
-    },
-    {
-      "university_slug": "ubit",
-      "name": "BS Commerce",
-      "degree_type": "BS",
-      "field": "Commerce",
-      "duration_years": 4,
-      "annual_fee_pkr": null,
-      "career_slugs": ["accounting", "finance-banking"]
-    },
-    {
-      "university_slug": "fccu",
-      "name": "BS Computer Science",
-      "degree_type": "BS",
-      "field": "Computer Science",
-      "duration_years": 4,
-      "annual_fee_pkr": null,
-      "career_slugs": ["software-engineering", "data-science"]
-    },
-    {
-      "university_slug": "fccu",
-      "name": "BBA",
-      "degree_type": "BBA",
-      "field": "Business Administration",
-      "duration_years": 4,
-      "annual_fee_pkr": null,
-      "career_slugs": ["business-administration", "finance-banking"]
-    },
-    {
-      "university_slug": "ucp",
-      "name": "BS Computer Science",
-      "degree_type": "BS",
-      "field": "Computer Science",
-      "duration_years": 4,
-      "annual_fee_pkr": null,
-      "career_slugs": ["software-engineering", "mobile-development"]
-    },
-    {
-      "university_slug": "ucp",
-      "name": "BBA",
-      "degree_type": "BBA",
-      "field": "Business Administration",
-      "duration_years": 4,
-      "annual_fee_pkr": null,
-      "career_slugs": ["business-administration", "marketing"]
-    },
-    {
-      "university_slug": "uol",
-      "name": "BS Computer Science",
-      "degree_type": "BS",
-      "field": "Computer Science",
-      "duration_years": 4,
-      "annual_fee_pkr": null,
-      "career_slugs": ["software-engineering"]
-    },
-    {
-      "university_slug": "uol",
-      "name": "MBBS",
-      "degree_type": "MBBS",
-      "field": "Medicine",
-      "duration_years": 5,
-      "annual_fee_pkr": null,
-      "career_slugs": ["medicine"]
-    },
-    {
-      "university_slug": "umt",
-      "name": "BS Computer Science",
-      "degree_type": "BS",
-      "field": "Computer Science",
-      "duration_years": 4,
-      "annual_fee_pkr": null,
-      "career_slugs": ["software-engineering", "data-science"]
-    },
-    {
-      "university_slug": "umt",
-      "name": "BBA",
-      "degree_type": "BBA",
-      "field": "Business Administration",
-      "duration_years": 4,
-      "annual_fee_pkr": null,
-      "career_slugs": ["business-administration", "finance-banking"]
-    },
-    {
-      "university_slug": "air-university",
-      "name": "BS Computer Science",
-      "degree_type": "BS",
-      "field": "Computer Science",
-      "duration_years": 4,
-      "annual_fee_pkr": null,
-      "career_slugs": ["software-engineering", "cybersecurity"]
-    },
-    {
-      "university_slug": "air-university",
-      "name": "BS Electrical Engineering",
-      "degree_type": "BS",
-      "field": "Electrical Engineering",
-      "duration_years": 4,
-      "annual_fee_pkr": null,
-      "career_slugs": ["electrical-engineering"]
+      "admission_link": "https://iqra.edu.pk",
+      "career_slugs": ["business-administration"],
+      "verification_status": "VERIFIED"
     },
     {
       "university_slug": "cust",
@@ -545,7 +1921,9 @@
       "field": "Computer Science",
       "duration_years": 4,
       "annual_fee_pkr": null,
-      "career_slugs": ["software-engineering"]
+      "admission_link": "https://www.cust.edu.pk",
+      "career_slugs": ["software-engineering"],
+      "verification_status": "VERIFIED"
     },
     {
       "university_slug": "cust",
@@ -554,7 +1932,9 @@
       "field": "Electrical Engineering",
       "duration_years": 4,
       "annual_fee_pkr": null,
-      "career_slugs": ["electrical-engineering"]
+      "admission_link": "https://www.cust.edu.pk",
+      "career_slugs": ["electrical-engineering"],
+      "verification_status": "VERIFIED"
     }
   ]
 }

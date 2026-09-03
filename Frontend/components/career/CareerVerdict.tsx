@@ -1,9 +1,7 @@
-﻿import Link from "next/link"
+import Link from "next/link"
 import { CheckCircle2, AlertTriangle, ArrowRight, Sparkles } from "lucide-react"
-import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
 import type { CareerVerdict as VerdictType } from "@/lib/types/career.types"
+import { cn } from "@/lib/utils/cn"
 
 export function CareerVerdict({
   verdict,
@@ -15,74 +13,86 @@ export function CareerVerdict({
   const isGood = verdict.verdict === "GOOD_FIT"
   const isExploring = verdict.verdict === "WORTH_EXPLORING"
 
-  const badgeVariant = isGood ? "success" : isExploring ? "warning" : "destructive"
+  const badgeClass = isGood 
+    ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/30" 
+    : isExploring 
+    ? "bg-indigo-500/10 text-indigo-400 border-indigo-500/30" 
+    : "bg-amber-500/10 text-amber-400 border-amber-500/30"
 
   return (
-    <Card className="border-2 border-primary/20 bg-gradient-to-b from-primary/5 to-transparent overflow-hidden">
-      <CardHeader className="pb-3">
-        <div className="flex items-center justify-between gap-2">
-          <div className="flex items-center gap-2">
-            <Sparkles className="h-4 w-4 text-primary" />
-            <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+    <div className="relative rounded-[2rem] border border-indigo-500/30 bg-slate-900/60 overflow-hidden backdrop-blur-md shadow-[0_0_50px_rgba(79,70,229,0.1)]">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(79,70,229,0.15),transparent_70%)] pointer-events-none" />
+      
+      <div className="relative z-10 p-6 sm:p-10 border-b border-slate-800/80">
+        <div className="flex items-center justify-between gap-4 mb-6">
+          <div className="flex items-center gap-2.5">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-500/20 text-indigo-400">
+              <Sparkles className="h-4 w-4" />
+            </div>
+            <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
               AI Recommendation
             </span>
           </div>
-          <Badge variant={badgeVariant} className="font-bold text-xs">
+          <span className={cn("inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-bold tracking-wider uppercase border", badgeClass)}>
             {verdict.verdict.replace("_", " ")}
-          </Badge>
+          </span>
         </div>
-        <CardTitle className="text-2xl font-bold tracking-tight text-foreground mt-2">
+        
+        <h3 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight mb-4">
           {verdict.headline}
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-6">
-        <p className="text-sm text-muted-foreground leading-relaxed">
+        </h3>
+        <p className="text-base text-slate-300 leading-relaxed max-w-3xl">
           {verdict.reasoning}
         </p>
+      </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-          <div className="rounded-2xl border border-emerald-200/80 bg-emerald-50/50 p-4 space-y-2">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-emerald-800 flex items-center gap-1.5">
-              <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
+      <div className="relative z-10 p-6 sm:p-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/5 p-6 space-y-4">
+            <h4 className="text-xs font-bold uppercase tracking-widest text-emerald-400 flex items-center gap-2">
+              <CheckCircle2 className="h-4 w-4" />
               Your Strengths
             </h4>
-            <ul className="space-y-1.5 text-xs text-emerald-950">
+            <ul className="space-y-3 text-sm text-slate-300">
               {verdict.student_strengths_match.map((s, idx) => (
-                <li key={idx} className="flex items-start gap-1.5">
-                  <span>✓</span>
-                  <span>{s}</span>
+                <li key={idx} className="flex items-start gap-2.5">
+                  <span className="text-emerald-500 font-bold">✓</span>
+                  <span className="leading-relaxed">{s}</span>
                 </li>
               ))}
             </ul>
           </div>
 
-          <div className="rounded-2xl border border-amber-200/80 bg-amber-50/50 p-4 space-y-2">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-amber-800 flex items-center gap-1.5">
-              <AlertTriangle className="h-3.5 w-3.5 text-amber-600" />
+          <div className="rounded-2xl border border-amber-500/20 bg-amber-500/5 p-6 space-y-4">
+            <h4 className="text-xs font-bold uppercase tracking-widest text-amber-500 flex items-center gap-2">
+              <AlertTriangle className="h-4 w-4" />
               Gaps to Address
             </h4>
-            <ul className="space-y-1.5 text-xs text-amber-950">
+            <ul className="space-y-3 text-sm text-slate-300">
               {verdict.gaps_to_address.map((g, idx) => (
-                <li key={idx} className="flex items-start gap-1.5">
-                  <span>•</span>
-                  <span>{g}</span>
+                <li key={idx} className="flex items-start gap-2.5">
+                  <span className="text-amber-500 font-bold">•</span>
+                  <span className="leading-relaxed">{g}</span>
                 </li>
               ))}
             </ul>
           </div>
         </div>
-      </CardContent>
-      <CardFooter className="pt-2 pb-6 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-border/40">
-        <div className="text-xs text-muted-foreground">
-          Suggested action: <strong className="text-foreground">{verdict.suggested_trial || "7-Day Trial"}</strong>
+      </div>
+
+      <div className="relative z-10 p-6 sm:px-10 sm:py-8 border-t border-slate-800/80 bg-slate-900/50 flex flex-col sm:flex-row items-center justify-between gap-6">
+        <div className="text-sm text-slate-400">
+          Suggested action: <strong className="text-white font-semibold">{verdict.suggested_trial || "7-Day Trial"}</strong>
         </div>
-        <Button asChild size="lg" className="w-full sm:w-auto gap-2">
-          <Link href={`/careers/${careerSlug}/trial`}>
-            Start 7-Day Trial
-            <ArrowRight className="h-4 w-4" />
-          </Link>
-        </Button>
-      </CardFooter>
-    </Card>
+        
+        <Link 
+          href={`/careers/${careerSlug}/trial`}
+          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-8 py-3.5 text-sm font-bold text-white shadow-[0_0_20px_rgba(79,70,229,0.3)] hover:bg-indigo-500 transition-all hover:scale-105 group"
+        >
+          Start 7-Day Trial
+          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+        </Link>
+      </div>
+    </div>
   )
 }

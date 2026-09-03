@@ -130,11 +130,17 @@ _COLUMN_MIGRATIONS: dict[str, list[tuple[str, str]]] = {
         ("category", "VARCHAR(100)"),
         ("is_active", "BOOLEAN DEFAULT TRUE"),
     ],
+    "learning_resources": [
+        ("geographic_scope", "VARCHAR(64)"),
+    ],
     "alumni": [
         ("university_id", "INTEGER"),
         ("career_id", "INTEGER"),
         ("source_id", "INTEGER"),
         ("source_url", "VARCHAR(500)"),
+    ],
+    "students": [
+        ("city", "VARCHAR(100)"),
     ],
 }
 

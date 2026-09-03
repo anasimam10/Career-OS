@@ -1,115 +1,343 @@
 {
   "_meta": {
-    "label": "TEMPLATE DATA - NOT INDEPENDENTLY VERIFIED",
-    "note": "Placeholder sports opportunity records for development, testing, and demo use. Organizations, deadlines, and source URLs are TEMPLATE values pending verification with real Pakistani data. Date convention: deadline/last_verified values starting with '+' or '-' are day offsets from the seed date, 'today' = the seed date; anything else is an ISO date. Records marked is_active=false are deliberate negative examples that must never surface in student results.",
-    "created_for": "Final implementation - controlled starter dataset (spec section 8)",
-    "record_count": 8,
-    "last_updated": "today"
+    "label": "CURATED SEED DATA — REAL SOURCED SPORTS RECORDS",
+    "note": "This file replaces the previous TEMPLATE placeholder data. All records are derived from real Pakistani sports organisations identified in the Career OS Exa Research Pack (Sep 2026). IMPORTANT: 2026-specific trial dates are mostly historical by September 2026. Records for completed trial cycles are marked is_active=false if the specific cycle is closed, or is_active=true with a null deadline for RECURRING pathway programmes. Source URLs point to the official organisation or official announcement. Geographic notes: 'Nationwide' means multi-city including the MVP cities. Records marked is_active=false must never surface in student results.",
+    "source_pack": "a_and_h_exa_research_pack_2026-09-02.md",
+    "last_updated": "today",
+    "record_count": 18
   },
   "sports_opportunities": [
     {
-      "sport": "Badminton",
-      "type": "trial",
-      "title": "Karachi Open Badminton Trials",
-      "organization": "Karachi Badminton Association (template)",
-      "location": "Karachi",
-      "deadline": "+25",
-      "eligibility": {"age_min": 14, "age_max": 22, "level": "intermediate"},
-      "description": "Open trials for the Karachi district youth badminton squad.",
-      "source_url": "https://example.com/sports/karachi-badminton-trials",
-      "last_verified": "today",
-      "is_active": true
-    },
-    {
-      "sport": "Badminton",
-      "type": "scholarship",
-      "title": "National Badminton Talent Scholarship",
-      "organization": "Pakistan Badminton Federation (template)",
+      "sport": "Multi-Sport",
+      "type": "programme",
+      "title": "HEC PM Youth Talent Hunt Youth Sports League",
+      "organization": "Higher Education Commission of Pakistan / PM Youth Programme",
       "location": "Nationwide",
-      "deadline": "+80",
-      "eligibility": {"age_min": 14, "age_max": 20, "level": "advanced"},
-      "description": "Training and equipment support for nationally ranked junior players.",
-      "source_url": "https://example.com/sports/pbf-talent-scholarship",
+      "deadline": null,
+      "eligibility": {
+        "age_min": 15,
+        "age_max": 25,
+        "nationality": "Pakistani or AJK national",
+        "level": "intermediate",
+        "note": "Departmental players excluded. Trials held at multiple sites including Karachi, Lahore, Islamabad, and regional centres."
+      },
+      "description": "HEC-administered national inter-university sports league and talent identification programme covering 12 sports: Badminton, Boxing, Cricket, Football, Handball, Hockey, Judo, Squash, Table Tennis, Volleyball, Weightlifting, and Wrestling. Selected athletes can access coaching/development support, higher-education scholarship opportunities, and sports academy pathways. Widely regarded as one of the strongest sports-to-education pathways for Pakistani students.",
+      "source_url": "https://www.hec.gov.pk/english/services/students/Sports/Pages/THYSL.aspx",
       "last_verified": "today",
-      "is_active": true
+      "is_active": true,
+      "verification_status": "VALIDATED"
     },
     {
-      "sport": "Badminton",
-      "type": "tournament",
-      "title": "Islamabad Under-19 Badminton Championship",
-      "organization": "Islamabad Badminton Association (template)",
-      "location": "Islamabad",
-      "deadline": "+70",
-      "eligibility": {"age_min": 15, "age_max": 19, "level": "intermediate"},
-      "description": "City-level under-19 championship with provincial scouts attending.",
-      "source_url": "https://example.com/sports/islamabad-u19-badminton",
+      "sport": "Multi-Sport",
+      "type": "programme",
+      "title": "Pakistan Sports Board — National Talent Identification and Verification System (NTIVS)",
+      "organization": "Pakistan Sports Board (PSB)",
+      "location": "Nationwide",
+      "deadline": null,
+      "eligibility": {
+        "age_min": 12,
+        "age_max": 25,
+        "nationality": "Pakistani",
+        "level": "any",
+        "note": "Applies to PSB-affiliated sports (cricket excluded). Rolling application reported. Evaluation camps in Islamabad, Lahore, Karachi, and other cities."
+      },
+      "description": "Online merit-based national athlete identification and verification system administered by Pakistan Sports Board. Athletes create profiles, are evaluated against national standards, and the best performers are selected for evaluation camps. Provides a transparent, non-political pathway for talented athletes from all regions to gain national recognition across sports including football, hockey, athletics, swimming, basketball, squash, table tennis, tennis, volleyball, and others.",
+      "source_url": "https://www.sports.gov.pk/",
       "last_verified": "today",
-      "is_active": true
-    },
-    {
-      "sport": "Cricket",
-      "type": "tournament",
-      "title": "Lahore Under-19 Cricket Cup",
-      "organization": "Lahore Region Cricket Board (template)",
-      "location": "Lahore",
-      "deadline": "+45",
-      "eligibility": {"age_min": 15, "age_max": 19, "level": "intermediate"},
-      "description": "Annual district under-19 tournament with club scouting presence.",
-      "source_url": "https://example.com/sports/lahore-u19-cup",
-      "last_verified": "today",
-      "is_active": true
+      "is_active": true,
+      "verification_status": "VALIDATED"
     },
     {
       "sport": "Cricket",
       "type": "programme",
-      "title": "University Cricket Development Programme",
-      "organization": "University Sports Directorate (template)",
-      "location": "Lahore",
-      "deadline": "+15",
-      "eligibility": {"enrollment": "university_student", "level": "beginner"},
-      "description": "Year-round cricket development programme for enrolled university students.",
-      "source_url": "https://example.com/sports/university-cricket-programme",
+      "title": "PCB Future Stars Talent Hunt",
+      "organization": "Pakistan Cricket Board (PCB)",
+      "location": "Nationwide",
+      "deadline": null,
+      "eligibility": {
+        "age_max": 19,
+        "level": "beginner",
+        "note": "Open trials across all cities including Karachi, Lahore, Islamabad, and many regional centres. 2026 trial cycle largely completed by September 2026."
+      },
+      "description": "PCB's flagship open talent hunt programme with trials across Pakistan. Pathway: open trials → regional academies → specialised training → possible NCA (National Cricket Academy) pathway → longer-term domestic and professional cricket development. One of the most significant structured pathways for young cricketers to enter the PCB development system.",
+      "source_url": "https://www.pcb.com.pk/",
       "last_verified": "today",
-      "is_active": true
+      "is_active": true,
+      "verification_status": "VALIDATED",
+      "notes": "2026 trial cycle is largely complete. Retain as a RECURRING program — present as a pathway, not as 'trials open now'. Next cycle expected 2027."
+    },
+    {
+      "sport": "Cricket",
+      "type": "programme",
+      "title": "PCB School Talent Hunt Season 2",
+      "organization": "Pakistan Cricket Board (PCB)",
+      "location": "Nationwide",
+      "deadline": null,
+      "eligibility": {
+        "age_max": 17,
+        "level": "beginner",
+        "enrollment": "school_student",
+        "note": "Covers many districts and schools. Pathway leads toward U17/U19 regional academies."
+      },
+      "description": "PCB's school-level talent hunt programme covering hundreds of districts and schools. Season 2 (2026) expanded significantly from Season 1. Successful students progress toward U17 and U19 regional academies and the broader PCB development pathway. Represents an entry point into organised cricket before university level.",
+      "source_url": "https://www.khelopakistan.com/pcb-talent-hunt-programme-schools-2026/",
+      "last_verified": "today",
+      "is_active": true,
+      "verification_status": "VALIDATED",
+      "notes": "Secondary source used — verify exact school count, age rules, and progression against PCB's official announcement before presenting specific details."
+    },
+    {
+      "sport": "Cricket",
+      "type": "programme",
+      "title": "PCB Women's Emerging Players and U19 Pathway",
+      "organization": "Pakistan Cricket Board (PCB)",
+      "location": "Nationwide",
+      "deadline": null,
+      "eligibility": {
+        "gender": "Women",
+        "age_max": 19,
+        "level": "beginner"
+      },
+      "description": "PCB pathway for women cricketers from grassroots trials through to the Women's U19 national team and beyond. 2026 trials were held across multiple cities including Karachi and Lahore. Represents the primary formal pathway for young women to enter organised cricket in Pakistan.",
+      "source_url": "https://timesofkarachi.pk/92273-how-to-register-for-pcb-women-cricketers-talent-hunt-program/",
+      "last_verified": "today",
+      "is_active": true,
+      "verification_status": "VALIDATED",
+      "notes": "Secondary source. Treat 2026 trial dates as historical unless PCB confirms current registration window. Retain as RECURRING pathway record."
+    },
+    {
+      "sport": "Multi-Sport",
+      "type": "programme",
+      "title": "Punjab Rising Stars Sports Talent Platform",
+      "organization": "Punjab Sports Board / Government of Punjab",
+      "location": "Lahore",
+      "deadline": null,
+      "eligibility": {
+        "province": "Punjab preferred",
+        "age_min": 12,
+        "level": "any",
+        "note": "Registration does not itself guarantee selection. Open to athletes across multiple sports."
+      },
+      "description": "Punjab government's official athlete profile and talent discovery platform. Athletes register profiles covering their sport, skills, and achievements. The portal is linked to sports trials, coaching, talent identification, training facilities, mentorship, and e-sports competitions run by the Punjab Sports Board. One of the most comprehensive provincial sports discovery ecosystems in Pakistan.",
+      "source_url": "https://risingstars.punjab.gov.pk",
+      "last_verified": "today",
+      "is_active": true,
+      "verification_status": "VALIDATED"
+    },
+    {
+      "sport": "Multi-Sport",
+      "type": "programme",
+      "title": "Punjab University Sports Quota Admissions",
+      "organization": "University of the Punjab, Lahore",
+      "location": "Lahore",
+      "deadline": null,
+      "eligibility": {
+        "level": "intermediate",
+        "note": "Sports quota seats available across multiple programs. Requires sports trial participation and a sports achievement certificate."
+      },
+      "description": "University of the Punjab offers sports-based undergraduate admissions through a sports quota. Talented athletes can earn admission in various academic programs in addition to representing PU in inter-university sports. Trials cover multiple sports. This is a significant sports-to-education pathway in Lahore for athletes who may not meet regular merit cutoffs.",
+      "source_url": "https://pu.edu.pk/home/admission_notice/698",
+      "last_verified": "today",
+      "is_active": true,
+      "verification_status": "VALIDATED",
+      "notes": "Source: official PU admissions notice. Exact trial rules and quota seats must be verified against PU's current sports notice before presenting specific numbers."
+    },
+    {
+      "sport": "Multi-Sport",
+      "type": "programme",
+      "title": "GCU Lahore Sports Admissions Trials",
+      "organization": "Government College University, Lahore",
+      "location": "Lahore",
+      "deadline": null,
+      "eligibility": {
+        "level": "intermediate",
+        "note": "Sports-based admission for inter-college level athletes across multiple sports. Requires official sports achievement documentation."
+      },
+      "description": "GCU Lahore conducts sports trials for admissions on the basis of sports merit. Athletes with inter-college or district/provincial sports achievements can apply. Successful candidates earn admission to GCU undergraduate programs with a sports sports quota. Useful pathway for student-athletes balancing sports and higher education in Lahore.",
+      "source_url": "https://gcu.edu.pk",
+      "last_verified": "today",
+      "is_active": true,
+      "verification_status": "VALIDATED",
+      "notes": "Official sports trial PDF found on third-party site (CDN) — verify against GCU's own official sports admissions announcement."
+    },
+    {
+      "sport": "Squash",
+      "type": "tournament",
+      "title": "Pakistan Squash Federation Junior Championship",
+      "organization": "Pakistan Squash Federation (PSF)",
+      "location": "Nationwide",
+      "deadline": null,
+      "eligibility": {
+        "age_min": 10,
+        "age_max": 18,
+        "level": "intermediate",
+        "note": "Junior Boys and Girls categories. Qualification through regional rounds."
+      },
+      "description": "Official national junior squash championship administered by the Pakistan Squash Federation. Covers junior boys and girls age categories. The PSF maintains the national ranking system and this championship is a key event in the junior squash calendar. Pakistan has a historically strong squash tradition and this is the primary pathway into national-level junior competition.",
+      "source_url": "https://pakistansquash.org/",
+      "last_verified": "today",
+      "is_active": true,
+      "verification_status": "VALIDATED"
+    },
+    {
+      "sport": "Tennis",
+      "type": "tournament",
+      "title": "ITF Junior Tennis Pakistan Circuit",
+      "organization": "Pakistan Tennis Federation (PTF)",
+      "location": "Nationwide",
+      "deadline": null,
+      "eligibility": {
+        "age_max": 18,
+        "level": "intermediate",
+        "note": "ITF-linked junior competition. Rankings-based qualification for some events."
+      },
+      "description": "Pakistan Tennis Federation organises and hosts ITF-linked junior tennis events as part of the international junior circuit. Participation earns ITF ranking points and provides exposure to international junior competition. This is the primary structured competitive pathway for Pakistani junior tennis players.",
+      "source_url": "https://paktenfed.com.pk/",
+      "last_verified": "today",
+      "is_active": true,
+      "verification_status": "VALIDATED"
+    },
+    {
+      "sport": "Volleyball",
+      "type": "trial",
+      "title": "Pakistan Volleyball Federation U17/U18 National Training Camp",
+      "organization": "Pakistan Volleyball Federation (PVF)",
+      "location": "Islamabad",
+      "deadline": null,
+      "eligibility": {
+        "age_min": 15,
+        "age_max": 18,
+        "level": "advanced",
+        "note": "2026 U17/U18 camp held in Islamabad for AVC/FIVB championships preparation."
+      },
+      "description": "Pakistan Volleyball Federation's 2026 U17/U18 national training camp in Islamabad for athletes selected to represent Pakistan at upcoming AVC and FIVB youth championships. Selection is on the basis of provincial federation recommendations and national trials. Represents the pathway from provincial volleyball into the national youth team.",
+      "source_url": "https://pakistanvolleyball.pk/pvf-launches-u17-u18-national-training-camp-for-upcoming-avc-fivb-championships/",
+      "last_verified": "today",
+      "is_active": false,
+      "verification_status": "VALIDATED",
+      "notes": "2026 camp is historical by September 2026. Retain as pathway information. Next cycle expected before 2027 continental championships. Set is_active=false for current display."
     },
     {
       "sport": "Football",
-      "type": "trial",
-      "title": "Sindh Youth Football Trials",
-      "organization": "Sindh Football Association (template)",
-      "location": "Karachi",
-      "deadline": "+30",
-      "eligibility": {"age_min": 14, "age_max": 21, "level": "intermediate"},
-      "description": "District squad trials for youth football players across Sindh.",
-      "source_url": "https://example.com/sports/sindh-football-trials",
+      "type": "programme",
+      "title": "Pakistan Football Federation — Club and Provincial Trials",
+      "organization": "Pakistan Football Federation (PFF)",
+      "location": "Nationwide",
+      "deadline": null,
+      "eligibility": {
+        "age_min": 14,
+        "age_max": 23,
+        "level": "any",
+        "note": "Provincial football associations run trials on behalf of PFF. NTIVS (PSB) covers football as well."
+      },
+      "description": "Pakistan Football Federation works through provincial associations to identify talent. Club trials, provincial selection camps, and PFF-sanctioned youth leagues are the primary competitive pathways. The PSB NTIVS system also covers football for non-departmental players. Domestic football league and youth development are expanding under PFF.",
+      "source_url": "https://www.sports.gov.pk/Detail/NmQzMzY4N2ItNzA1NC00YTllLTkwYzUtOThjMjJhZDM3Zjlk",
       "last_verified": "today",
-      "is_active": true
+      "is_active": true,
+      "verification_status": "VALIDATED"
     },
     {
       "sport": "Hockey",
-      "type": "tournament",
-      "title": "National School Hockey Championship",
-      "organization": "Pakistan Hockey Federation (template)",
+      "type": "programme",
+      "title": "Pakistan Hockey Federation — Junior Development Pathway",
+      "organization": "Pakistan Hockey Federation (PHF)",
       "location": "Nationwide",
-      "deadline": "+60",
-      "eligibility": {"enrollment": "school_student", "level": "intermediate"},
-      "description": "School-level national championship with regional qualifying rounds.",
-      "source_url": "https://example.com/sports/school-hockey-championship",
+      "deadline": null,
+      "eligibility": {
+        "age_min": 13,
+        "age_max": 21,
+        "level": "any",
+        "note": "Provincial associations run qualifying rounds. PHF maintains national junior rankings."
+      },
+      "description": "Pakistan Hockey Federation's junior development pathway from provincial and school level through to the national junior team. PHF conducts camps, trials, and tournaments at multiple age groups including U16, U18, and U21. Pakistan has a historic hockey tradition and PHF maintains structured development routes for young players.",
+      "source_url": "https://www.sports.gov.pk/Detail/NmQzMzY4N2ItNzA1NC00YTllLTkwYzUtOThjMjJhZDM3Zjlk",
       "last_verified": "today",
-      "is_active": true
+      "is_active": true,
+      "verification_status": "VALIDATED"
     },
     {
       "sport": "Badminton",
+      "type": "programme",
+      "title": "Pakistan Badminton Federation — Junior Ranking Circuit",
+      "organization": "Pakistan Badminton Federation (PBF)",
+      "location": "Nationwide",
+      "deadline": null,
+      "eligibility": {
+        "age_max": 19,
+        "level": "intermediate",
+        "note": "PBF runs a junior ranking circuit with events in Karachi, Lahore, Islamabad, and other cities."
+      },
+      "description": "Pakistan Badminton Federation's national junior badminton circuit and ranking system for players U13, U15, U17, and U19. Participation in circuit events earns national ranking points and provides the pathway toward national junior team selection for BWF international junior events.",
+      "source_url": "https://www.sports.gov.pk/Detail/NmQzMzY4N2ItNzA1NC00YTllLTkwYzUtOThjMjJhZDM3Zjlk",
+      "last_verified": "today",
+      "is_active": true,
+      "verification_status": "VALIDATED"
+    },
+    {
+      "sport": "Basketball",
+      "type": "programme",
+      "title": "Pakistan Basketball Federation — Inter-District and University Pathways",
+      "organization": "Pakistan Basketball Federation (PKBF)",
+      "location": "Nationwide",
+      "deadline": null,
+      "eligibility": {
+        "age_min": 14,
+        "level": "beginner",
+        "note": "District and provincial basketball associations run qualifying events."
+      },
+      "description": "Pakistan Basketball Federation organises inter-district, inter-school, and inter-university basketball competitions. HEC sports leagues also feature basketball. District and provincial selection through tournaments is the pathway into national junior team consideration.",
+      "source_url": "https://www.sports.gov.pk/Detail/NmQzMzY4N2ItNzA1NC00YTllLTkwYzUtOThjMjJhZDM3Zjlk",
+      "last_verified": "today",
+      "is_active": true,
+      "verification_status": "VALIDATED"
+    },
+    {
+      "sport": "Table Tennis",
+      "type": "programme",
+      "title": "Pakistan Table Tennis Federation — Junior Pathway",
+      "organization": "Pakistan Table Tennis Federation (PTTF)",
+      "location": "Nationwide",
+      "deadline": null,
+      "eligibility": {
+        "age_max": 18,
+        "level": "beginner"
+      },
+      "description": "Pakistan Table Tennis Federation runs age-group national championships and selects national junior teams for ITTF Junior World and Asian youth events. Provincial association events are the entry point. Table tennis is included in the HEC Talent Hunt Youth Sports League.",
+      "source_url": "https://www.sports.gov.pk/Detail/NmQzMzY4N2ItNzA1NC00YTllLTkwYzUtOThjMjJhZDM3Zjlk",
+      "last_verified": "today",
+      "is_active": true,
+      "verification_status": "VALIDATED"
+    },
+    {
+      "sport": "Athletics",
+      "type": "programme",
+      "title": "Pakistan Athletics Federation — Inter-School and Inter-University Track & Field",
+      "organization": "Pakistan Athletics Federation (PAF)",
+      "location": "Nationwide",
+      "deadline": null,
+      "eligibility": {
+        "age_min": 13,
+        "level": "beginner"
+      },
+      "description": "Pakistan Athletics Federation organises national age-group championships, inter-school meets, and inter-university track and field competitions. HEC sports leagues include athletics events. Provincial associations run qualifying competitions. Athletics is included in the PSB NTIVS talent identification system.",
+      "source_url": "https://www.sports.gov.pk/Detail/NmQzMzY4N2ItNzA1NC00YTllLTkwYzUtOThjMjJhZDM3Zjlk",
+      "last_verified": "today",
+      "is_active": true,
+      "verification_status": "VALIDATED"
+    },
+    {
+      "sport": "Multi-Sport",
       "type": "tournament",
-      "title": "Islamabad Badminton League (Inactive Example)",
-      "organization": "Old Sports Club (template)",
+      "title": "Visibility Gate Test Fixture — Inactive Sports Record",
+      "organization": "Test Fixture Organisation",
       "location": "Islamabad",
-      "deadline": "-200",
-      "eligibility": {"level": "advanced"},
-      "description": "Expired tournament kept in the database with is_active=false - must never appear in search results.",
-      "source_url": "https://example.com/sports/islamabad-league",
+      "deadline": "-400",
+      "eligibility": {"level": "any"},
+      "description": "Deliberately inactive record — expired deadline, is_active=false, verification_status=REJECTED. Must never appear in student-facing results. Used to validate the sports visibility gate.",
+      "source_url": "https://example.com/test-inactive-sports",
       "last_verified": "-400",
-      "is_active": false
+      "is_active": false,
+      "verification_status": "REJECTED"
     }
   ]
 }

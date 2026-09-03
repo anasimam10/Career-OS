@@ -1,17 +1,18 @@
-﻿/**
- * Session abstraction for Phase 1 mock session.
- * All student identity access must go through this module.
- * When real JWT auth is added, only this file needs to change.
+/**
+ * Session abstraction for Career OS.
+ * All student identity access goes through this module.
+ * Persists student identity in browser localStorage without hardcoding demo student id=1.
  */
 
 const SESSION_KEY = "ah_careers_session"
-const DEMO_STUDENT_ID = 1
-const DEMO_STUDENT_NAME = "Demo Student"
+export const DEMO_STUDENT_ID = 1
+const DEMO_STUDENT_NAME = "Student"
 
 export interface Session {
   student_id: number
   name: string
   onboarding_completed: boolean
+  city?: string
 }
 
 export function getSession(): Session | null {
@@ -28,6 +29,17 @@ export function getSession(): Session | null {
 export function getOrCreateSession(): Session {
   const existing = getSession()
   if (existing) return existing
+  
+  if (process.env.NEXT_PUBLIC_USE_MOCK !== "true") {
+    // In real mode, we don't return Demo Student 1 automatically.
+    // Instead return a null-equivalent stub session so app redirects to onboarding
+    return {
+      student_id: 0,
+      name: "",
+      onboarding_completed: false,
+    }
+  }
+
   const session: Session = {
     student_id: DEMO_STUDENT_ID,
     name: DEMO_STUDENT_NAME,
@@ -43,8 +55,33 @@ export function setSession(session: Session): void {
 }
 
 export function updateSession(updates: Partial<Session>): void {
-  const current = getOrCreateSession()
+  const current = getSession()
+  if (!current) {
+    if (process.env.NEXT_PUBLIC_USE_MOCK !== "true") {
+      console.warn("Attempting to update session without an existing student identity in real mode.")
+      return
+    }
+    // Explicit mock-only fallback
+    setSession({
+      student_id: DEMO_STUDENT_ID,
+      name: DEMO_STUDENT_NAME,
+      onboarding_completed: false,
+      ...updates,
+    })
+    return
+  }
   setSession({ ...current, ...updates })
+}
+
+export function saveNewStudentSession(studentId: number, name: string = "Student", city?: string): Session {
+  const session: Session = {
+    student_id: studentId,
+    name: name,
+    onboarding_completed: true,
+    city: city,
+  }
+  setSession(session)
+  return session
 }
 
 export function clearSession(): void {
@@ -56,6 +93,19 @@ export function isOnboardingComplete(): boolean {
   return getSession()?.onboarding_completed ?? false
 }
 
-export function getStudentId(): number {
-  return getOrCreateSession().student_id
+export function getStudentId(): number | null {
+  return getSession()?.student_id ?? null
 }
+
+export function getEffectiveStudentId(): number {
+  const sid = getSession()?.student_id
+  if (sid) return sid
+  if (process.env.NEXT_PUBLIC_USE_MOCK === "true") {
+    return DEMO_STUDENT_ID
+  }
+  // In real mode, a missing session means the user needs to onboard.
+  // Returning 0 or throwing could break SSR, but returning a non-existent ID 
+  // explicitly prevents mixing up with Demo Student 1.
+  return 0 
+}
+

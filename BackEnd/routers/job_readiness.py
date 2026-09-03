@@ -16,6 +16,7 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 
 from database import get_db
+from routers.deps import get_current_student_id
 from schemas.shared import JobReadiness
 from services import job_readiness_service
 
@@ -25,12 +26,14 @@ router = APIRouter(tags=["job-readiness"])
 @router.post("/job-readiness", response_model=JobReadiness, responses={404: {"description": "Student not found"}})
 def get_job_readiness(
     db: Session = Depends(get_db),
+    student_id: int = Depends(get_current_student_id),
 ) -> JobReadiness | JSONResponse:
     """Compute the deterministic job readiness score and AI analysis."""
     try:
-        return job_readiness_service.get_job_readiness(db)
+        return job_readiness_service.get_job_readiness(db, student_id=student_id)
     except job_readiness_service.StudentNotFoundError:
         return JSONResponse(
             status_code=404,
             content={"error": "Student profile not found — complete onboarding first."},
         )
+

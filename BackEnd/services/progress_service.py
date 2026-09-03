@@ -27,6 +27,8 @@ from services.journey_state import (
     DEMO_STUDENT_ID,
     is_valid_transition,
     next_stage_with_pending,
+    parse_stage,
+    VALID_TRANSITIONS,
 )
 
 logger = logging.getLogger("ah_career.journey")
@@ -44,20 +46,37 @@ class InvalidStatusError(Exception):
     """The requested milestone status is not settable by students."""
 
 
-def record_progress(db: Session, request: ProgressRequest) -> ProgressResponse:
+def record_progress(
+    db: Session, request: ProgressRequest, student_id: int = DEMO_STUDENT_ID
+) -> ProgressResponse:
     """
-    1. Validate the milestone (exists + belongs to the demo student).
+    Mark a milestone completed or skipped.
+
+    1. Validate the milestone belongs to the requested student (or find first pending if omitted).
     2. Update its status and completion time.
     3. Advance the stage through the backend state machine if appropriate.
     4. Recalculate and persist a new Next Best Action.
-
-    Raises:
-        MilestoneNotFoundError, InvalidStatusError.
     """
     if request.status not in STUDENT_SETTABLE_STATUSES:
         raise InvalidStatusError(request.status)
 
-    milestone = _get_owned_milestone(db, request.milestone_id)
+    if request.milestone_id is not None and request.milestone_id > 0:
+        milestone = _get_owned_milestone(db, request.milestone_id, student_id=student_id)
+    else:
+        # Caller omitted milestone_id: pick first pending milestone for this student in current stage
+        student = db.get(Student, student_id)
+        pending = []
+        if student:
+            pending = [
+                m for m in roadmap_service.get_pending_milestones(db, student_id=student_id)
+                if m.stage == student.education_stage
+            ]
+            if not pending:
+                pending = roadmap_service.get_pending_milestones(db, student_id=student_id)
+        if pending:
+            milestone = pending[0]
+        else:
+            raise MilestoneNotFoundError(0)
 
     milestone.status = request.status
     if request.status == "done":
@@ -65,10 +84,10 @@ def record_progress(db: Session, request: ProgressRequest) -> ProgressResponse:
     db.commit()
     logger.info(
         "Progress: milestone=%s status=%s student=%s",
-        milestone.id, request.status, DEMO_STUDENT_ID,
+        milestone.id, request.status, student_id,
     )
 
-    student = db.get(Student, DEMO_STUDENT_ID)
+    student = db.get(Student, student_id)
     new_stage = _advance_stage_if_ready(db, student)
 
     # Progress changed — the cached NBA is stale by definition; recalculate.
@@ -82,9 +101,11 @@ def record_progress(db: Session, request: ProgressRequest) -> ProgressResponse:
 # ---------------------------------------------------------------------------
 
 
-def _get_owned_milestone(db: Session, milestone_id: int) -> Milestone:
+def _get_owned_milestone(
+    db: Session, milestone_id: int, student_id: int = DEMO_STUDENT_ID
+) -> Milestone:
     """
-    Load the milestone and verify it belongs to the demo student.
+    Load the milestone and verify it belongs to the student.
 
     Unknown ids and other students' milestones raise the same error — the
     response must not reveal that a milestone id exists for someone else.
@@ -93,7 +114,7 @@ def _get_owned_milestone(db: Session, milestone_id: int) -> Milestone:
     if milestone is None:
         raise MilestoneNotFoundError(milestone_id)
     roadmap = db.get(Roadmap, milestone.roadmap_id)
-    if roadmap is None or roadmap.student_id != DEMO_STUDENT_ID:
+    if roadmap is None or roadmap.student_id != student_id:
         raise MilestoneNotFoundError(milestone_id)
     return milestone
 
@@ -116,6 +137,15 @@ def _advance_stage_if_ready(db: Session, student: Student) -> str:
 
     pending_stages = {m.stage for m in pending if m.stage != current}
     target = next_stage_with_pending(current, pending_stages)
+
+    # If no other pending milestones exist across the student's roadmap, instantiate next valid stage
+    if target is None and len(pending_stages) == 0:
+        current_stage = parse_stage(current)
+        if current_stage and current_stage in VALID_TRANSITIONS and VALID_TRANSITIONS[current_stage]:
+            target = VALID_TRANSITIONS[current_stage][0]
+            # Ensure milestones for the new target stage are instantiated
+            roadmap_service.ensure_stage_milestones(db, student.id, target.value)
+
     if target is not None and is_valid_transition(current, target.value):
         student.education_stage = target.value
         db.commit()

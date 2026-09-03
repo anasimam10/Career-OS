@@ -1,44 +1,71 @@
-﻿import Link from "next/link"
-import { ArrowRight, TrendingUp } from "lucide-react"
-import { Card, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import type { CareerListItem } from "@/lib/types/career.types"
+import Link from "next/link"
+import { ArrowRight, TrendingUp, TrendingDown, Minus } from "lucide-react"
+import { type CareerListItem } from "@/lib/types/career.types"
+import { cn } from "@/lib/utils/cn"
+
+const FIELD_DESCRIPTIONS: Record<string, string> = {
+  "Technology": "High-growth software exports, domestic tech houses, and remote engineering roles.",
+  "Healthcare": "Hospital clinical training, PMDC licensing, and public/private healthcare demands.",
+  "Business": "Corporate finance, audit firms, supply chain, and banking across business hubs.",
+  "Engineering": "Civil infrastructure, power systems, industrial manufacturing, and PEC registration.",
+  "Design": "User experience, product design, and creative advertising agencies.",
+  "Media & Communications": "Broadcast journalism, digital media strategy, and corporate communication.",
+}
 
 export function CareerCard({ career }: { career: CareerListItem }) {
-  const demandVariant =
-    career.demand_level === "HIGH"
-      ? "high"
-      : career.demand_level === "MEDIUM"
-      ? "medium"
-      : "low"
+  const isHighDemand = career.demand_level === "HIGH"
+  const isMediumDemand = career.demand_level === "MEDIUM"
+
+  const demandClass = isHighDemand
+    ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/30"
+    : isMediumDemand
+    ? "bg-indigo-500/10 text-indigo-400 border-indigo-500/30"
+    : "bg-slate-800/50 text-slate-400 border-slate-700"
+
+  const DemandIcon = isHighDemand ? TrendingUp : isMediumDemand ? Minus : TrendingDown
+
+  const description =
+    FIELD_DESCRIPTIONS[career.field] ||
+    `Verified Pakistan labour statistics, required entry exams, and top universities for ${career.name}.`
 
   return (
-    <Card className="flex flex-col justify-between hover:shadow-card-hover transition-all border-border/80 group">
-      <CardHeader>
-        <div className="flex items-center justify-between gap-2 mb-2">
-          <Badge variant="outline" className="text-[11px]">
+    <div className="group relative flex flex-col justify-between rounded-2xl border border-slate-800 bg-slate-900/40 p-6 backdrop-blur-sm transition-all hover:border-slate-700 hover:bg-slate-900/60 overflow-hidden">
+      {/* Subtle background abstract motif */}
+      <div className="absolute -right-12 -top-12 h-32 w-32 rounded-full bg-indigo-500/5 blur-2xl transition-all group-hover:bg-indigo-500/10 pointer-events-none" />
+      
+      <div className="relative z-10 space-y-4">
+        <div className="flex items-start justify-between gap-2">
+          <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
             {career.field}
-          </Badge>
-          <Badge variant={demandVariant} className="text-[11px] font-semibold">
-            {career.demand_level} Demand
-          </Badge>
+          </span>
+          <span className={cn("inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[10px] font-bold tracking-wider uppercase border", demandClass)}>
+            <DemandIcon className="h-3 w-3" />
+            {career.demand_level}
+          </span>
         </div>
-        <CardTitle className="text-xl group-hover:text-primary transition-colors">
-          {career.name}
-        </CardTitle>
-        <CardDescription>
-          Explore verified realities, top Pakistani universities, and day-to-day requirements.
-        </CardDescription>
-      </CardHeader>
-      <CardFooter className="pt-0">
-        <Button asChild variant="outline" size="sm" className="w-full justify-between group-hover:border-primary/50">
-          <Link href={`/careers/${career.slug}/reality-check`}>
-            <span>Run Reality Check</span>
-            <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
-          </Link>
-        </Button>
-      </CardFooter>
-    </Card>
+        
+        <div>
+          <h3 className="text-xl font-bold text-white group-hover:text-indigo-300 transition-colors">
+            {career.name}
+          </h3>
+          <p className="text-sm text-slate-400 leading-relaxed mt-2 line-clamp-2">
+            {description}
+          </p>
+        </div>
+      </div>
+
+      <div className="relative z-10 pt-6 mt-auto">
+        <Link 
+          href={`/careers/${career.slug}/reality-check`}
+          className="flex items-center justify-between w-full p-3 rounded-xl border border-slate-800 bg-slate-900/80 text-sm font-semibold text-slate-300 hover:bg-slate-800 hover:text-white transition-all group/btn"
+        >
+          <span>Run Reality Check</span>
+          <div className="h-6 w-6 rounded-full bg-indigo-500/20 flex items-center justify-center text-indigo-400 group-hover/btn:bg-indigo-500 group-hover/btn:text-white transition-colors">
+            <ArrowRight className="h-3 w-3" />
+          </div>
+        </Link>
+      </div>
+    </div>
   )
 }
+

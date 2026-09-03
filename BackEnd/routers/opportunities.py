@@ -22,6 +22,7 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 
 from database import get_db
+from routers.deps import get_current_student_id
 from schemas.requests import OpportunityMatchRequest
 from schemas.responses import OpportunityMatchResponse, OpportunityOut
 from services import opportunity_service
@@ -57,11 +58,16 @@ def list_opportunities(
 
 @router.post("/opportunities/match", response_model=OpportunityMatchResponse)
 def match_opportunities(
-    request: OpportunityMatchRequest, db: Session = Depends(get_db)
+    request: OpportunityMatchRequest,
+    db: Session = Depends(get_db),
+    student_id: int = Depends(get_current_student_id),
 ) -> OpportunityMatchResponse | JSONResponse:
     """AI-ranked opportunity matches for the student (Pattern B + deterministic scoring)."""
     try:
-        return opportunity_service.match_opportunities(db, request)
+        return opportunity_service.match_opportunities(
+            db, request, student_id=student_id
+        )
+
     except opportunity_service.StudentNotFoundError:
         return JSONResponse(
             status_code=404,

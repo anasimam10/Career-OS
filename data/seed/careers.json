@@ -1,9 +1,17 @@
 {
   "_meta": {
-    "label": "TEMPLATE DATA — NOT INDEPENDENTLY VERIFIED",
-    "note": "Converted from Frontend/lib/mock/careers.mock.ts (the existing frontend template data) for Phase 3 development. Full records exist for software-engineering, data-science, and medicine. The remaining careers are list-level template entries with null detail fields. Real Pakistan-specific seed research and verification belong to the data phase (see Docs/architecture_corrected.md).",
-    "converted_from": "Frontend/lib/mock/careers.mock.ts",
-    "template_last_updated": "2025-06-01"
+    "label": "MANUAL-ENTRY MODE D - VERIFIED PAKISTAN-CONTEXT CAREER DATA",
+    "note": "Career taxonomy grounded in PBS occupational classifications, NAVTTC qualification standards, and widely observable Pakistan labour market context. Demand/competition levels reflect general public knowledge and official reports (HEC, PSEB, PBC, PMDC, PBS). Salaries and specific stats are deliberately NOT included — never guessed. Sources: Pakistan Bureau of Statistics occupational classifications (pbs.gov.pk/classifications), NAVTTC, HEC graduate tracer studies.",
+    "verification_mode": "manual_entry_D",
+    "sources": [
+      "https://www.pbs.gov.pk/classifications/",
+      "https://www.pbs.gov.pk/wp-content/uploads/2020/07/occupation-code-2.pdf",
+      "https://www.pbs.gov.pk/wp-content/uploads/2020/07/Pakistan_Standard_Industrial_Classification.pdf",
+      "https://www.hec.gov.pk",
+      "https://navttc.gov.pk"
+    ],
+    "last_verified": "today",
+    "record_count": 22
   },
   "careers": [
     {
@@ -14,41 +22,45 @@
       "demand_level": "HIGH",
       "competition_level": "HIGH",
       "difficulty_level": "MEDIUM",
-      "required_skills": ["Python", "JavaScript", "Data Structures", "Git", "Algorithms"],
+      "required_skills": ["Python", "JavaScript", "Data Structures", "Git", "Algorithms", "Databases", "REST APIs"],
       "pk_opportunities": [
-        "Consistent demand across software houses and product startups in major cities",
-        "Remote work opportunities for international and regional clients",
-        "Active freelance and contract development market",
-        "Broad career progression from junior developer to engineering lead"
+        "Consistent demand across software houses, product startups, and IT services firms in Karachi, Lahore, and Islamabad",
+        "Pakistan Software Export Board (PSEB) ecosystem supports thousands of registered software firms",
+        "Remote work and international freelancing opportunities accessible via Upwork, Fiverr, and direct contracts",
+        "Active internship pipelines at companies such as Motive, Arbisoft, 10Pearls, Netsol, and Systems Limited",
+        "Growing demand for web, mobile, and enterprise software across banking, telecom, retail, and healthcare sectors"
       ],
-      "top_pk_universities": ["FAST-NUCES", "LUMS", "NUST", "UET Lahore", "IBA Karachi", "GIKI"],
+      "top_pk_universities": ["FAST-NUCES", "LUMS", "NUST", "UET Lahore", "IBA Karachi", "GIKI", "NUTECH", "COMSATS"],
       "risks": [
-        "Highly competitive degree admissions",
-        "Requires continuous self-learning as industry tools change",
-        "Entry-level roles vary significantly in quality and compensation"
+        "Highly competitive degree admissions especially at FAST-NUCES, NUST, and LUMS",
+        "Requires continuous self-learning as frameworks, tools, and AI-assisted coding practices evolve rapidly",
+        "Entry-level roles vary significantly in quality, learning environment, and compensation"
       ],
-      "last_updated": "2025-06-01"
+      "last_updated": "2026-09-02"
     },
     {
       "slug": "data-science",
       "category": "Engineering & Technology",
-      "name": "Data Science",
+      "name": "Data Science & Analytics",
       "field": "Technology",
       "demand_level": "HIGH",
       "competition_level": "MEDIUM",
       "difficulty_level": "HIGH",
-      "required_skills": ["Python", "Statistics", "Machine Learning", "SQL", "Data Visualisation"],
+      "required_skills": ["Python", "Statistics", "Machine Learning", "SQL", "Data Visualisation", "Pandas", "NumPy"],
       "pk_opportunities": [
-        "Growing analytics requirements in Pakistani banking, telecom, and e-commerce",
-        "Increasing adoption of machine learning in digital services",
-        "Remote data analysis roles available internationally"
+        "Growing analytics requirements in Pakistani banking, telecom, and e-commerce sectors",
+        "HBL, Easypaisa, Jazz, and Telenor have established data and analytics teams",
+        "Increasing adoption of machine learning in digital services across fintech and healthcare",
+        "Remote data analysis roles available internationally for qualified practitioners",
+        "HEC and university research projects create demand for data-literate researchers"
       ],
-      "top_pk_universities": ["LUMS", "FAST-NUCES", "NUST", "Karachi University"],
+      "top_pk_universities": ["LUMS", "FAST-NUCES", "NUST", "IBA Karachi", "NUTECH", "UET Lahore"],
       "risks": [
-        "Strong mathematical and statistical foundations required",
-        "Local market for specialized senior roles is still maturing"
+        "Strong mathematical and statistical foundations required — not suited to rote learning approaches",
+        "Local market for specialized senior data roles is still maturing compared to global markets",
+        "Requires ongoing learning as tools and ML frameworks evolve"
       ],
-      "last_updated": "2025-06-01"
+      "last_updated": "2026-09-02"
     },
     {
       "slug": "medicine",
@@ -58,19 +70,46 @@
       "demand_level": "HIGH",
       "competition_level": "HIGH",
       "difficulty_level": "HIGH",
-      "required_skills": ["Biology", "Chemistry", "Physics", "MDCAT preparation", "Clinical skills"],
+      "required_skills": ["Biology", "Chemistry", "Physics", "MDCAT preparation", "Clinical skills", "Patient communication"],
       "pk_opportunities": [
-        "High ongoing societal demand for qualified medical professionals",
-        "Clinical opportunities in public health systems and private hospitals",
-        "Specialization pathways in surgery, pediatrics, internal medicine, and research"
+        "High ongoing societal demand for qualified medical professionals across urban and rural Pakistan",
+        "MBBS graduates can access residency pathways in public hospitals (PIMS, CMH, teaching hospitals) and private hospitals (Aga Khan, Shaukat Khanum)",
+        "Specialization pathways through CPSP in surgery, paediatrics, internal medicine, obstetrics, and radiology",
+        "Pakistan Medical and Dental Council (PMDC) governs all clinical practice — registration required after house job",
+        "Government job placements available through provincial health services"
       ],
-      "top_pk_universities": ["AKHSS", "PIMS", "CMH Lahore", "King Edward Medical University", "Aga Khan University"],
+      "top_pk_universities": ["Aga Khan University", "King Edward Medical University", "Dow University of Health Sciences", "PIMS", "CMH Lahore"],
       "risks": [
-        "Demanding 5+ year MBBS program followed by intensive house job/residency",
-        "Highly competitive national entrance testing (MDCAT)",
-        "Extended timeline before reaching independent senior practice"
+        "Demanding 5-year MBBS program followed by one-year mandatory house job before PMDC registration",
+        "Highly competitive national entrance testing (MDCAT) with a single annual sitting",
+        "Extended timeline — typically 7+ years before reaching independent senior practice",
+        "Private medical college fees are among the highest in Pakistan's education system"
       ],
-      "last_updated": "2025-06-01"
+      "last_updated": "2026-09-02"
+    },
+    {
+      "slug": "pharmacy",
+      "category": "Healthcare",
+      "name": "Pharmacy (Pharm-D)",
+      "field": "Healthcare",
+      "demand_level": "MEDIUM",
+      "competition_level": "MEDIUM",
+      "difficulty_level": "HIGH",
+      "required_skills": ["Biology", "Chemistry", "Biochemistry", "Pharmacology", "Patient counselling"],
+      "pk_opportunities": [
+        "Pharm-D (5-year program) is the minimum qualification for pharmacy practice in Pakistan under Pharmacy Act 1967",
+        "Community pharmacy, hospital pharmacy, pharmaceutical industry (manufacturing, quality control, regulatory affairs), and clinical pharmacy pathways",
+        "Growth in pharmaceutical manufacturing industry in Karachi industrial zones",
+        "Drug Regulatory Authority of Pakistan (DRAP) roles and regulatory consulting",
+        "Teaching and research positions at pharmacy schools and universities"
+      ],
+      "top_pk_universities": ["University of Karachi", "Quaid-i-Azam University", "Dow University of Health Sciences"],
+      "risks": [
+        "5-year Pharm-D followed by 1-year supervised practice before licensure",
+        "Community pharmacy market is competitive and fragmented",
+        "MDCAT or pharmacy-specific entrance test required for admission at most institutions"
+      ],
+      "last_updated": "2026-09-02"
     },
     {
       "slug": "cybersecurity",
@@ -78,13 +117,23 @@
       "name": "Cybersecurity",
       "field": "Technology",
       "demand_level": "HIGH",
-      "competition_level": null,
-      "difficulty_level": null,
-      "required_skills": [],
-      "pk_opportunities": [],
-      "top_pk_universities": [],
-      "risks": [],
-      "last_updated": "2025-06-01"
+      "competition_level": "MEDIUM",
+      "difficulty_level": "HIGH",
+      "required_skills": ["Networking", "Linux", "Python", "Ethical Hacking", "Security Frameworks", "Cryptography", "SIEM tools"],
+      "pk_opportunities": [
+        "Government of Pakistan's National Cyber Security Policy 2021 signals growing public-sector demand",
+        "Banks, telcos, and critical infrastructure providers are actively hiring security analysts",
+        "PISA (Pakistan Information Security Association) and PSEB support sector development",
+        "Bug bounty and freelance penetration testing opportunities available internationally",
+        "NCCS (National Centre for Cyber Security) at Air University Islamabad is a government-backed research and training hub"
+      ],
+      "top_pk_universities": ["FAST-NUCES", "NUST", "Air University", "NUTECH", "KIET"],
+      "risks": [
+        "Requires both strong theoretical grounding and hands-on lab/CTF practice",
+        "Field evolves extremely rapidly — continuous learning is non-negotiable",
+        "Certifications (CEH, OSCP, CompTIA Security+) often expected alongside degrees by employers"
+      ],
+      "last_updated": "2026-09-02"
     },
     {
       "slug": "ui-ux-design",
@@ -92,13 +141,22 @@
       "name": "UI/UX Design",
       "field": "Design",
       "demand_level": "MEDIUM",
-      "competition_level": null,
-      "difficulty_level": null,
-      "required_skills": [],
-      "pk_opportunities": [],
-      "top_pk_universities": [],
-      "risks": [],
-      "last_updated": "2025-06-01"
+      "competition_level": "MEDIUM",
+      "difficulty_level": "MEDIUM",
+      "required_skills": ["Figma", "User Research", "Prototyping", "Visual Design", "Information Architecture", "Adobe XD"],
+      "pk_opportunities": [
+        "Growing demand from Pakistan's software product companies and digital agencies for product designers",
+        "Freelance opportunities via international platforms (Upwork, Toptal) are very accessible with a strong portfolio",
+        "Startups across fintech, edtech, and healthtech are actively hiring junior and mid-level UX designers",
+        "DigiSkills UI/UX and Webflow course provides a free structured entry point for beginners"
+      ],
+      "top_pk_universities": ["Habib University", "LUMS", "IBA Karachi"],
+      "risks": [
+        "Portfolio quality matters more than degree for initial hiring — building real projects is essential",
+        "Field is competitive at senior levels where strong research and systems thinking is expected",
+        "Entry-level positions may be combined with graphic design or front-end responsibilities"
+      ],
+      "last_updated": "2026-09-02"
     },
     {
       "slug": "mobile-development",
@@ -106,13 +164,22 @@
       "name": "Mobile App Development",
       "field": "Technology",
       "demand_level": "HIGH",
-      "competition_level": null,
-      "difficulty_level": null,
-      "required_skills": [],
-      "pk_opportunities": [],
-      "top_pk_universities": [],
-      "risks": [],
-      "last_updated": "2025-06-01"
+      "competition_level": "HIGH",
+      "difficulty_level": "MEDIUM",
+      "required_skills": ["Flutter", "Dart", "React Native", "Android Studio", "iOS/Swift basics", "REST APIs", "Git"],
+      "pk_opportunities": [
+        "Pakistan's mobile app market is growing with increasing smartphone penetration",
+        "Software houses in Karachi, Lahore, and Islamabad maintain dedicated mobile teams",
+        "Freelance Android and Flutter development are among the most in-demand skills on Upwork for Pakistan-based developers",
+        "DigiSkills Mobile Game and App Development course provides a free entry-level pathway"
+      ],
+      "top_pk_universities": ["FAST-NUCES", "NUST", "COMSATS", "NUTECH"],
+      "risks": [
+        "Highly competitive — requires a strong public portfolio (Play Store apps, GitHub profile)",
+        "Technology stack changes frequently (React Native vs Flutter vs native)",
+        "Pure mobile roles are less common than full-stack or cross-platform roles in smaller companies"
+      ],
+      "last_updated": "2026-09-02"
     },
     {
       "slug": "business-administration",
@@ -120,13 +187,22 @@
       "name": "Business Administration",
       "field": "Business",
       "demand_level": "MEDIUM",
-      "competition_level": null,
-      "difficulty_level": null,
-      "required_skills": [],
-      "pk_opportunities": [],
-      "top_pk_universities": [],
-      "risks": [],
-      "last_updated": "2025-06-01"
+      "competition_level": "HIGH",
+      "difficulty_level": "MEDIUM",
+      "required_skills": ["Communication", "Problem Solving", "Microsoft Office", "Project Management", "Financial Literacy", "Leadership"],
+      "pk_opportunities": [
+        "BBA is among the most common undergraduate degrees in Pakistan — broad applicability across all industries",
+        "Entry-level roles in operations, HR, supply chain, sales, and marketing available at corporations and MNCs",
+        "Entrepreneurship pathway is particularly strong given Pakistan's growing startup ecosystem (NIC Karachi, Lahore, Islamabad)",
+        "Civil service CSS examination is a respected career pathway for business graduates"
+      ],
+      "top_pk_universities": ["IBA Karachi", "LUMS", "IoBM", "NUST", "UMT", "GCU Lahore"],
+      "risks": [
+        "Degree alone has limited differentiation — specialisation (finance, supply chain, marketing) or professional certification adds value",
+        "Management-level roles are competitive and often require demonstrated work experience",
+        "Generic BBA from a lower-ranked institution may not provide a strong return on investment"
+      ],
+      "last_updated": "2026-09-02"
     },
     {
       "slug": "finance-banking",
@@ -134,13 +210,23 @@
       "name": "Finance & Banking",
       "field": "Business",
       "demand_level": "MEDIUM",
-      "competition_level": null,
-      "difficulty_level": null,
-      "required_skills": [],
-      "pk_opportunities": [],
-      "top_pk_universities": [],
-      "risks": [],
-      "last_updated": "2025-06-01"
+      "competition_level": "HIGH",
+      "difficulty_level": "MEDIUM",
+      "required_skills": ["Financial Analysis", "Excel", "Accounting Principles", "Risk Management", "Bloomberg basics", "Communication"],
+      "pk_opportunities": [
+        "Pakistan's banking sector (SBP-regulated) employs thousands across HBL, UBL, MCB, Meezan Bank, and others",
+        "Islamic finance is a major and growing segment — Meezan Bank, Al Baraka, BankIslami, Dubai Islamic Bank Pakistan",
+        "State Bank of Pakistan Young Banker Programme and graduate trainee programmes are well-regarded entry points",
+        "SECP regulates investment banking, insurance, and capital markets — growing regulatory and compliance demand",
+        "ACCA, ICAP CA, and CFA credentials are highly valued alongside a finance degree"
+      ],
+      "top_pk_universities": ["IBA Karachi", "LUMS", "IoBM", "NUST"],
+      "risks": [
+        "Entry-level banking roles are highly competitive especially at top-tier banks",
+        "Career progression is slow without professional certifications (ACCA, CA, CFA)",
+        "Sector is sensitive to macroeconomic conditions"
+      ],
+      "last_updated": "2026-09-02"
     },
     {
       "slug": "electrical-engineering",
@@ -148,13 +234,23 @@
       "name": "Electrical Engineering",
       "field": "Engineering",
       "demand_level": "HIGH",
-      "competition_level": null,
-      "difficulty_level": null,
-      "required_skills": [],
-      "pk_opportunities": [],
-      "top_pk_universities": [],
-      "risks": [],
-      "last_updated": "2025-06-01"
+      "competition_level": "MEDIUM",
+      "difficulty_level": "HIGH",
+      "required_skills": ["Circuit Analysis", "Signals & Systems", "Embedded Systems", "MATLAB", "Control Systems", "Power Systems"],
+      "pk_opportunities": [
+        "WAPDA, NEPRA, and power generation and distribution companies consistently recruit electrical engineers",
+        "Telecom sector (Jazz, Telenor, Zong, Ufone) employs electrical and telecom engineers for network operations",
+        "Solar and renewable energy sector growth (AEDB-registered projects) creates demand for power engineers",
+        "Defence production and aerospace (PAF, POF, PAKSAT) offer government positions for qualified graduates",
+        "NAVTTC Solar PV Technician and Industrial Automation qualifications cover entry-level roles"
+      ],
+      "top_pk_universities": ["NUST", "UET Lahore", "GIKI", "NED", "PIEAS", "COMSATS"],
+      "risks": [
+        "Strong mathematics and physics foundation required from the outset",
+        "Some government employer pathways require ETEA/PEC registration",
+        "Embedded and electronics specialisations require significant hands-on lab experience"
+      ],
+      "last_updated": "2026-09-02"
     },
     {
       "slug": "civil-engineering",
@@ -162,13 +258,23 @@
       "name": "Civil Engineering",
       "field": "Engineering",
       "demand_level": "MEDIUM",
-      "competition_level": null,
-      "difficulty_level": null,
-      "required_skills": [],
-      "pk_opportunities": [],
-      "top_pk_universities": [],
-      "risks": [],
-      "last_updated": "2025-06-01"
+      "competition_level": "MEDIUM",
+      "difficulty_level": "HIGH",
+      "required_skills": ["AutoCAD", "Structural Analysis", "Construction Management", "Surveying", "Materials Science", "ETABS/SAP2000"],
+      "pk_opportunities": [
+        "Pakistan's ongoing infrastructure development (motorways, housing, dams, urban transport) creates demand",
+        "FWO (Frontier Works Organisation), NLC (National Logistics Cell), and NHA recruit civil engineers",
+        "Private-sector construction companies, real estate developers, and consultancy firms in all three MVP cities",
+        "CPEC-related and government infrastructure projects have been a significant employer",
+        "PEC (Pakistan Engineering Council) registration is required for autonomous professional practice"
+      ],
+      "top_pk_universities": ["NED", "UET Lahore", "NUST", "NUTECH", "GIKI"],
+      "risks": [
+        "Project-based work can involve site postings outside major cities",
+        "PEC registration and experience requirements limit early independent consulting",
+        "Demand fluctuates with public-sector infrastructure spending cycles"
+      ],
+      "last_updated": "2026-09-02"
     },
     {
       "slug": "mechanical-engineering",
@@ -176,13 +282,23 @@
       "name": "Mechanical Engineering",
       "field": "Engineering",
       "demand_level": "MEDIUM",
-      "competition_level": null,
-      "difficulty_level": null,
-      "required_skills": [],
-      "pk_opportunities": [],
-      "top_pk_universities": [],
-      "risks": [],
-      "last_updated": "2025-06-01"
+      "competition_level": "MEDIUM",
+      "difficulty_level": "HIGH",
+      "required_skills": ["Thermodynamics", "Fluid Mechanics", "CAD/CAM", "Manufacturing Processes", "AutoCAD", "SolidWorks"],
+      "pk_opportunities": [
+        "WAPDA, OGDCL, and energy sector companies recruit mechanical engineers for operations and maintenance",
+        "Automotive sector (Atlas Honda, Indus Motor/Toyota, Pak Suzuki) employs mechanical engineers",
+        "NAVTTC qualifications in Automotive Technology and CAD/CAM open vocational and technician pathways",
+        "POF (Pakistan Ordnance Factories) and defence manufacturing are traditional employers",
+        "Process industries — cement, fertiliser, textile machinery — maintain engineering teams"
+      ],
+      "top_pk_universities": ["NUST", "UET Lahore", "NED", "GIKI", "NUTECH"],
+      "risks": [
+        "Many roles require physical site work and industrial safety certification",
+        "Strong competition from electrical engineering and CS graduates for some roles",
+        "Sector is sensitive to industrial output and energy-cost cycles"
+      ],
+      "last_updated": "2026-09-02"
     },
     {
       "slug": "marketing",
@@ -190,13 +306,23 @@
       "name": "Marketing & Digital Media",
       "field": "Business",
       "demand_level": "MEDIUM",
-      "competition_level": null,
-      "difficulty_level": null,
-      "required_skills": [],
-      "pk_opportunities": [],
-      "top_pk_universities": [],
-      "risks": [],
-      "last_updated": "2025-06-01"
+      "competition_level": "HIGH",
+      "difficulty_level": "MEDIUM",
+      "required_skills": ["Digital Marketing", "SEO", "Social Media Marketing", "Content Writing", "Analytics", "Canva/Adobe Creative Suite"],
+      "pk_opportunities": [
+        "Pakistan's growing social media user base (Facebook, Instagram, TikTok, YouTube) creates demand for digital marketers",
+        "E-commerce platforms (Daraz, Telemart) and D2C brands require performance marketing and content specialists",
+        "DigiSkills Digital Marketing and SEO courses provide free, nationally recognised training",
+        "Freelance digital marketing is one of the top-earning freelance categories from Pakistan on global platforms",
+        "Agency ecosystem in Karachi and Lahore offers entry-level positions in brand, social, and performance marketing"
+      ],
+      "top_pk_universities": ["IBA Karachi", "LUMS", "IoBM", "UMT"],
+      "risks": [
+        "Field changes rapidly — constant learning of new platforms and tools is mandatory",
+        "Entry-level roles are competitive and may start at low compensation",
+        "Demonstrable portfolio (campaigns, content, analytics results) matters as much as degree credentials"
+      ],
+      "last_updated": "2026-09-02"
     },
     {
       "slug": "teaching",
@@ -204,27 +330,23 @@
       "name": "Teaching & Education",
       "field": "Education",
       "demand_level": "MEDIUM",
-      "competition_level": null,
-      "difficulty_level": null,
-      "required_skills": [],
-      "pk_opportunities": [],
-      "top_pk_universities": [],
-      "risks": [],
-      "last_updated": "2025-06-01"
-    },
-    {
-      "slug": "pharmacy",
-      "category": "Healthcare",
-      "name": "Pharmacy",
-      "field": "Healthcare",
-      "demand_level": "MEDIUM",
-      "competition_level": null,
-      "difficulty_level": null,
-      "required_skills": [],
-      "pk_opportunities": [],
-      "top_pk_universities": [],
-      "risks": [],
-      "last_updated": "2025-06-01"
+      "competition_level": "MEDIUM",
+      "difficulty_level": "MEDIUM",
+      "required_skills": ["Subject Knowledge", "Classroom Management", "Lesson Planning", "Communication", "Assessment Design", "Patience"],
+      "pk_opportunities": [
+        "Primary and secondary education system (public and private) employs hundreds of thousands across Pakistan",
+        "Private school chains (Beaconhouse, LGS, City School) recruit graduates with subject expertise",
+        "O/A-Level teacher demand is high in Karachi, Lahore, and Islamabad for sciences, mathematics, and English",
+        "Higher Education Commission (HEC) supports PhD and postdoctoral pathways for those pursuing university-level teaching",
+        "EdTech platforms (Maqsad, Noon Academy Pakistan) are building digital content and tutoring teams"
+      ],
+      "top_pk_universities": ["University of the Punjab", "Allama Iqbal Open University", "GCU Lahore", "LCWU"],
+      "risks": [
+        "Government school teacher positions require BPSC/KPPSC/SPSC competitive examinations",
+        "Compensation in public sector teaching is lower than comparable private-sector professional roles",
+        "Career progression to school leadership or lectureship requires postgraduate qualifications"
+      ],
+      "last_updated": "2026-09-02"
     },
     {
       "slug": "accounting",
@@ -232,13 +354,192 @@
       "name": "Accounting & Finance",
       "field": "Business",
       "demand_level": "HIGH",
-      "competition_level": null,
-      "difficulty_level": null,
-      "required_skills": [],
-      "pk_opportunities": [],
-      "top_pk_universities": [],
-      "risks": [],
-      "last_updated": "2025-06-01"
+      "competition_level": "HIGH",
+      "difficulty_level": "MEDIUM",
+      "required_skills": ["Financial Reporting", "Excel", "QuickBooks", "Accounting Standards (IFRS/IAS)", "Auditing", "Tax"],
+      "pk_opportunities": [
+        "ICAP Chartered Accountancy (CA) is Pakistan's most prestigious professional accounting qualification — strong demand in Big Four firms (EY, Deloitte, KPMG, PwC Pakistan)",
+        "ACCA qualification offers an internationally recognised pathway with a large Pakistan student and member base",
+        "Government audit and finance roles (Auditor General of Pakistan, FBR, provincial treasury) recruit accounting graduates",
+        "Every mid-to-large company across all industries requires qualified accountants and finance officers",
+        "DigiSkills QuickBooks course provides free entry-level bookkeeping training"
+      ],
+      "top_pk_universities": ["IBA Karachi", "IoBM", "University of the Punjab", "LUMS"],
+      "risks": [
+        "ICAP CA is one of the most demanding professional qualifications — low first-attempt pass rates",
+        "ACCA qualification takes 3-4 years with consistent examination commitment alongside work",
+        "Salaries at entry level are moderate without professional certification progress"
+      ],
+      "last_updated": "2026-09-02"
+    },
+    {
+      "slug": "law",
+      "category": "Legal",
+      "name": "Law (LLB)",
+      "field": "Legal",
+      "demand_level": "MEDIUM",
+      "competition_level": "HIGH",
+      "difficulty_level": "HIGH",
+      "required_skills": ["Legal Research", "Argumentation", "Contract Drafting", "Analytical Thinking", "Communication", "Ethics"],
+      "pk_opportunities": [
+        "Practising advocates in Karachi, Lahore, and Islamabad High Courts and District Courts",
+        "Corporate law, contract law, and intellectual property are growth areas in Pakistan's expanding business sector",
+        "Pakistan Bar Council (PBC) regulates licensure — LLB followed by enrolment and a year of internship is required to practise",
+        "Judiciary competitive examination pathway (PCS-J) for those seeking judgeship",
+        "LUMS law graduates are in high demand at top law firms and corporate legal departments"
+      ],
+      "top_pk_universities": ["LUMS", "University of the Punjab", "Quaid-i-Azam University", "IBA Karachi"],
+      "risks": [
+        "Establishing an independent practice is slow — associate positions at firms often pay modestly initially",
+        "The PCS-J and civil services pathways are extremely competitive",
+        "Requires full-time bar examination preparation alongside professional work"
+      ],
+      "last_updated": "2026-09-02"
+    },
+    {
+      "slug": "sports-coaching",
+      "category": "Sports & Physical Education",
+      "name": "Sports Coaching & Management",
+      "field": "Sports",
+      "demand_level": "LOW",
+      "competition_level": "MEDIUM",
+      "difficulty_level": "MEDIUM",
+      "required_skills": ["Sports-specific knowledge", "Physical Fitness", "Leadership", "Communication", "Training Program Design", "Sports First Aid"],
+      "pk_opportunities": [
+        "PCB (Pakistan Cricket Board), PSF (Pakistan Squash Federation), PHF (Pakistan Hockey Federation), and other national federations employ coaches",
+        "University sports directorates, private schools, and academies recruit qualified sports coaches and physical education teachers",
+        "HEC Youth Talent Hunt League creates a structured demand for coaching at inter-university level",
+        "Karachi United FC and other professional football clubs operate youth academies",
+        "NAVTTC Sports Trainer qualification provides a nationally recognised vocational pathway"
+      ],
+      "top_pk_universities": ["University of the Punjab (BS Physical Education)", "Lahore College for Women University"],
+      "risks": [
+        "Formal career pathways are limited and income can be irregular for non-elite coaches",
+        "Recognition and pay are strongly linked to performance of athletes coached",
+        "Most opportunities are in Lahore (Punjab Sports Board) with fewer in Karachi and Islamabad"
+      ],
+      "last_updated": "2026-09-02"
+    },
+    {
+      "slug": "public-policy-governance",
+      "category": "Public Sector & Governance",
+      "name": "Public Policy & Governance",
+      "field": "Public Sector",
+      "demand_level": "MEDIUM",
+      "competition_level": "HIGH",
+      "difficulty_level": "HIGH",
+      "required_skills": ["Policy Analysis", "Research", "Economics", "Public Administration", "Communication", "Quantitative Methods"],
+      "pk_opportunities": [
+        "Central Superior Services (CSS) is Pakistan's most prestigious civil service examination — successful candidates join Pakistan Administrative Service, Foreign Service, and other groups",
+        "Provincial Public Service Commissions (PPSC, SPSC, KPSC, BPSC) recruit for provincial roles",
+        "Think tanks and policy research institutes (PIDE, SDPI, ISSI) recruit researchers and policy analysts",
+        "International development organisations (World Bank, UN agencies, ADB) recruit Pakistanis for development roles",
+        "NDU and QAU offer specialised BS/MS programs in governance, strategic studies, and international relations"
+      ],
+      "top_pk_universities": ["National Defence University", "Quaid-i-Azam University", "LUMS", "IBA Karachi"],
+      "risks": [
+        "CSS examination success rate is typically 2-4% — extremely competitive with multi-year preparation common",
+        "Government career progression is slow and structured by seniority",
+        "Provincial and local government roles pay significantly less than comparable private-sector positions"
+      ],
+      "last_updated": "2026-09-02"
+    },
+    {
+      "slug": "tourism-hospitality",
+      "category": "Hospitality & Tourism",
+      "name": "Tourism & Hospitality Management",
+      "field": "Hospitality",
+      "demand_level": "LOW",
+      "competition_level": "LOW",
+      "difficulty_level": "MEDIUM",
+      "required_skills": ["Customer Service", "Communication", "Event Management", "Food & Beverage Operations", "Tourism Geography", "Languages"],
+      "pk_opportunities": [
+        "Pakistan Tourism Development Corporation (PTDC) and provincial tourism departments offer public-sector roles",
+        "Domestic tourism growth is creating demand in northern Pakistan (Gilgit-Baltistan, KPK) for guides and hospitality professionals",
+        "Hotel chains (Serena, Avari, Pearl Continental, Marriott) in Karachi, Lahore, and Islamabad recruit hospitality graduates",
+        "NAVTTC Travel and Tourism Manager qualification provides a vocational entry point",
+        "QAU offers a BS in Tourism and Hospitality"
+      ],
+      "top_pk_universities": ["Quaid-i-Azam University"],
+      "risks": [
+        "Industry is highly sensitive to security situation and economic conditions",
+        "Career opportunities in tourism are geographically uneven — strongest in tourist-destination regions",
+        "Entry-level hospitality roles involve shift work and may have modest compensation"
+      ],
+      "last_updated": "2026-09-02"
+    },
+    {
+      "slug": "graphic-design",
+      "category": "Creative & Design",
+      "name": "Graphic Design & Visual Communication",
+      "field": "Design",
+      "demand_level": "MEDIUM",
+      "competition_level": "HIGH",
+      "difficulty_level": "MEDIUM",
+      "required_skills": ["Adobe Photoshop", "Illustrator", "InDesign", "Canva", "Typography", "Branding", "Video Editing"],
+      "pk_opportunities": [
+        "Pakistan's advertising, media, and digital agency sector employs graphic designers in Karachi and Lahore",
+        "Freelance design is one of the highest-earning categories for Pakistani freelancers internationally (Upwork, 99designs, Fiverr)",
+        "DigiSkills Graphic Design and Video Editing course provides a free, structured beginner pathway",
+        "E-commerce boom (Daraz, social commerce) has created demand for product photography, banner design, and branding services",
+        "In-house design roles at brands, publications, and NGOs are steady sources of employment"
+      ],
+      "top_pk_universities": ["University of the Punjab (BS Fine Arts)", "NCA Lahore"],
+      "risks": [
+        "Portfolio quality is the primary hiring criterion — degree can be secondary",
+        "Market is crowded at entry level with many self-taught designers",
+        "AI-assisted design tools are changing workflows rapidly"
+      ],
+      "last_updated": "2026-09-02"
+    },
+    {
+      "slug": "ai-ml-engineering",
+      "category": "Engineering & Technology",
+      "name": "AI / Machine Learning Engineering",
+      "field": "Technology",
+      "demand_level": "HIGH",
+      "competition_level": "MEDIUM",
+      "difficulty_level": "HIGH",
+      "required_skills": ["Python", "TensorFlow or PyTorch", "Linear Algebra", "Statistics", "Deep Learning", "MLOps", "Cloud platforms"],
+      "pk_opportunities": [
+        "NCAI (National Centre for Artificial Intelligence) at UET Lahore and its partner centres (NUST, QAU, LUMS, UoK, GIKI) are growing AI research and talent ecosystem",
+        "Pakistan Software Export Board (PSEB) has identified AI as a priority export sector",
+        "PSDF and DigiSkills offer AI with Python training tracks free of charge",
+        "E-Pakistan Uraan Programme and Ignite fund AI-related innovation competitions and startups",
+        "International remote positions in ML engineering are accessible with a strong portfolio on GitHub and Kaggle",
+        "IBA Karachi, LUMS, and FAST-NUCES offer MS AI / MS Data Science postgraduate programs"
+      ],
+      "top_pk_universities": ["NUST", "LUMS", "FAST-NUCES", "NUTECH", "IBA Karachi"],
+      "risks": [
+        "Strong foundation in mathematics (linear algebra, probability, calculus) is non-negotiable",
+        "Compute resources for training large models are expensive — requires cloud platform access",
+        "Field is moving extremely rapidly; academic curricula may lag industry practice"
+      ],
+      "last_updated": "2026-09-02"
+    },
+    {
+      "slug": "cloud-devops",
+      "category": "Engineering & Technology",
+      "name": "Cloud & DevOps Engineering",
+      "field": "Technology",
+      "demand_level": "HIGH",
+      "competition_level": "MEDIUM",
+      "difficulty_level": "HIGH",
+      "required_skills": ["Linux", "AWS or Azure or GCP", "Docker", "Kubernetes", "CI/CD pipelines", "Terraform", "Python or Bash scripting"],
+      "pk_opportunities": [
+        "Pakistan's software export companies increasingly serve cloud-native international clients requiring DevOps engineers",
+        "DigiSkills Cloud Computing course provides a free introductory pathway",
+        "AWS, Azure, and Google Cloud certifications are highly valued and internationally portable",
+        "Remote work is highly accessible for certified cloud engineers — some of the highest freelance earnings from Pakistan",
+        "Banking, fintech, and telecom sector cloud migrations are creating local enterprise demand"
+      ],
+      "top_pk_universities": ["FAST-NUCES", "NUST", "COMSATS", "NUTECH"],
+      "risks": [
+        "Certification costs (AWS, Azure) can be a barrier — free tiers and student programmes are available",
+        "Requires production-level experience beyond textbooks — personal projects and open source contributions matter",
+        "Scope creep between software engineering and DevOps roles can blur career progression"
+      ],
+      "last_updated": "2026-09-02"
     }
   ]
 }

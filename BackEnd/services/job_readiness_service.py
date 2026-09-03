@@ -77,15 +77,18 @@ class StudentNotFoundError(Exception):
 # ---------------------------------------------------------------------------
 
 
-def get_job_readiness(db: Session) -> JobReadiness:
+def get_job_readiness(
+    db: Session, student_id: int = DEMO_STUDENT_ID
+) -> JobReadiness:
     """
     Compute the deterministic job readiness score, then call Qwen for
     gap analysis. If Qwen fails, return the deterministic score with
     hardcoded fallback text — never HTTP 500.
     """
-    student = db.get(Student, DEMO_STUDENT_ID)
+    student = db.get(Student, student_id)
     if student is None:
         raise StudentNotFoundError()
+
 
     # --- deterministic scoring ---
     component_scores = _compute_component_scores(db, student)

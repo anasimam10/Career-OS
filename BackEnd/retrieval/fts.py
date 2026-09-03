@@ -28,7 +28,7 @@ logger = logging.getLogger("ah_career.fts")
 FTS_SPECS: dict[str, tuple[str, list[str]]] = {
     "careers": ("careers_fts", ["name", "field", "category"]),
     "opportunities": ("opportunities_fts", ["title", "organization", "description"]),
-    "universities": ("universities_fts", ["name"]),
+    "universities": ("universities_fts", ["name", "short_name"]),
     "programs": ("programs_fts", ["name"]),
     "alumni": ("alumni_fts", ["career_path", "field"]),
     "learning_resources": ("learning_resources_fts", ["title", "provider"]),

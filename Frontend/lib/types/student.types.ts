@@ -1,4 +1,4 @@
-﻿import type { EducationStage } from "./journey.types"
+import type { EducationStage } from "./journey.types"
 
 export interface Skill {
   name: string
@@ -18,7 +18,9 @@ export interface OnboardingPayload {
 export interface OnboardingResponse {
   profile_updated: boolean
   next_best_action: import("./journey.types").NextBestAction
+  student_id?: number
 }
+
 
 export interface StudentProfile {
   student_id: number

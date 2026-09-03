@@ -3,9 +3,22 @@
 # ──────────────────────────────────────────────────────────────
 
 # === Secrets — never commit ==================================
+.env
+.env.*
+*.env
+*.env.*
+!*.env.example
+!*.env.local.example
 BackEnd/.env
 Frontend/.env.local
 Frontend/.env
+*service_account*.json
+*service-account*.json
+*credentials*.json
+*.pem
+*.key
+*.p12
+*.pfx
 
 # === Python ==================================================
 __pycache__/
@@ -16,16 +29,25 @@ dist/
 build/
 .venv/
 venv/
+.pytest_cache/
 
 # === Node / Next.js =========================================
 Frontend/node_modules/
+node_modules/
 Frontend/.next/
+.next/
 Frontend/out/
+out/
+.vercel/
+*.tsbuildinfo
 
 # === Database ================================================
-BackEnd/*.db
+*.db
 *.db-journal
 *.db-wal
+*.db-shm
+BackEnd/*.db
+ah_career.db
 
 # === IDE / editor ============================================
 .vscode/

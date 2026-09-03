@@ -33,6 +33,8 @@ class LearningResource(Base):
     level: Mapped[str | None] = mapped_column(String, nullable=True)  # beginner/intermediate/advanced
     is_free: Mapped[bool | None] = mapped_column(Boolean, nullable=True)  # verified only
     duration_hours: Mapped[float | None] = mapped_column(Float, nullable=True)  # verified only
+    # Geographic scope: ONLINE, NATIONWIDE, or a specific city. NULL means unspecified.
+    geographic_scope: Mapped[str | None] = mapped_column(String, nullable=True)
     source_id: Mapped[int | None] = mapped_column(Integer, nullable=True)
     verification_status: Mapped[str] = mapped_column(String, default="CANDIDATE")
     last_verified: Mapped[date | None] = mapped_column(Date, nullable=True)

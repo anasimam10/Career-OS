@@ -31,18 +31,48 @@ logger = logging.getLogger("ah_career.journey")
 _NO_GOAL_VALUES = {"", "not sure yet", "unsure", "undecided"}
 
 
-def complete_onboarding(db: Session, payload: OnboardingPayload) -> OnboardingResponse:
+import uuid
+
+def complete_onboarding(
+    db: Session,
+    payload: OnboardingPayload,
+    student_id: Optional[int] = None,
+    is_new: bool = False,
+) -> OnboardingResponse:
     """
-    1. Ensure the demo student exists (MVP demo-student session, §8/§12).
+    1. Ensure or create the target student (new session or demo student).
     2. Persist the profile (stage, interests, skills, goal, sport, motivation).
     3. Bootstrap journey milestones for the student's stage.
     4. Generate and persist the first Next Best Action.
     """
-    student = _ensure_demo_student(db)
+    if is_new:
+        repo = StudentRepository(db)
+        email = f"student_{uuid.uuid4().hex[:8]}@ahcareers.local"
+        student = repo.create_with_profile(
+            name="Student",
+            email=email,
+            password_hash="session_guest",
+            education_stage=payload.education_stage.value,
+        )
+    elif student_id and student_id != DEMO_STUDENT_ID:
+        student = db.get(Student, student_id)
+        if student is None:
+            repo = StudentRepository(db)
+            student = repo.create_with_profile(
+                id=student_id,
+                name="Student",
+                email=f"student_{student_id}_{uuid.uuid4().hex[:6]}@ahcareers.local",
+                password_hash="session_guest",
+                education_stage=payload.education_stage.value,
+            )
+    else:
+        student = _ensure_demo_student(db)
+
     career = _resolve_goal_career(db, payload.career_interests)
 
     # ---- Student row: journey state + scalar profile fields --------------
     student.education_stage = payload.education_stage.value
+    student.city = payload.city
     student.sports_interest = payload.sports_interest
     student.motivation_tags = json.dumps(payload.motivation_tags, ensure_ascii=False)
     student.career_goal = career.slug if career is not None else None
@@ -71,7 +101,8 @@ def complete_onboarding(db: Session, payload: OnboardingPayload) -> OnboardingRe
         "Onboarding complete: student=%s stage=%s goal=%s",
         student.id, student.education_stage, student.career_goal,
     )
-    return OnboardingResponse(profile_updated=True, next_best_action=nba)
+    return OnboardingResponse(profile_updated=True, next_best_action=nba, student_id=student.id)
+
 
 
 # ---------------------------------------------------------------------------

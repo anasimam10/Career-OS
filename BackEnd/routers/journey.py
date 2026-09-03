@@ -18,6 +18,7 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 
 from database import get_db
+from routers.deps import get_current_student_id
 from schemas.requests import ProgressRequest, RoadmapRequest
 from schemas.responses import JourneyResponse, ProgressResponse, RoadmapResponse
 from services import journey_service, progress_service, roadmap_service
@@ -26,10 +27,13 @@ router = APIRouter(tags=["journey"])
 
 
 @router.get("/journey", response_model=JourneyResponse)
-def get_journey(db: Session = Depends(get_db)) -> JourneyResponse | JSONResponse:
+def get_journey(
+    db: Session = Depends(get_db),
+    student_id: int = Depends(get_current_student_id),
+) -> JourneyResponse | JSONResponse:
     """The student's current journey state (progressive disclosure: max 3 steps)."""
     try:
-        return journey_service.get_journey(db)
+        return journey_service.get_journey(db, student_id=student_id)
     except journey_service.StudentNotFoundError:
         return JSONResponse(
             status_code=404,
@@ -39,10 +43,13 @@ def get_journey(db: Session = Depends(get_db)) -> JourneyResponse | JSONResponse
 
 @router.post("/roadmap", response_model=RoadmapResponse)
 def create_roadmap(
-    request: RoadmapRequest, db: Session = Depends(get_db)
+    request: RoadmapRequest,
+    db: Session = Depends(get_db),
+    student_id: int = Depends(get_current_student_id),
 ) -> RoadmapResponse | JSONResponse:
     """Create (idempotently) the roadmap milestones and return visible steps only."""
-    student = journey_service.get_current_student(db)
+    student = journey_service.get_current_student(db, student_id=student_id)
+
     if student is None:
         return JSONResponse(
             status_code=404,
@@ -69,11 +76,13 @@ def create_roadmap(
 
 @router.post("/progress", response_model=ProgressResponse)
 def record_progress(
-    request: ProgressRequest, db: Session = Depends(get_db)
+    request: ProgressRequest,
+    db: Session = Depends(get_db),
+    student_id: int = Depends(get_current_student_id),
 ) -> ProgressResponse | JSONResponse:
     """Mark a milestone done/skipped; the backend advances the stage if valid."""
     try:
-        return progress_service.record_progress(db, request)
+        return progress_service.record_progress(db, request, student_id=student_id)
     except progress_service.MilestoneNotFoundError:
         return JSONResponse(
             status_code=404,

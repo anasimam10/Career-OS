@@ -221,7 +221,7 @@ class TestCareerDemoJourney:
                 pk_opportunities=["Tech hubs in Lahore, Karachi, Islamabad"],
                 risks=["Rapid technology shifts"],
                 rewards=["High market demand"],
-                data_source="A&H Verified DB",
+                data_source="Career OS Verified DB",
             ),
             verdict=CareerVerdict(
                 verdict="GOOD_FIT",

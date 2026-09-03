@@ -30,7 +30,7 @@ def list_universities(
     city: Optional[str] = None,
     type: Optional[str] = None,
     hec_recognized: Optional[bool] = None,
-    limit: int = 20,
+    limit: int = 100,
     db: Session = Depends(get_db),
 ) -> UniversityListResponse:
     """Verified universities for the University Finder (master §17).

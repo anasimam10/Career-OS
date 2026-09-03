@@ -17,19 +17,21 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 
 from database import get_db
+from routers.deps import get_current_student_id
 from schemas.requests import CoachChatPayload
 from schemas.shared import CoachResponse
 from services import coach_service
 from services.ai_service import AIUnavailableError, AIValidationError
 from services.rate_limiter import rate_limiter
-from services.journey_state import DEMO_STUDENT_ID
 
 router = APIRouter(tags=["coach"])
 
 
 @router.post("/coach/chat", response_model=None)
 def coach_chat(
-    payload: CoachChatPayload, db: Session = Depends(get_db)
+    payload: CoachChatPayload,
+    db: Session = Depends(get_db),
+    student_id: int = Depends(get_current_student_id),
 ) -> CoachResponse | JSONResponse:
     """Handle a coach chat message with rate limiting and AI validation."""
     # --- validate message ---
@@ -40,7 +42,7 @@ def coach_chat(
         )
 
     # --- rate limit ---
-    if not rate_limiter.is_allowed(DEMO_STUDENT_ID):
+    if not rate_limiter.is_allowed(student_id):
         return JSONResponse(
             status_code=429,
             content={
@@ -56,8 +58,11 @@ def coach_chat(
 
     # --- call service ---
     try:
-        result = coach_service.coach_chat(db, payload.message.strip(), history)
+        result = coach_service.coach_chat(
+            db, payload.message.strip(), history, student_id=student_id
+        )
         return result
+
     except coach_service.StudentNotFoundError:
         return JSONResponse(
             status_code=404,

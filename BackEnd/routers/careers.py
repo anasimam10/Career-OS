@@ -22,6 +22,7 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 
 from database import get_db
+from routers.deps import get_current_student_id
 from schemas.requests import CareerAnalyzeRequest, CareerTrialRequest
 from schemas.responses import CareerDetail, CareerListItem
 from schemas.shared import CareerRealityResponse, CareerTrialPlan
@@ -38,15 +39,13 @@ router = APIRouter(tags=["careers"])
 
 @router.get("/careers", response_model=list[CareerListItem])
 def list_careers(
-    search: str = "",
+    search: Optional[str] = None,
     field: Optional[str] = None,
     db: Session = Depends(get_db),
 ) -> list[CareerListItem]:
-    """All available careers for the Career Explorer UI.
-
-    Optional additive filters (master §17): ``search`` matches career
-    name/field/category (FTS-backed), ``field`` narrows to one field.
-    Omitting both keeps the legacy unfiltered listing.
+    """
+    List verified careers with optional filtering by search term or field.
+    Database only — NO AI.
     """
     return career_service.get_career_list(db, search=search, field=field)
 
@@ -70,11 +69,15 @@ def get_career(slug: str, db: Session = Depends(get_db)) -> CareerDetail | JSONR
 
 @router.post("/career/analyze", response_model=CareerRealityResponse)
 def analyze_career(
-    request: CareerAnalyzeRequest, db: Session = Depends(get_db)
+    request: CareerAnalyzeRequest,
+    db: Session = Depends(get_db),
+    student_id: int = Depends(get_current_student_id),
 ) -> CareerRealityResponse | JSONResponse:
     """Career Reality Check: student profile + career data -> Qwen -> verdict."""
     try:
-        return career_service.analyze_career(db, request.career_slug)
+        return career_service.analyze_career(
+            db, request.career_slug, student_id=student_id
+        )
     except career_service.CareerNotFoundError:
         return JSONResponse(
             status_code=404,
@@ -94,11 +97,15 @@ def analyze_career(
 
 @router.post("/career/trial-plan", response_model=CareerTrialPlan)
 def trial_plan(
-    request: CareerTrialRequest, db: Session = Depends(get_db)
+    request: CareerTrialRequest,
+    db: Session = Depends(get_db),
+    student_id: int = Depends(get_current_student_id),
 ) -> CareerTrialPlan | JSONResponse:
     """Generate a personalised 7-day trial plan for a career."""
     try:
-        return career_service.generate_trial_plan(db, request.career_slug)
+        return career_service.generate_trial_plan(
+            db, request.career_slug, student_id=student_id
+        )
     except career_service.CareerNotFoundError:
         return JSONResponse(
             status_code=404,
@@ -114,3 +121,4 @@ def trial_plan(
             status_code=500,
             content={"error": "AI response could not be processed"},
         )
+

@@ -1,10 +1,12 @@
-﻿import type { OnboardingResponse } from "@/lib/types/student.types"
+import type { OnboardingResponse } from "@/lib/types/student.types"
 import { MOCK_NBA } from "./journey.mock"
 
 export const MOCK_ONBOARDING_RESPONSE: OnboardingResponse = {
   profile_updated: true,
   next_best_action: MOCK_NBA,
+  student_id: 1,
 }
+
 
 export const INTEREST_OPTIONS = [
   "Technology", "Mathematics", "Biology", "Physics", "Chemistry",

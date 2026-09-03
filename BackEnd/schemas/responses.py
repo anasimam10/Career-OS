@@ -64,6 +64,8 @@ class CareerDetail(BaseModel):
 class OnboardingResponse(BaseModel):
     profile_updated: bool
     next_best_action: NextBestAction
+    student_id: Optional[int] = None
+
 
 
 # ---------------------------------------------------------------------------
@@ -72,6 +74,7 @@ class OnboardingResponse(BaseModel):
 
 
 class JourneyStep(BaseModel):
+    id: Optional[int] = None
     title: str
     description: str
     stage: EducationStage
@@ -81,6 +84,7 @@ class JourneyStep(BaseModel):
 class JourneyResponse(BaseModel):
     stage: EducationStage
     current_step: str
+    current_milestone_id: Optional[int] = None
     next_steps: list[JourneyStep]
     next_best_action: NextBestAction
 

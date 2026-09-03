@@ -43,7 +43,14 @@ class Settings:
 
     # --- Application ---
     SECRET_KEY: str = os.getenv("SECRET_KEY", "change-me-to-a-random-string")
-    CORS_ORIGINS: list[str] = os.getenv("CORS_ORIGINS", "http://localhost:3000").split(",")
+    CORS_ORIGINS: list[str] = [
+        origin.strip()
+        for origin in os.getenv(
+            "CORS_ORIGINS",
+            "http://localhost:3000,http://127.0.0.1:3000,http://localhost:8000,http://127.0.0.1:8000"
+        ).split(",")
+        if origin.strip()
+    ]
     LOG_LEVEL: str = os.getenv("LOG_LEVEL", "INFO")
 
     # --- Admin / ingestion (architecture_master §12/§17) ---

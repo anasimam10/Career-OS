@@ -35,7 +35,7 @@ class CareerTrialRequest(BaseModel):
 
 
 class ProgressRequest(BaseModel):
-    milestone_id: int
+    milestone_id: Optional[int] = None
     status: str = "done"
 
 

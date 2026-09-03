@@ -29,22 +29,24 @@ class StudentNotFoundError(Exception):
     """No onboarded demo student — the journey cannot exist yet."""
 
 
-def get_journey(db: Session) -> JourneyResponse:
+def get_journey(db: Session, student_id: int = DEMO_STUDENT_ID) -> JourneyResponse:
     """
-    Assemble the journey view for the demo student.
+    Assemble the journey view for the requested student (defaults to demo student).
 
     Raises:
         StudentNotFoundError — nobody has onboarded yet.
     """
-    student = db.get(Student, DEMO_STUDENT_ID)
+    student = db.get(Student, student_id)
     if student is None:
         raise StudentNotFoundError()
 
     stage = parse_stage(student.education_stage) or EducationStage.HIGH_SCHOOL
 
     pending = roadmap_service.get_pending_milestones(db, student.id)
+    current_milestone_id = None
     if pending:
         current_step = pending[0].title
+        current_milestone_id = pending[0].id
         next_steps: list[JourneyStep] = [
             roadmap_service.to_journey_step(m)
             for m in pending[: roadmap_service.MAX_VISIBLE_STEPS]
@@ -53,6 +55,8 @@ def get_journey(db: Session) -> JourneyResponse:
         # No roadmap milestones yet — honest deterministic defaults for the stage
         current_step = roadmap_service.stage_default_step_title(stage.value)
         next_steps = roadmap_service.stage_default_steps(stage.value)
+        if next_steps and next_steps[0].id:
+            current_milestone_id = next_steps[0].id
 
     # Cached when still valid (no Qwen call on refresh), otherwise generated.
     nba = nba_service.generate_nba(db, student)
@@ -60,11 +64,13 @@ def get_journey(db: Session) -> JourneyResponse:
     return JourneyResponse(
         stage=stage,
         current_step=current_step,
+        current_milestone_id=current_milestone_id,
         next_steps=next_steps,
         next_best_action=nba,
     )
 
 
-def get_current_student(db: Session) -> Optional[Student]:
-    """The active demo student (convenience for other services)."""
-    return db.get(Student, DEMO_STUDENT_ID)
+def get_current_student(db: Session, student_id: int = DEMO_STUDENT_ID) -> Optional[Student]:
+    """The active student (defaults to demo student)."""
+    return db.get(Student, student_id)
+

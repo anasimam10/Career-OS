@@ -50,6 +50,7 @@ def coach_chat(
     db: Session,
     message: str,
     history: list[dict],
+    student_id: int = DEMO_STUDENT_ID,
 ) -> CoachResponse:
     """
     Build context, call Qwen, validate and return CoachResponse.
@@ -59,9 +60,10 @@ def coach_chat(
     then enforces the 2000-character combined limit.
     """
     # --- fetch student ---
-    student = db.get(Student, DEMO_STUDENT_ID)
+    student = db.get(Student, student_id)
     if student is None:
         raise StudentNotFoundError()
+
 
     # --- build context from DB ---
     context = _build_student_context(db, student)

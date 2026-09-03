@@ -113,7 +113,7 @@ export const MOCK_REALITY_CHECK: Record<string, CareerRealityResponse> = {
         "Transferable skills applicable globally",
         "Practical ability to build independent products and tools",
       ],
-      data_source: "A&H Careers verified database, updated 2025",
+      data_source: "Career OS verified database, updated 2025",
     },
     verdict: {
       verdict: "WORTH_EXPLORING",

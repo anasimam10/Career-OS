@@ -1,4 +1,4 @@
-﻿export type EducationStage =
+export type EducationStage =
   | "HIGH_SCHOOL"
   | "CAREER_DISCOVERY"
   | "CAREER_DECISION"
@@ -32,6 +32,7 @@ export interface Milestone {
 }
 
 export interface JourneyStep {
+  id?: number
   title: string
   description: string
   stage: EducationStage
@@ -41,6 +42,7 @@ export interface JourneyStep {
 export interface JourneyResponse {
   stage: EducationStage
   current_step: string
+  current_milestone_id?: number
   next_steps: JourneyStep[]
   next_best_action: NextBestAction
 }

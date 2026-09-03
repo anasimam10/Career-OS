@@ -22,7 +22,7 @@ from retrieval.fts import fts_search_ids
 # Master §11: student-facing queries see VALIDATED/VERIFIED records only.
 STUDENT_VISIBLE_STATUSES = ("VALIDATED", "VERIFIED")
 
-MAX_UNIVERSITY_RESULTS = 30
+MAX_UNIVERSITY_RESULTS = 300
 MAX_PROGRAM_RESULTS = 50
 
 
@@ -76,7 +76,11 @@ def search_universities(
         if ids:
             rows = base.filter(University.id.in_(ids)).all()
         else:
-            rows = base.filter(University.name.ilike(f"%{query_clean}%")).all()
+            rows = base.filter(
+                (University.name.ilike(f"%{query_clean}%"))
+                | (University.short_name.ilike(f"%{query_clean}%"))
+                | (University.slug.ilike(f"%{query_clean}%"))
+            ).all()
     else:
         rows = base.order_by(University.name).all()
 
@@ -190,3 +194,77 @@ def _program_to_dict(record: Program) -> dict:
         "career_ids": career_ids,
         "verification_status": record.verification_status,
     }
+
+
+def get_university_secondary_intellectual_capital(
+    db: Session, university_id_or_slug: str | int
+) -> dict | None:
+    """Retrieve supplementary faculty intellectual capital from secondary dataset.
+
+    Returns None if university not found or has no secondary CS faculty data.
+    Clearly marks data as EXTERNAL_SECONDARY / L2 authority level.
+    """
+    import json
+    from knowledge_engine.staging import PKEStagingRecord
+
+    if isinstance(university_id_or_slug, int) or (
+        isinstance(university_id_or_slug, str) and university_id_or_slug.isdigit()
+    ):
+        uni = db.query(University).filter(University.id == int(university_id_or_slug)).first()
+    else:
+        uni = db.query(University).filter(University.slug == str(university_id_or_slug)).first()
+
+    if not uni:
+        return None
+
+    dedup_key = f"enrichment:university:{uni.id}"
+    record = (
+        db.query(PKEStagingRecord)
+        .filter(
+            PKEStagingRecord.domain == "university_secondary_enrichment",
+            PKEStagingRecord.dedup_key == dedup_key,
+        )
+        .first()
+    )
+    if not record or not record.extracted_json:
+        return None
+
+    try:
+        data = json.loads(record.extracted_json)
+        data["is_primary"] = False
+        data["authority_level"] = "L2"
+        data["source_type"] = "EXTERNAL_SECONDARY"
+        data["data_provenance_note"] = (
+            "Supplementary external secondary dataset. Primary verified university records remain authoritative."
+        )
+        return data
+    except (json.JSONDecodeError, TypeError):
+        return None
+
+
+def get_public_universities_macro_statistics(db: Session) -> list[dict]:
+    """Retrieve historical public universities macro-level count time-series.
+
+    Classified as L2 / EXTERNAL_SECONDARY.
+    """
+    import json
+    from knowledge_engine.staging import PKEStagingRecord
+
+    records = (
+        db.query(PKEStagingRecord)
+        .filter(PKEStagingRecord.domain == "macro_statistics")
+        .order_by(PKEStagingRecord.id.asc())
+        .all()
+    )
+    results = []
+    for r in records:
+        if r.extracted_json:
+            try:
+                item = json.loads(r.extracted_json)
+                item["source_type"] = "EXTERNAL_SECONDARY"
+                item["authority_level"] = "L2"
+                results.append(item)
+            except (json.JSONDecodeError, TypeError):
+                continue
+    return results
+

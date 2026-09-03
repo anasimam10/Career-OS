@@ -37,7 +37,11 @@ export default function RealityCheckPage() {
         ) : error || !analysis ? (
           <ErrorState message={error || "Could not load analysis"} onRetry={refetch} />
         ) : (
-          <RealityCheckPanel data={analysis} careerSlug={slug} />
+          <RealityCheckPanel
+            data={analysis}
+            careerSlug={slug}
+            topUniversities={career?.top_pk_universities}
+          />
         )}
       </div>
     </PageTransition>

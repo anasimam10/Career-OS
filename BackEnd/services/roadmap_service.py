@@ -506,6 +506,7 @@ def to_journey_step(milestone: Milestone) -> JourneyStep:
     template = _template_for_title(milestone.title)
     duration = (template or {}).get("estimated_duration", "1-2 weeks")
     return JourneyStep(
+        id=milestone.id,
         title=milestone.title,
         description=milestone.description or "",
         stage=milestone.stage,

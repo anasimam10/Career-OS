@@ -165,7 +165,11 @@ def list_sports(
 # ---------------------------------------------------------------------------
 
 
-def match_opportunities(db: Session, request: OpportunityMatchRequest) -> OpportunityMatchResponse:
+def match_opportunities(
+    db: Session,
+    request: OpportunityMatchRequest,
+    student_id: int = DEMO_STUDENT_ID,
+) -> OpportunityMatchResponse:
     """
     AI-ranked opportunity matches for the student (architecture §8).
 
@@ -175,11 +179,10 @@ def match_opportunities(db: Session, request: OpportunityMatchRequest) -> Opport
     student_opportunity_matches.
 
     Raises:
-        StudentNotFoundError  -- demo student missing (complete onboarding).
+        StudentNotFoundError  -- student missing (complete onboarding).
         InvalidRequestError   -- blank city.
-        AIUnavailableError    -- both MCP attempts failed AND no fallback.
     """
-    student = _get_student(db)
+    student = _get_student(db, student_id=student_id)
 
     city = (request.city or "").strip()
     if not city:
@@ -227,7 +230,11 @@ def match_opportunities(db: Session, request: OpportunityMatchRequest) -> Opport
     return response
 
 
-def match_sports(db: Session, request: SportsMatchRequest) -> SportsMatchResponse:
+def match_sports(
+    db: Session,
+    request: SportsMatchRequest,
+    student_id: int = DEMO_STUDENT_ID,
+) -> SportsMatchResponse:
     """
     Match the student to relevant sports opportunities (architecture §8).
 
@@ -236,11 +243,9 @@ def match_sports(db: Session, request: SportsMatchRequest) -> SportsMatchRespons
     There is no persistence table for sports matches, so nothing is cached.
 
     Raises:
-        StudentNotFoundError  -- demo student missing (complete onboarding).
-        InvalidRequestError   -- blank sport.
-        AIUnavailableError    -- both MCP attempts failed AND no fallback.
+        StudentNotFoundError  -- student missing (complete onboarding).
     """
-    student = _get_student(db)
+    student = _get_student(db, student_id=student_id)
 
     sport = (request.sport or "").strip()
     if not sport:
@@ -272,6 +277,7 @@ def match_sports(db: Session, request: SportsMatchRequest) -> SportsMatchRespons
         student.id, sport, location, level, response.data_quality, len(response.matches),
     )
     return response
+
 
 
 # ---------------------------------------------------------------------------
@@ -412,11 +418,12 @@ def _persist_opportunity_matches(db: Session, student_id: int, matches) -> None:
 # ---------------------------------------------------------------------------
 
 
-def _get_student(db: Session) -> Student:
-    student = db.get(Student, DEMO_STUDENT_ID)
+def _get_student(db: Session, student_id: int = DEMO_STUDENT_ID) -> Student:
+    student = db.get(Student, student_id)
     if student is None:
-        raise StudentNotFoundError(DEMO_STUDENT_ID)
+        raise StudentNotFoundError(student_id)
     return student
+
 
 
 def _profile_skill_names(db: Session, student_id: int) -> list[str]:

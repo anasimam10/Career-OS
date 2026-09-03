@@ -1,5 +1,5 @@
 # ──────────────────────────────────────────────────────────────
-# A&H Careers — Production Docker image for Render deployment.
+# Career OS — Production Docker image for Render deployment.
 #
 # Build context: repository root (set in render.yaml or Render dashboard).
 #

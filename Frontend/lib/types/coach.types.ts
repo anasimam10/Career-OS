@@ -7,12 +7,14 @@ export interface SourceCitation {
 export interface ChatMessage {
   role: "user" | "assistant"
   content: string
+  suggested_resource?: string | null
   next_best_action?: string
   next_best_action_type?: string | null
   reasoning_summary?: string | null
   sources?: SourceCitation[]
   confidence?: string | null
 }
+
 
 export interface CoachChatPayload {
   message: string

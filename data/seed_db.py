@@ -63,6 +63,7 @@ def main() -> int:
         alum_inserted, alum_skipped = _seed_alumni(db)
         opp_inserted, opp_skipped = _seed_opportunities(db)
         sports_inserted, sports_skipped = _seed_sports_opportunities(db)
+        pke_inserted, pke_skipped = _seed_pke_sources(db)
 
         # --- demo student (id=1, per Frontend/lib/session.ts) --------------
         student_repo = StudentRepository(db)
@@ -96,6 +97,7 @@ def main() -> int:
     print(f"Alumni: {alum_inserted} inserted, {alum_skipped} skipped (already present).")
     print(f"Opportunities: {opp_inserted} inserted, {opp_skipped} skipped (already present).")
     print(f"Sports opportunities: {sports_inserted} inserted, {sports_skipped} skipped (already present).")
+    print(f"PKE sources: {pke_inserted} inserted, {pke_skipped} skipped (already present).")
     print(f"Demo student (id=1): {'created' if demo_created else 'already present'}.")
     print("Done. Opportunity/sports/alumni seeds are TEMPLATE data (see _meta); universities/programs/learning are manual-entry verified facts.")
     return 0
@@ -118,9 +120,33 @@ def _seed_careers(db) -> tuple[int, int, int]:
         existing = db.query(Career).filter(Career.slug == record["slug"]).first()
         if existing is not None:
             skipped += 1
-            # Additive backfill only: fill an empty category, never overwrite.
+            # Additive backfill only: fill empty fields, never overwrite real content.
+            updated = False
             if existing.category is None and record.get("category"):
                 existing.category = record["category"]
+                updated = True
+            if (not existing.pk_opportunities or existing.pk_opportunities in ("[]", "null")) and record.get("pk_opportunities"):
+                existing.pk_opportunities = json.dumps(record.get("pk_opportunities") or [])
+                updated = True
+            if (not existing.required_skills or existing.required_skills in ("[]", "null")) and record.get("required_skills"):
+                existing.required_skills = json.dumps(record.get("required_skills") or [])
+                updated = True
+            if (not existing.top_pk_universities or existing.top_pk_universities in ("[]", "null")) and record.get("top_pk_universities"):
+                existing.top_pk_universities = json.dumps(record.get("top_pk_universities") or [])
+                updated = True
+            if (not existing.risks or existing.risks in ("[]", "null")) and record.get("risks"):
+                existing.risks = json.dumps(record.get("risks") or [])
+                updated = True
+            if existing.demand_level is None and record.get("demand_level"):
+                existing.demand_level = record["demand_level"]
+                updated = True
+            if existing.competition_level is None and record.get("competition_level"):
+                existing.competition_level = record["competition_level"]
+                updated = True
+            if existing.difficulty_level is None and record.get("difficulty_level"):
+                existing.difficulty_level = record["difficulty_level"]
+                updated = True
+            if updated:
                 backfilled += 1
             continue
         db.add(
@@ -283,6 +309,7 @@ def _seed_learning_resources(db) -> tuple[int, int]:
                 level=record.get("level"),
                 is_free=record.get("is_free"),
                 duration_hours=record.get("duration_hours"),
+                geographic_scope=record.get("geographic_scope"),
                 verification_status=record.get("verification_status", "VERIFIED"),
                 last_verified=_parse_date(record.get("last_verified", "today")),
             )
@@ -416,6 +443,41 @@ def _seed_sports_opportunities(db) -> tuple[int, int]:
             last_verified=_parse_date(rec.get("last_verified")),
             is_active=bool(rec.get("is_active", True)),
             verification_status=rec.get("verification_status", "VALIDATED"),
+        ),
+    )
+
+
+def _seed_pke_sources(db) -> tuple[int, int]:
+    """Insert curated PKE sources from data/seed/pke_sources.json."""
+    from knowledge_engine.pke_source_registry import PKESource
+
+    seed_file = ROOT / "data" / "seed" / "pke_sources.json"
+    if not seed_file.exists():
+        return 0, 0
+    records = json.loads(seed_file.read_text(encoding="utf-8"))["sources"]
+    return _insert_unique(
+        db,
+        records=records,
+        exists=lambda rec: db.query(PKESource)
+        .filter(PKESource.source_id == rec["source_id"])
+        .first()
+        is not None,
+        build=lambda rec: PKESource(
+            source_id=rec["source_id"],
+            name=rec["name"],
+            base_url=rec["base_url"],
+            authority_level=rec["authority_level"],
+            source_type=rec["source_type"],
+            domains=rec["domains"],
+            geographic_scope=rec["geographic_scope"],
+            access_review_status=rec["access_review_status"],
+            retrieval_method=rec.get("retrieval_method"),
+            has_official_api=bool(rec.get("has_official_api", False)),
+            is_reachable=rec.get("is_reachable"),
+            last_checked=_parse_date(rec.get("last_checked")),
+            source_confidence=rec.get("source_confidence"),
+            notes=rec.get("notes"),
+            tos_review_url=rec.get("tos_review_url"),
         ),
     )
 

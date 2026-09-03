@@ -1,10 +1,11 @@
-﻿"use client"
+"use client"
 
 import { useState } from "react"
 import { submitOnboarding } from "@/lib/api/onboarding"
-import { updateSession } from "@/lib/session"
+import { saveNewStudentSession, updateSession } from "@/lib/session"
 import type { OnboardingPayload, OnboardingResponse, Skill } from "@/lib/types/student.types"
 import type { EducationStage } from "@/lib/types/journey.types"
+
 
 export interface OnboardingState {
   education_stage: EducationStage
@@ -35,7 +36,7 @@ export function useOnboarding() {
   const [error, setError] = useState<string | null>(null)
   const [result, setResult] = useState<OnboardingResponse | null>(null)
 
-  const totalSteps = 6
+  const totalSteps = 8
 
   const nextStep = () => setStep((s) => Math.min(s + 1, totalSteps))
   const prevStep = () => setStep((s) => Math.max(s - 1, 1))
@@ -44,9 +45,9 @@ export function useOnboarding() {
     setData((prev) => ({ ...prev, ...updates }))
   }
 
-  const toggleArrayItem = (key: "interests" | "career_interests" | "motivation_tags" | "future_goals", value: string) => {
+  const toggleArrayItem = (key: "interests" | "career_interests" | "motivation_tags" | "future_goals" | "skills", value: string) => {
     setData((prev) => {
-      const arr = prev[key]
+      const arr = prev[key] as string[]
       return {
         ...prev,
         [key]: arr.includes(value) ? arr.filter((x) => x !== value) : [...arr, value],
@@ -68,9 +69,14 @@ export function useOnboarding() {
         city: data.city || "Karachi",
       }
       const res = await submitOnboarding(payload)
-      updateSession({ onboarding_completed: true })
+      if (res.student_id) {
+        saveNewStudentSession(res.student_id, "Student", payload.city)
+      } else {
+        updateSession({ onboarding_completed: true, city: payload.city })
+      }
       setResult(res)
       return res
+
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to submit onboarding")
       throw err

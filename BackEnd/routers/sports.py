@@ -20,6 +20,7 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 
 from database import get_db
+from routers.deps import get_current_student_id
 from schemas.requests import SportsMatchRequest
 from schemas.responses import SportsMatchResponse, SportsOpportunityOut
 from services import opportunity_service
@@ -54,11 +55,14 @@ def list_sports(
 
 @router.post("/sports/match", response_model=SportsMatchResponse)
 def match_sports(
-    request: SportsMatchRequest, db: Session = Depends(get_db)
+    request: SportsMatchRequest,
+    db: Session = Depends(get_db),
+    student_id: int = Depends(get_current_student_id),
 ) -> SportsMatchResponse | JSONResponse:
     """Match the student to relevant sports opportunities ({sport, location, level})."""
     try:
-        return opportunity_service.match_sports(db, request)
+        return opportunity_service.match_sports(db, request, student_id=student_id)
+
     except opportunity_service.StudentNotFoundError:
         return JSONResponse(
             status_code=404,

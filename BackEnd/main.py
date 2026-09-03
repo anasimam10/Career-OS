@@ -1,5 +1,5 @@
 """
-A&H Careers — FastAPI application entry point.
+Career OS — FastAPI application entry point.
 
 Run with:
     cd BackEnd
@@ -32,6 +32,8 @@ from routers.onboarding import router as onboarding_router
 from routers.opportunities import router as opportunities_router
 from routers.sports import router as sports_router
 from routers.universities import router as universities_router
+from routers.mock_interviews import router as mock_interviews_router
+from routers.students import router as students_router
 from services.ai_service import _model_chain  # single source of chain resolution
 
 # --- MCP servers (Phase 5) ---------------------------------------------
@@ -61,8 +63,8 @@ logger = logging.getLogger("ah_career")
 # ---------------------------------------------------------------------------
 
 app = FastAPI(
-    title="A&H Careers API",
-    description="Backend API for the A&H Careers AI-powered student career journey.",
+    title="Career OS API",
+    description="Backend API for the Career OS AI-powered student career journey.",
     version="0.1.0",
 )
 
@@ -93,6 +95,8 @@ app.include_router(job_readiness_router, prefix="/api/v1")
 app.include_router(universities_router, prefix="/api/v1")
 app.include_router(alumni_router, prefix="/api/v1")
 app.include_router(learning_router, prefix="/api/v1")
+app.include_router(mock_interviews_router, prefix="/api/v1")
+app.include_router(students_router, prefix="/api/v1")
 # Admin routes stay out of the public Swagger UI (include_in_schema=False).
 app.include_router(admin_router, prefix="/api/v1")
 
