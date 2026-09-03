@@ -81,6 +81,22 @@ app.add_middleware(
 )
 
 # ---------------------------------------------------------------------------
+# Root & Health Probes (Platform & Render Health Checks)
+# ---------------------------------------------------------------------------
+
+@app.get("/")
+def root():
+    """Root probe for Render/cloud deployment health checks."""
+    return {"status": "ok", "service": "Career OS Backend", "version": "1.0.0"}
+
+
+@app.get("/health")
+def health():
+    """Root-level health check probe."""
+    return {"status": "ok"}
+
+
+# ---------------------------------------------------------------------------
 # Routers
 # ---------------------------------------------------------------------------
 
