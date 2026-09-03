@@ -13,11 +13,11 @@ export default function AlumniPage() {
         <div className="mx-auto max-w-4xl px-4 sm:px-6 space-y-8">
           <div className="flex items-center gap-2">
             <Link
-              href="/journey"
+              href="/"
               className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors"
             >
               <ArrowLeft className="h-4 w-4" />
-              <span>Back to Journey</span>
+              <span>Back to Home</span>
             </Link>
           </div>
 

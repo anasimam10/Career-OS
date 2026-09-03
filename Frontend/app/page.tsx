@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { HeroSection } from "@/components/home/HeroSection"
 import { FeaturesSection } from "@/components/home/FeaturesSection"
+import { TalkToAlumniSection } from "@/components/alumni/TalkToAlumniSection"
 import { PageTransition } from "@/components/layout/PageTransition"
 import { getSession, clearSession } from "@/lib/session"
 import { getStudentProfile } from "@/lib/api/students"
@@ -48,6 +49,9 @@ export default function HomePage() {
       <div className="space-y-8 pb-16">
         <HeroSection />
         <FeaturesSection />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <TalkToAlumniSection />
+        </div>
       </div>
     </PageTransition>
   )

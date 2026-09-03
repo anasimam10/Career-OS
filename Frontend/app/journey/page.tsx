@@ -1,7 +1,5 @@
 "use client"
 
-import { TalkToAlumniSection } from "@/components/alumni/TalkToAlumniSection"
-
 import Link from "next/link"
 import { useJourney } from "@/hooks/useJourney"
 import { isOnboardingComplete } from "@/lib/session"
@@ -111,10 +109,7 @@ export default function JourneyPage() {
                 />
               </section>
 
-              {/* 4. Talk to Alumni - Future Feature Entry Point */}
-              <section className="relative z-10 pt-4">
-                <TalkToAlumniSection />
-              </section>
+
             </div>
           )}
         </div>

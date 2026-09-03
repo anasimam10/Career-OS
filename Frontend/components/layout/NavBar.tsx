@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Map, MessageSquare, Sparkles, Target, Trophy, Briefcase, ClipboardCheck, ArrowRight, User } from "lucide-react"
+import { Map, MessageSquare, Sparkles, Target, Trophy, Briefcase, ClipboardCheck, ArrowRight, User, Users } from "lucide-react"
 import { cn } from "@/lib/utils/cn"
 import { isOnboardingComplete, getSession } from "@/lib/session"
 
@@ -15,6 +15,7 @@ const navItems = [
   { href: "/sports", label: "Sports", icon: Trophy },
   { href: "/job-readiness", label: "Job Ready", icon: ClipboardCheck },
   { href: "/mock-interview", label: "Mock Interview", icon: ClipboardCheck },
+  { href: "/alumni", label: "Talk to Alumni", icon: Users },
 ]
 
 export function NavBar() {
