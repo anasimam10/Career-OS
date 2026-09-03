@@ -140,3 +140,9 @@ npm run dev
 - **Frontend App**: `http://localhost:3000` (or `http://127.0.0.1:3000`)
 - **Journey Route**: `http://localhost:3000/journey`
 - **Careers Route**: `http://localhost:3000/careers`
+
+# cd "e:\Uni work\Career OS\BackEnd"
+# .venv\Scripts\activate
+# python -m uvicorn main:app --host 127.0.0.1 --port 8000
+# cd "e:\Uni work\Career OS\Frontend"
+# npm run dev
