@@ -23,8 +23,8 @@ class Settings:
 
     # --- Qwen / DashScope (Phase 2) ---
     DASHSCOPE_API_KEY: str = os.getenv("DASHSCOPE_API_KEY", "")
-    DASHSCOPE_WORKSPACE_ID: str = os.getenv("DASHSCOPE_WORKSPACE_ID", "")
-    DASHSCOPE_BASE_URL: str = os.getenv("DASHSCOPE_BASE_URL", "")
+    DASHSCOPE_WORKSPACE_ID: str = os.getenv("DASHSCOPE_WORKSPACE_ID", "ws-knn10vssjylmv6s0")
+    DASHSCOPE_BASE_URL: str = os.getenv("DASHSCOPE_BASE_URL", "https://ws-knn10vssjylmv6s0.ap-southeast-1.maas.aliyuncs.com")
     QWEN_MODEL: str = os.getenv("QWEN_MODEL", "qwen3.6-plus")
     # Ordered backup models tried ONLY when the primary fails with an
     # eligible model-availability error (HTTP 429 / 404 / 5xx). Comma-

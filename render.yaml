@@ -18,9 +18,9 @@ services:
       - key: DASHSCOPE_API_KEY
         sync: false                  # set manually in Render dashboard
       - key: DASHSCOPE_WORKSPACE_ID
-        sync: false
+        value: ws-knn10vssjylmv6s0
       - key: DASHSCOPE_BASE_URL
-        sync: false
+        value: https://ws-knn10vssjylmv6s0.ap-southeast-1.maas.aliyuncs.com
       - key: QWEN_MODEL
         value: qwen3.6-plus
       - key: QWEN_FALLBACK_MODELS
