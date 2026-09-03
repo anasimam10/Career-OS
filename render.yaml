@@ -13,7 +13,6 @@ services:
     env: docker
     dockerfilePath: BackEnd/Dockerfile
     dockerContext: .
-    startCommand: sh -c "cd /app/BackEnd && exec uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000} --workers 1"
     plan: starter
     envVars:
       - key: DASHSCOPE_API_KEY
