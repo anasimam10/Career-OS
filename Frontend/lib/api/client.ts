@@ -1,7 +1,20 @@
 import type { ApiError } from "@/lib/types/shared.types"
 import { getStudentId } from "@/lib/session"
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000/api/v1"
+function getBaseUrl(): string {
+  let url = (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000/api/v1").trim()
+  url = url.replace(/\/+$/, "")
+  if (!url.endsWith("/api/v1")) {
+    if (url.endsWith("/api")) {
+      url = `${url}/v1`
+    } else {
+      url = `${url}/api/v1`
+    }
+  }
+  return url
+}
+
+const BASE_URL = getBaseUrl()
 
 export class ApiClientError extends Error {
   constructor(

@@ -47,10 +47,10 @@ from services.ai_service import (
 )
 
 MODELS = [
-    "qwen3.7-plus",
     "qwen3.6-plus",
     "qwen-plus-2025-07-28",
     "qwen3-vl-235b-a22b-thinking",
+    "qwen-turbo",
 ]
 
 VALID_NBA = {
@@ -354,7 +354,7 @@ def test_model_configuration_loaded():
 def test_startup_rejects_incomplete_model_chain(monkeypatch):
     # startup validation (spec §9, configuration check only): a chain
     # missing a mandated model must abort startup with a clear error
-    monkeypatch.setattr(settings, "QWEN_FALLBACK_MODELS", "qwen3.6-plus")
+    monkeypatch.setattr(settings, "QWEN_FALLBACK_MODELS", "qwen-plus-2025-07-28")
     with pytest.raises(RuntimeError, match="missing required models"):
         with TestClient(app):
             pass
@@ -392,7 +392,7 @@ def test_future_model_extensibility(monkeypatch):
     monkeypatch.setattr(
         settings,
         "QWEN_FALLBACK_MODELS",
-        "qwen3.6-plus,qwen-plus-2025-07-28,qwen3-vl-235b-a22b-thinking,qwen3.5-plus",
+        "qwen-plus-2025-07-28,qwen3-vl-235b-a22b-thinking,qwen-turbo,qwen3.5-plus",
     )
     client = mock_client(
         [rate_limit_error() for _ in range(4)] + [json.dumps(VALID_NBA)]
@@ -402,7 +402,7 @@ def test_future_model_extensibility(monkeypatch):
     result = service.call_structured("Generate one action.", NextBestAction)
 
     assert isinstance(result, NextBestAction)
-    assert models_used(client) == MODELS + ["qwen3.5-plus"]
+    assert models_used(client) == ["qwen3.6-plus", "qwen-plus-2025-07-28", "qwen3-vl-235b-a22b-thinking", "qwen-turbo", "qwen3.5-plus"]
 
     # callers still never pass or know about model selection
     for method in (AIService.call_structured, AIService.call_with_mcp):

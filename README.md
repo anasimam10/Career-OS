@@ -23,7 +23,7 @@ Career OS is a Pakistan-focused AI Career Operating System that helps students d
 
 - **Frontend**: Next.js 14 (App Router), TypeScript, Tailwind CSS, Lucide Icons, Framer Motion
 - **Backend**: FastAPI (Python 3.11+), SQLAlchemy 2.0, SQLite (WAL mode, single-writer safe)
-- **AI Runtime**: Alibaba Cloud DashScope Qwen Model Chain (`qwen3.7-plus` primary with multi-model availability fallbacks)
+- **AI Runtime**: Alibaba Cloud DashScope Qwen Model Chain (`qwen3.6-plus` primary with multi-model availability fallbacks)
 - **Architecture**: Model Context Protocol (MCP) servers mounted over SSE, Pakistan Knowledge Engine (PKE)
 
 ---

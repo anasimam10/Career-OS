@@ -39,10 +39,10 @@ from services.ai_service import (
     AIValidationError,
 )
 
-PRIMARY = "qwen3.7-plus"
-FALLBACK = "qwen3.6-plus"  # first fallback (kept for the single-transition scenarios)
-FALLBACK_2 = "qwen-plus-2025-07-28"
-FALLBACK_3 = "qwen3-vl-235b-a22b-thinking"
+PRIMARY = "qwen3.6-plus"
+FALLBACK = "qwen-plus-2025-07-28"  # first fallback (kept for the single-transition scenarios)
+FALLBACK_2 = "qwen3-vl-235b-a22b-thinking"
+FALLBACK_3 = "qwen-turbo"
 CHAIN = [PRIMARY, FALLBACK, FALLBACK_2, FALLBACK_3]
 
 VALID_NBA = {
@@ -600,7 +600,7 @@ class TestFutureExtensibility:
 
         assert isinstance(result, NextBestAction)
         assert models_used(client) == [
-            "qwen3.7-plus",
+            "qwen3.6-plus",
             "qwen3.5-plus",
             "qwen3.4-plus",
         ]

@@ -38,7 +38,8 @@ export function OnboardingWizard() {
         router.push("/journey")
       }, 1200)
     } catch {
-      // error is surfaced in error state
+      // If submission fails, revert transition step so student can see error and retry
+      prevStep()
     }
   }
 

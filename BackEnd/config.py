@@ -25,14 +25,14 @@ class Settings:
     DASHSCOPE_API_KEY: str = os.getenv("DASHSCOPE_API_KEY", "")
     DASHSCOPE_WORKSPACE_ID: str = os.getenv("DASHSCOPE_WORKSPACE_ID", "")
     DASHSCOPE_BASE_URL: str = os.getenv("DASHSCOPE_BASE_URL", "")
-    QWEN_MODEL: str = os.getenv("QWEN_MODEL", "qwen3.7-plus")
+    QWEN_MODEL: str = os.getenv("QWEN_MODEL", "qwen3.6-plus")
     # Ordered backup models tried ONLY when the primary fails with an
     # eligible model-availability error (HTTP 429 / 404 / 5xx). Comma-
     # separated, order preserved; empty entries and duplicates of earlier
     # models are ignored. An empty value disables the fallback entirely.
     QWEN_FALLBACK_MODELS: str = os.getenv(
         "QWEN_FALLBACK_MODELS",
-        "qwen3.6-plus,qwen-plus-2025-07-28,qwen3-vl-235b-a22b-thinking",
+        "qwen-plus-2025-07-28,qwen3-vl-235b-a22b-thinking,qwen-turbo",
     )
     AI_TIMEOUT_SECONDS: float = float(os.getenv("AI_TIMEOUT_SECONDS", "60"))
 
@@ -65,10 +65,10 @@ class Settings:
 # chain — a configuration check only, never a live API call. Future chain
 # changes update QWEN_MODEL / QWEN_FALLBACK_MODELS and this list together.
 REQUIRED_QWEN_MODELS = [
-    "qwen3.7-plus",
     "qwen3.6-plus",
     "qwen-plus-2025-07-28",
     "qwen3-vl-235b-a22b-thinking",
+    "qwen-turbo",
 ]
 
 

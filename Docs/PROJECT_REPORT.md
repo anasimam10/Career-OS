@@ -144,7 +144,7 @@ Internal MCP servers are mounted directly into FastAPI:
 
 ## 15. Qwen Four-Model Runtime
 The system implements a four-tier availability fallback chain:
-1. **Primary**: `qwen3.7-plus` — High-capability reasoning, structured output synthesis.
+1. **Primary**: `qwen3.6-plus` — High-capability reasoning, structured output synthesis.
 2. **Fallback 1**: `qwen3.6-plus` — Seamless availability backup for HTTP 429/5xx.
 3. **Fallback 2**: `qwen-plus-2025-07-28` — Stable production fallback.
 4. **Fallback 3**: `qwen3-vl-235b-a22b-thinking` — High-reasoning emergency fallback.

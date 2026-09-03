@@ -120,12 +120,13 @@ def _raise_controlled_api_error(exc: Exception, operation: str) -> None:
     AIUnavailableError and never triggers a model switch.
     """
     status = getattr(exc, "status_code", None)
-    if isinstance(exc, RateLimitError) or status == 429:
-        logger.error("AI rate limit: operation=%s", operation)
+    err_str = str(exc).lower()
+    if isinstance(exc, RateLimitError) or status == 429 or "insufficient_quota" in err_str:
+        logger.error("AI rate limit or quota exhausted: operation=%s", operation)
         raise _ModelUnavailableError(
-            f"The AI provider rate-limited the request (operation={operation})."
+            f"The AI provider rate-limited or exhausted quota for the model (operation={operation})."
         ) from exc
-    if status == 404:
+    if status == 404 or "model not found" in err_str:
         logger.error("AI model unavailable: operation=%s", operation)
         raise _ModelUnavailableError(
             f"The AI model is unavailable (operation={operation})."
