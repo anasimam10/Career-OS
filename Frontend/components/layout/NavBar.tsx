@@ -52,14 +52,16 @@ export function NavBar() {
           
           {/* Logo Branding */}
           <Link href="/" className="flex items-center gap-2.5 shrink-0 group">
-            <Image
-              src="/images/career-os-logo.png"
-              alt="Career OS"
-              width={140}
-              height={32}
-              priority
-              className="h-8 w-auto object-contain transition-transform group-hover:scale-105"
-            />
+            <div className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-full overflow-hidden shadow-[0_0_15px_rgba(79,70,229,0.35)] transition-transform group-hover:scale-105">
+              <Image
+                src="/images/career-os-logo.png"
+                alt="Career OS"
+                width={32}
+                height={32}
+                priority
+                className="h-8 w-8 rounded-full object-contain"
+              />
+            </div>
             <div className="flex flex-col hidden sm:flex">
               <span className="font-bold tracking-tight text-white text-sm leading-none">
                 Career OS
