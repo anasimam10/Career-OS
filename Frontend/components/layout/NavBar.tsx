@@ -1,5 +1,7 @@
 "use client"
 
+import Image from "next/image"
+
 import React, { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -50,15 +52,20 @@ export function NavBar() {
           
           {/* Logo Branding */}
           <Link href="/" className="flex items-center gap-2.5 shrink-0 group">
-            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-indigo-600 text-white font-bold text-xs shadow-[0_0_15px_rgba(79,70,229,0.35)] transition-transform group-hover:scale-105">
-              OS
-            </div>
+            <Image
+              src="/images/career-os-logo.png"
+              alt="Career OS"
+              width={140}
+              height={32}
+              priority
+              className="h-8 w-auto object-contain transition-transform group-hover:scale-105"
+            />
             <div className="flex flex-col hidden sm:flex">
               <span className="font-bold tracking-tight text-white text-sm leading-none">
                 Career OS
               </span>
               <span className="text-[9px] text-indigo-300/80 font-medium leading-tight mt-0.5 tracking-wider uppercase">
-                Premium Engine
+                A&H Career
               </span>
             </div>
           </Link>
