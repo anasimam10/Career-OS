@@ -1,7 +1,7 @@
 # Career OS
 ## Career Operating System
 
-Career OS is an intelligent, Pakistan-focused Career Operating System engineered for students, university applicants, and early-career professionals. Designed to eliminate the pervasive information friction and ungrounded rumors in Pakistan's academic and labor landscape, Career OS delivers verified university criteria, grounded salary benchmarks in PKR, actionable 7-day career trials, scholarship tracking, athletic trials, and personalized Next Best Actions (NBA) powered by a strictly grounded AI runtime.
+Career OS is an intelligent, Pakistan-focused Career Operating System that transforms fragmented career and education information into clear, evidence-driven pathways. Built for students, university applicants, and early-career professionals, it combines verified academic data, Pakistan-specific career and salary intelligence, university and opportunity discovery, career trials, sports pathways, learning resources, and a grounded AI mentor into one personalized system. Career OS turns complex choices into practical next steps through contextual guidance and a personalized Next Best Action (NBA).
 
 ---
 
