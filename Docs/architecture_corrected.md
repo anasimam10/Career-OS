@@ -919,7 +919,7 @@ touch .env
 Add to `.env`:
 
 ```
-DASHSCOPE_API_KEY=sk-your-key-here
+DASHSCOPE_API_KEY=your_dashscope_api_key_here
 DASHSCOPE_WORKSPACE_ID=your-workspace-id
 DASHSCOPE_BASE_URL=https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
 SECRET_KEY=your-random-jwt-secret-here

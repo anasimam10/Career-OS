@@ -5,7 +5,7 @@ Usage:
     cd BackEnd
     .venv\\Scripts\\python.exe test_qwen.py
 
-Makes exactly ONE real API call using the configured model (qwen3.7-plus)
+Makes exactly ONE real API call using the configured model (qwen3.6-plus)
 and validates the response against the NextBestAction schema.
 Never prints credentials.
 """

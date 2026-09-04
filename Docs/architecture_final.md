@@ -813,7 +813,7 @@ No self-signed certificates. No manual certificate management. Both platforms ha
 
 ```bash
 # AI — keep server-side only
-DASHSCOPE_API_KEY=sk-...
+DASHSCOPE_API_KEY=your_dashscope_api_key_here
 DASHSCOPE_WORKSPACE_ID=ws-...
 DASHSCOPE_BASE_URL=https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
 QWEN_MODEL=qwen3.7-plus
