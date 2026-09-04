@@ -1,100 +1,120 @@
 # Career OS
-## Career Operating System
+### Pakistan's Career Operating System
 
-Career OS is an intelligent, Pakistan-focused Career Operating System that transforms fragmented career and education information into clear, evidence-driven pathways. Built for students, university applicants, and early-career professionals, it combines verified academic data, Pakistan-specific career and salary intelligence, university and opportunity discovery, career trials, sports pathways, learning resources, and a grounded AI mentor into one personalized system. Career OS turns complex choices into practical next steps through contextual guidance and a personalized Next Best Action (NBA).
-
----
-
-## What It Does
-
-- **Personalized Onboarding**: Guided multi-step profiling capturing education stage, city, career goals, baseline skills, and sports interests.
-- **Career Discovery & Reality Check**: Unvarnished market demand analysis, local employer realities, and starting-to-peak PKR salary bands across 22 Pakistani career pathways.
-- **Career Pathways & Journey**: Actionable 7-day career trial micro-curriculums and milestone-driven progression roadmaps that recalculate Next Best Actions upon completion.
-- **Universities & Programs**: Searchable registry covering 248 Pakistani universities and 174 degree programs across all provinces with entrance test prerequisites.
-- **Opportunities & Scholarships**: 31 verified regional scholarships (HEC, PEEF, Ehsaas), corporate internships, and trainee fellowships.
-- **Sports Pathways**: 18 dedicated athletic listings across PCB academies, departmental trials (WAPDA, Army), and university sports quota admissions.
-- **Learning Resources**: 75 curated technical and foundational roadmaps mapped directly to required career skills.
-- **Grounded AI Mentor**: Conversational counseling powered by Qwen, strictly constrained by local Pakistani education and employment facts.
-- **Mock Interviews**: Interactive technical screening sessions with secure evaluation rubrics, deterministic scoring, and direct learning resource remediation.
-- **Talk to Alumni (Coming Soon)**: Future verified community gateway previewing 1-on-1 mentorship with graduates from top Pakistani institutions.
+Career OS is a Pakistan-focused Career Operating System that guides students from high school uncertainty to their first job through a structured, personalized journey.
 
 ---
 
-## How It Works
+## Who It Is For
+
+Career OS is built for **students, university applicants, and early-career individuals across Pakistan** who need structured, reliable direction during critical educational and career transitions.
+
+---
+
+## The Real Problem
+
+Students today are not suffering from a lack of career information—they are overwhelmed by it. 
+
+Every day, young Pakistanis face a barrage of YouTube career videos, viral social media advice, peer pressure, family and societal expectations, salary hype, and conflicting opinions. University program criteria and scholarship deadlines remain scattered across dozens of disjointed portals.
+
+The fundamental issue is clear:
+> **Students have too much scattered information, but no clear, personalized pathway from where they are now to where they want to go.**
+
+Without personalized guidance, students experience FOMO, make high-stakes academic choices based on rumors or short-term trends, and remain uncertain about what practical step to take next.
+
+---
+
+## The Solution
+
+Career OS replaces fragmented searches with **one continuous, personalized operating system**. 
+
+Rather than offering generic advice, the platform takes into account a student's:
+- **Education Stage** (Matric, FSc/A-Levels, Undergraduate, Fresh Graduate)
+- **City & Region** (access to local campuses and regional opportunities)
+- **Interests & Motivations**
+- **Baseline Skills**
+- **Career Goals & Milestone Progress**
+
+Career OS turns career decision-making into a structured, step-by-step roadmap with clear next actions.
+
+---
+
+## The End-to-End Pathway
+
+Career OS is designed to guide a student along an end-to-end journey from high school toward their first job:
 
 ```
-Next.js 14 Client (Vercel)
-  ↓ [REST API + X-Student-Id]
-FastAPI Application (Render / Docker)
-  ↓ [Tool-Mediated Context]
-Pakistan Knowledge Engine (PKE) & MCP SSE Servers
-  ↓ [Strict JSON Contracts]
-Alibaba Cloud Qwen Model Chain (qwen3.6-plus primary)
+HIGH SCHOOL / INTERMEDIATE
   ↓
-Grounded, Hallucination-Free Personalized Student Experience
+FIELD & CAREER EXPLORATION
+  ↓
+REALITY CHECK (Market Demand & PKR Salaries)
+  ↓
+UNIVERSITY & PROGRAM DISCOVERY
+  ↓
+7-DAY CAREER TRIALS
+  ↓
+SKILL DEVELOPMENT & LEARNING RESOURCES
+  ↓
+SCHOLARSHIPS & OPPORTUNITIES
+  ↓
+EXPERIENCE & SPORTS PATHWAYS
+  ↓
+INTERVIEW PREPARATION (Qwen-Powered Mock Screening)
+  ↓
+FIRST JOB
 ```
 
 ---
 
-## Technology
+## What We Built
 
-- **Frontend**: Next.js 14 (App Router), TypeScript, Tailwind CSS, Lucide Icons, Framer Motion
-- **Backend**: FastAPI (Python 3.13), SQLAlchemy 2.0, Pydantic v2, SQLite (WAL mode)
-- **AI Runtime**: Alibaba Cloud DashScope Qwen Model Chain (`qwen3.6-plus` primary with multi-model availability fallbacks: `qwen-plus-2025-07-28`, `qwen3-vl-235b-a22b-thinking`, `qwen-turbo`)
-- **Knowledge Architecture**: Model Context Protocol (MCP) SSE servers, Pakistan Knowledge Engine (PKE)
+We engineered a responsive, full-stack web application tailored specifically to the realities of Pakistan's education and labor market:
 
----
-
-## Data & Trust
-
-- **Pakistan-Specific**: All institutional data, fee ranges, entrance criteria, and salaries reflect real Pakistani conditions.
-- **PKE Source Registry**: Tracks 40 verified primary provenance sources (HEC, PEC, PMDC, PCB, universities).
-- **Primary vs. Secondary**: Authoritative primary PKE records always take precedence; external datasets (`number-of-public-universities-in-pakistan.csv` and `pakistan-intellectual-capital-computer-science-ver-1.csv`) act purely as secondary supporting evidence with zero-overwrite guarantees.
-- **Zero Fabrication**: AI outputs are strictly constrained to retrieved context; the system will never invent universities, cutoffs, or deadlines.
+- **Personalized Onboarding & Student Journey**: Multi-step profiling that establishes the student's baseline, displays their current stage, and tracks progress toward milestones.
+- **Career Discovery & Reality Checks**: Grounded Pakistan labor market intelligence across 22 career pathways, providing realistic local employer expectations, actual work conditions, and starting-to-peak PKR salary bands.
+- **University & Program Directory**: Searchable directory covering 248 Pakistani universities and 174 degree programs across all provinces, including verified entrance test requirements.
+- **Practical 7-Day Career Trials**: Actionable, day-by-day micro-tasks allowing students to test-drive real industry work before investing years into a degree.
+- **Curated Learning Resources**: Technical and foundational skill roadmaps mapped directly to in-demand career competencies.
+- **Scholarships & Opportunities Registry**: Verified listings of national and regional financial aid (HEC, PEEF, Ehsaas), corporate internships, and trainee programs.
+- **Sports & Athletic Pathways**: Dedicated listings across PCB regional academies, departmental athletic trials (WAPDA, Armed Forces), and university sports quotas.
+- **Course-Aware Mock Interview System**: Interactive technical interview practice powered by Alibaba Qwen, providing domain-specific questions, structured rubric evaluations, and actionable feedback for skill gaps.
+- **Talk to Alumni (Future Preview)**: A frontend entry point previewing future verified mentorship and community networking with graduates from top Pakistani institutions.
 
 ---
 
-## Live Demo
+## The Differentiator
 
-- **Frontend (Vercel)**: [https://career-os-seven-flame.vercel.app](https://career-os-seven-flame.vercel.app)
+Career OS does not simply provide more information; it **organizes that information into a personalized pathway and actionable next steps**. 
+
+It transforms anxiety and uncertainty into a coherent, confidence-building roadmap from the classroom to the workforce.
 
 ---
 
-## Backend
+## Live Links
 
+- **Live Application (Vercel)**: [https://career-os-seven-flame.vercel.app](https://career-os-seven-flame.vercel.app)
 - **Backend API (Render)**: [https://ah-career-backend.onrender.com](https://ah-career-backend.onrender.com)
-- **Interactive Swagger Docs**: [https://ah-career-backend.onrender.com/docs](https://ah-career-backend.onrender.com/docs)
-- **Health Check Probe**: [https://ah-career-backend.onrender.com/health](https://ah-career-backend.onrender.com/health)
+- **Interactive API Docs (Swagger)**: [https://ah-career-backend.onrender.com/docs](https://ah-career-backend.onrender.com/docs)
+- **API Health Check**: [https://ah-career-backend.onrender.com/health](https://ah-career-backend.onrender.com/health)
+- **GitHub Repository**: [https://github.com/anasimam10/Career-OS](https://github.com/anasimam10/Career-OS)
 
 ---
 
-## GitHub
+## Quick Local Setup
 
-- **Public Repository**: [https://github.com/anasimam10/Career-OS](https://github.com/anasimam10/Career-OS)
-
----
-
-## Run Locally
-
-### Backend Setup
+### Backend (FastAPI + Python 3.11+)
 ```bash
 cd BackEnd
 pip install -r requirements.txt
 python -m uvicorn main:app --host 127.0.0.1 --port 8000
 ```
-*API serves on `http://127.0.0.1:8000` (Swagger docs at `/docs`).*
+*API runs at `http://127.0.0.1:8000` with Swagger docs at `/docs`.*
 
-### Frontend Setup
+### Frontend (Next.js 14 + Node 18+)
 ```bash
 cd Frontend
 npm install
 npm run dev
 ```
-*App serves on `http://localhost:3000`.*
-
----
-
-## Deployment
-
-- **Frontend**: Automatically deployed to **Vercel** on pushes to `main`.
-- **Backend**: Containerized with **Docker** and deployed as a persistent Web Service on **Render**.
+*Application runs at `http://localhost:3000`.*
