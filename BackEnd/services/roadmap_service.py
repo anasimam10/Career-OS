@@ -346,28 +346,28 @@ MILESTONE_TEMPLATES: dict[str, list[dict]] = {
     ],
     "FIRST_JOB": [
         {
-            "action_type": "SET_90_DAY_GOALS",
-            "title": "Set 90-day goals for your first job",
-            "description": "Agree on clear goals with your team and write them down.",
-            "estimated_duration": "1 hour",
+            "action_type": "APPLY_OPPORTUNITIES",
+            "title": "Apply to verified entry-level roles & opportunities",
+            "description": "Search and apply for verified Pakistani jobs and internships aligned with your target career.",
+            "estimated_duration": "1-2 hours",
             "steps": [
-                "Ask your team what success looks like in 90 days",
-                "Write down three concrete goals",
-                "Review progress with your team regularly",
+                "Browse verified opportunities in your city",
+                "Shortlist matching roles for your skills",
+                "Submit your applications with your updated CV",
             ],
-            "why_this_matters": "Clear early goals turn a new job into visible progress.",
+            "why_this_matters": "Consistent applications turn preparation into your first job offer.",
         },
         {
-            "action_type": "PROFESSIONAL_SKILLS",
-            "title": "Keep building professional skills",
-            "description": "Pick one professional skill and improve it deliberately this month.",
-            "estimated_duration": "Ongoing",
+            "action_type": "JOB_READINESS",
+            "title": "Verify your final job readiness score",
+            "description": "Run your comprehensive placement readiness audit to ensure your profile is employer-ready.",
+            "estimated_duration": "15 minutes",
             "steps": [
-                "Choose one skill your role depends on",
-                "Practice it deliberately in real work",
-                "Ask for feedback once a month",
+                "Check your placement readiness score",
+                "Review any remaining skill recommendations",
+                "Refine your application materials",
             ],
-            "why_this_matters": "Deliberate skill growth compounds fast early in a career.",
+            "why_this_matters": "A high readiness score gives you confidence when applying to top Pakistani employers.",
         },
     ],
 }
@@ -492,11 +492,11 @@ def get_action_details(action_type: Optional[str], career_slug: Optional[str] = 
         return "Start Mock Interview →", "/mock-interview"
     elif action_type in ("LEARN_FIRST_SKILL", "PRACTICE_SKILL", "REVIEW_CAREER_DATA"):
         return "View Learning Roadmaps →", "/opportunities"
-    elif action_type in ("PREPARE_CV", "JOB_SEARCH_ROUTINE"):
+    elif action_type in ("PREPARE_CV", "JOB_SEARCH_ROUTINE", "JOB_READINESS"):
         return "Check Job Readiness →", "/job-readiness"
-    elif action_type in ("BUILD_PROJECT", "DOCUMENT_PROJECT"):
+    elif action_type in ("BUILD_PROJECT", "DOCUMENT_PROJECT", "APPLY_OPPORTUNITIES"):
         return "Explore Opportunities →", "/opportunities"
-    elif action_type in ("SET_90_DAY_GOALS", "PROFESSIONAL_SKILLS", "FINALIZE_DECISION"):
+    elif action_type == "FINALIZE_DECISION":
         return "View My Profile →", "/profile"
     return None, None
 

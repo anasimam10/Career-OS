@@ -1,4 +1,4 @@
-﻿"use client"
+"use client"
 
 import Link from "next/link"
 import { Sparkles, Clock, ArrowRight, CheckCircle2 } from "lucide-react"
@@ -72,7 +72,7 @@ export function NextStepCard({
 
         <CardFooter className="p-6 sm:p-8 pt-0 flex flex-col sm:flex-row items-center justify-between gap-4">
           <Button asChild variant="outline" size="sm" className="w-full sm:w-auto text-xs">
-            <Link href="/mentor">Ask AI Mentor About This</Link>
+            <Link href="/mock-interview">Practice AI Mock Interview</Link>
           </Button>
 
           <Button

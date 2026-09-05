@@ -51,8 +51,8 @@ const PHASE_METADATA: Record<number, { title: string; subtitle: string; icon: Re
     icon: Briefcase,
   },
   5: {
-    title: "First Job & Professional Growth",
-    subtitle: "Establish early career momentum with 90-day workplace goals and deliberate skill growth.",
+    title: "First Job & Placement",
+    subtitle: "Turn your preparation into verified applications, placement readiness audits, and your first job.",
     icon: GraduationCap,
   },
 }
@@ -65,7 +65,7 @@ function resolveAction(
     return {
       label: milestone.action_label,
       url: milestone.action_url,
-      reviewLabel: milestone.action_label.replace("Start", "Review").replace("Run", "View"),
+      reviewLabel: milestone.action_label.replace("Start", "Review").replace("Run", "View").replace("Explore", "View"),
     }
   }
   const title = milestone.title.toLowerCase()
@@ -83,6 +83,13 @@ function resolveAction(
       reviewLabel: "Review Trial Plan →",
     }
   }
+  if (title.includes("university") || title.includes("program") || title.includes("degree")) {
+    return {
+      label: "View Degree Pathways →",
+      url: `/careers/${careerSlug}/reality-check`,
+      reviewLabel: "Review Degree Pathways →",
+    }
+  }
   if (title.includes("explore") || title.includes("compare")) {
     return {
       label: "Explore Careers →",
@@ -97,13 +104,6 @@ function resolveAction(
       reviewLabel: "Practice Interview →",
     }
   }
-  if (title.includes("skill") || title.includes("learn") || title.includes("practice")) {
-    return {
-      label: "View Learning Roadmaps →",
-      url: "/opportunities",
-      reviewLabel: "View Roadmaps →",
-    }
-  }
   if (title.includes("cv") || title.includes("routine") || title.includes("readiness")) {
     return {
       label: "Check Job Readiness →",
@@ -111,14 +111,21 @@ function resolveAction(
       reviewLabel: "View Readiness Score →",
     }
   }
-  if (title.includes("opportunity") || title.includes("scholarship") || title.includes("internship")) {
+  if (title.includes("opportunity") || title.includes("scholarship") || title.includes("internship") || title.includes("role") || title.includes("apply")) {
     return {
       label: "Find Opportunities →",
       url: "/opportunities",
       reviewLabel: "View Opportunities →",
     }
   }
-  if (title.includes("goal") || title.includes("finalize") || title.includes("profile")) {
+  if (title.includes("skill") || title.includes("learn") || title.includes("practice")) {
+    return {
+      label: "View Learning Roadmaps →",
+      url: "/opportunities",
+      reviewLabel: "View Roadmaps →",
+    }
+  }
+  if (title.includes("finalize") || title.includes("profile")) {
     return {
       label: "View Profile →",
       url: "/profile",

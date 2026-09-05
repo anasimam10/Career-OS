@@ -88,6 +88,7 @@ def init_db() -> None:
 
     Base.metadata.create_all(bind=engine)
     _migrate_missing_columns()
+    _deduplicate_milestones_migration()
 
     from retrieval.fts import ensure_fts  # local import: avoids import cycles
 
@@ -178,3 +179,35 @@ def _migrate_missing_columns() -> None:
                 added.append(f"{table}.{name}")
     if added:
         logger.info("Migrated columns added: %s", ", ".join(added))
+
+
+def _deduplicate_milestones_migration() -> None:
+    """Remove legacy duplicate milestone records per roadmap, prioritizing completed records."""
+    inspector = inspect(engine)
+    if "milestones" not in inspector.get_table_names():
+        return
+    with engine.begin() as conn:
+        result = conn.execute(
+            text("""
+                SELECT roadmap_id, title
+                FROM milestones
+                GROUP BY roadmap_id, title
+                HAVING COUNT(*) > 1
+            """)
+        ).fetchall()
+        for r_id, title in result:
+            rows = conn.execute(
+                text("""
+                    SELECT id, status
+                    FROM milestones
+                    WHERE roadmap_id = :r_id AND title = :title
+                    ORDER BY CASE WHEN status IN ('completed', 'done') THEN 0 ELSE 1 END, id ASC
+                """),
+                {"r_id": r_id, "title": title},
+            ).fetchall()
+            if len(rows) > 1:
+                delete_ids = [r[0] for r in rows[1:]]
+                conn.execute(
+                    text(f"DELETE FROM milestones WHERE id IN ({','.join(str(i) for i in delete_ids)})")
+                )
+                logger.info("Deduplicated milestone '%s' on roadmap %s (kept %s, deleted %s)", title, r_id, rows[0][0], delete_ids)

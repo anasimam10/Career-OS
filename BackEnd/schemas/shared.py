@@ -93,7 +93,7 @@ class CareerTrialPlan(BaseModel):
     career_slug: str
     duration_days: int
     days: list[TrialDay]
-    reflection_prompt: str
+    reflection_prompt: str = "Reflect on which tasks felt natural and whether this field fits your everyday working style."
 
 
 class SourceCitation(BaseModel):
