@@ -20,19 +20,19 @@ import {
 import { cn } from "@/lib/utils/cn"
 import { isOnboardingComplete, getSession } from "@/lib/session"
 
-// Exactly 5 primary links per UX spec
+// Primary navigation links: Careers | My Journey | Opportunities | Job Readiness | Mock Interview | Alumni Soon
 const primaryNavItems = [
   { href: "/careers", label: "Careers", icon: Target },
   { href: "/journey", label: "My Journey", icon: Map },
   { href: "/opportunities", label: "Opportunities", icon: Briefcase },
   { href: "/job-readiness", label: "Job Readiness", icon: ClipboardCheck },
   { href: "/mock-interview", label: "Mock Interview", icon: ClipboardCheck },
+  { href: "/alumni", label: "Alumni", icon: Users, badge: "Soon" },
 ]
 
 // Secondary links available in mobile menu & footer
 const secondaryNavItems = [
-  { href: "/sports", label: "Sports", icon: Trophy },
-  { href: "/alumni", label: "Alumni (Coming Soon)", icon: Users },
+  { href: "/sports", label: "Sports Pathway", icon: Trophy },
 ]
 
 export function NavBar() {
@@ -79,7 +79,7 @@ export function NavBar() {
           </div>
         </Link>
 
-        {/* Desktop Primary Navigation (Strictly 5 Links) */}
+        {/* Desktop Primary Navigation (6 Links: Careers, Journey, Opportunities, Job Readiness, Mock Interview, Alumni Soon) */}
         <nav className="hidden md:flex items-center gap-1 bg-[#111827] rounded-full px-2 py-1 border border-[#2A3650]">
           {primaryNavItems.map((item) => {
             const isActive =
@@ -103,6 +103,11 @@ export function NavBar() {
                   )}
                 />
                 <span>{item.label}</span>
+                {item.badge && (
+                  <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold bg-amber-500/15 text-amber-400 border border-amber-500/20">
+                    {item.badge}
+                  </span>
+                )}
               </Link>
             )
           })}
@@ -181,6 +186,11 @@ export function NavBar() {
                     )}
                   />
                   <span>{item.label}</span>
+                  {item.badge && (
+                    <span className="ml-auto inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold bg-amber-500/15 text-amber-400 border border-amber-500/20">
+                      {item.badge}
+                    </span>
+                  )}
                 </Link>
               )
             })}

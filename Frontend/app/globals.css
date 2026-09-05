@@ -123,3 +123,8 @@
 ::-webkit-scrollbar-thumb:hover {
   background: hsl(var(--muted-foreground) / 0.5);
 }
+
+@keyframes loading {
+  from { width: 0%; }
+  to { width: 95%; }
+}

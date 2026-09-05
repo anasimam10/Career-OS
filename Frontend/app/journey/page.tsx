@@ -6,6 +6,7 @@ import Link from "next/link"
 import {
   CheckCircle2,
   ArrowRight,
+  ArrowUpRight,
   Loader2,
   AlertCircle,
   RefreshCw,
@@ -18,7 +19,6 @@ import {
   Layers,
   MapPin,
   Trophy,
-  ExternalLink,
   ChevronRight,
   Circle,
   Clock,
@@ -29,6 +29,7 @@ import { PageTransition } from "@/components/layout/PageTransition"
 import { TalkToAlumniSection } from "@/components/alumni/TalkToAlumniSection"
 import { getSession } from "@/lib/session"
 import { cn } from "@/lib/utils/cn"
+import { resolveMilestoneCTA } from "@/lib/constants/journeyCta"
 
 const PHASE_METADATA: Record<number, { title: string; subtitle: string; icon: React.ElementType }> = {
   1: {
@@ -56,84 +57,6 @@ const PHASE_METADATA: Record<number, { title: string; subtitle: string; icon: Re
     subtitle: "Turn your preparation into verified applications, placement readiness audits, and your first job.",
     icon: GraduationCap,
   },
-}
-
-function resolveAction(
-  milestone: MilestoneItem,
-  careerSlug: string = "software-engineering"
-): { label: string; url: string; reviewLabel?: string } | null {
-  if (milestone.action_label && milestone.action_url) {
-    return {
-      label: milestone.action_label,
-      url: milestone.action_url,
-      reviewLabel: milestone.action_label.replace("Start", "Review").replace("Run", "View").replace("Explore", "View"),
-    }
-  }
-  const title = milestone.title.toLowerCase()
-  if (title.includes("reality check")) {
-    return {
-      label: "Start Reality Check →",
-      url: `/careers/${careerSlug}/reality-check`,
-      reviewLabel: "Review Reality Check →",
-    }
-  }
-  if (title.includes("7-day") || title.includes("trial")) {
-    return {
-      label: "Start 7-Day Trial →",
-      url: `/careers/${careerSlug}/trial`,
-      reviewLabel: "Review Trial Plan →",
-    }
-  }
-  if (title.includes("university") || title.includes("program") || title.includes("degree")) {
-    return {
-      label: "View Degree Pathways →",
-      url: `/careers/${careerSlug}/reality-check`,
-      reviewLabel: "Review Degree Pathways →",
-    }
-  }
-  if (title.includes("explore") || title.includes("compare")) {
-    return {
-      label: "Explore Careers →",
-      url: "/careers",
-      reviewLabel: "Browse Careers →",
-    }
-  }
-  if (title.includes("interview")) {
-    return {
-      label: "Start Mock Interview →",
-      url: "/mock-interview",
-      reviewLabel: "Practice Interview →",
-    }
-  }
-  if (title.includes("cv") || title.includes("routine") || title.includes("readiness")) {
-    return {
-      label: "Check Job Readiness →",
-      url: "/job-readiness",
-      reviewLabel: "View Readiness Score →",
-    }
-  }
-  if (title.includes("opportunity") || title.includes("scholarship") || title.includes("internship") || title.includes("role") || title.includes("apply")) {
-    return {
-      label: "Find Opportunities →",
-      url: "/opportunities",
-      reviewLabel: "View Opportunities →",
-    }
-  }
-  if (title.includes("skill") || title.includes("learn") || title.includes("practice")) {
-    return {
-      label: "View Learning Roadmaps →",
-      url: "/opportunities",
-      reviewLabel: "View Roadmaps →",
-    }
-  }
-  if (title.includes("finalize") || title.includes("profile")) {
-    return {
-      label: "View Profile →",
-      url: "/profile",
-      reviewLabel: "View Profile →",
-    }
-  }
-  return null
 }
 
 export default function JourneyPage() {
@@ -275,7 +198,7 @@ export default function JourneyPage() {
   return (
     <PageTransition>
       <div className="bg-[#0B0F1A] min-h-screen pt-8 pb-28 text-[#F1F5F9]">
-        <div className="mx-auto max-w-[1040px] px-4 sm:px-6 space-y-10">
+        <div className="mx-auto max-w-[1040px] px-4 sm:px-6 space-y-8">
 
           {/* ========================================================================= */}
           {/* SECTION A: CURRENT CONTEXT HEADER                                          */}
@@ -288,7 +211,7 @@ export default function JourneyPage() {
                 <div className="flex flex-wrap items-center gap-2.5">
                   <span className="inline-flex items-center gap-1.5 rounded-full border border-blue-500/30 bg-blue-500/10 px-3 py-1 text-xs font-semibold text-blue-400">
                     <Sparkles className="h-3.5 w-3.5 text-blue-400" />
-                    Career OS Pathway
+                    Your journey
                   </span>
 
                   <span className="inline-flex items-center gap-1 rounded-full border border-[#1E2D42] bg-[#1C2539] px-2.5 py-0.5 text-xs text-[#94A3B8]">
@@ -312,11 +235,11 @@ export default function JourneyPage() {
                 </div>
 
                 <h1 className="text-3xl sm:text-4xl font-black text-[#F1F5F9] tracking-tight">
-                  {careerName}
+                  Your next steps
                 </h1>
 
                 <p className="text-xs sm:text-sm text-[#94A3B8] max-w-xl leading-relaxed">
-                  Your personalized career pathway connecting exploration, hands-on trials, degree programs, skills, and placement readiness in Pakistan.
+                  Personalized roadmap for <span className="text-slate-200 font-semibold">{careerName}</span> connecting exploration, hands-on trials, degree programs, skills, and placement readiness in Pakistan.
                 </p>
               </div>
 
@@ -352,6 +275,29 @@ export default function JourneyPage() {
               ) : null}
             </div>
           </header>
+
+          {/* ========================================================================= */}
+          {/* TASK 5d: PROGRESS SUMMARY BAR                                             */}
+          {/* ========================================================================= */}
+          {!loading && !error && totalCount > 0 && (
+            <div className="flex items-center gap-4 p-4 bg-gray-900/60 border border-gray-800 rounded-xl">
+              <div>
+                <span className="text-2xl font-bold text-white">{completedCount}</span>
+                <span className="text-gray-500 text-sm"> / {totalCount} milestones</span>
+              </div>
+
+              <div className="flex-1 h-2 bg-gray-800 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-gradient-to-r from-blue-600 to-emerald-500 rounded-full transition-all duration-700"
+                  style={{ width: `${(completedCount / totalCount) * 100}%` }}
+                />
+              </div>
+
+              <span className="text-sm font-semibold text-gray-400">
+                {Math.round((completedCount / totalCount) * 100)}%
+              </span>
+            </div>
+          )}
 
           {/* Error Banner */}
           {completionError && (
@@ -517,7 +463,7 @@ export default function JourneyPage() {
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                   {/* Current Focus Card (2 Columns) */}
                   {(() => {
-                    const action = resolveAction(activeMilestone, careerSlug)
+                    const cta = resolveMilestoneCTA(activeMilestone.title, careerSlug)
                     return (
                       <div className="lg:col-span-2 rounded-3xl border-2 border-blue-500/70 bg-gradient-to-br from-blue-950/40 via-[#111827] to-[#111827] p-6 sm:p-8 shadow-[0_0_40px_rgba(59,130,246,0.18)] relative overflow-hidden flex flex-col justify-between gap-6">
                         <div className="space-y-4">
@@ -547,13 +493,13 @@ export default function JourneyPage() {
                         {/* Action Buttons: Primary Feature CTA + Secondary Completion Button */}
                         <div className="pt-4 border-t border-[#1E2D42] flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
                           <div className="flex flex-wrap items-center gap-3">
-                            {action && (
+                            {cta && (
                               <Link
-                                href={action.url}
+                                href={cta.href}
                                 className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 hover:bg-blue-500 active:scale-[0.98] text-white px-6 py-3 text-sm font-bold transition-all shadow-lg shadow-blue-900/30 group cursor-pointer"
                               >
-                                <span>{action.label}</span>
-                                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                                <span>{cta.label}</span>
+                                <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                               </Link>
                             )}
 
@@ -566,7 +512,7 @@ export default function JourneyPage() {
                               {completingId === activeMilestone.id ? (
                                 <>
                                   <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                                  <span>Marking completed...</span>
+                                  <span>Saving...</span>
                                 </>
                               ) : (
                                 <>
@@ -685,12 +631,15 @@ export default function JourneyPage() {
                             {phaseCompleted ? (
                               <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-[11px] font-bold text-emerald-400 border border-emerald-500/20">
                                 <CheckCircle2 className="h-3 w-3" />
-                                <span>Complete</span>
+                                <span>Completed</span>
                               </span>
                             ) : hasActive ? (
-                              <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-500/15 px-2.5 py-0.5 text-[11px] font-bold text-blue-400 border border-blue-500/30">
-                                <span className="h-1.5 w-1.5 rounded-full bg-blue-400 animate-pulse" />
-                                <span>In Progress</span>
+                              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-500/15 text-blue-400 border border-blue-500/25">
+                                <span className="relative flex h-2 w-2">
+                                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75" />
+                                  <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500" />
+                                </span>
+                                In Progress
                               </span>
                             ) : (
                               <span className="inline-flex items-center gap-1 rounded-full bg-[#1C2539] px-2.5 py-0.5 text-[11px] font-semibold text-[#64748B]">
@@ -701,15 +650,24 @@ export default function JourneyPage() {
                         </div>
 
                         {/* Connected Vertical Timeline Spine */}
-                        <div className="relative pl-6 sm:pl-8 space-y-4">
+                        <div className="relative pl-6 sm:pl-8 flex flex-col gap-4">
                           {/* Continuous Vertical Spine Line */}
-                          <div className="absolute left-2.5 sm:left-3.5 top-3 bottom-3 w-[2px] bg-[#1E2D42]" />
+                          <div
+                            className={cn(
+                              "absolute left-2.5 sm:left-3.5 top-3 bottom-3 w-[2px]",
+                              phaseCompleted
+                                ? "bg-emerald-500/40"
+                                : hasActive
+                                ? "bg-blue-500/40"
+                                : "bg-gray-800"
+                            )}
+                          />
 
                           {items.map((milestone) => {
                             const isCompleted = milestone.status === "completed"
                             const isActive = milestone.status === "active"
                             const isUpcoming = milestone.status === "locked"
-                            const action = resolveAction(milestone, careerSlug)
+                            const cta = resolveMilestoneCTA(milestone.title, careerSlug)
 
                             return (
                               <div
@@ -745,7 +703,7 @@ export default function JourneyPage() {
                                   )}
                                 </div>
 
-                                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
+                                <div className="flex flex-col justify-between gap-3">
                                   <div className="space-y-1.5 flex-1">
                                     <div className="flex items-center gap-2">
                                       <span className="text-[11px] font-bold text-[#64748B] uppercase tracking-wider">
@@ -788,28 +746,40 @@ export default function JourneyPage() {
                                     )}
                                   </div>
 
-                                  {/* Right Action / Revisit link */}
-                                  <div className="self-start sm:self-center shrink-0 pt-2 sm:pt-0">
-                                    {isCompleted && action && (
+                                  {/* Milestone Contextual Action Area */}
+                                  {isActive && cta && (
+                                    <div className="flex flex-wrap items-center gap-3 mt-3 pt-3 border-t border-[#1E2D42]/60">
                                       <Link
-                                        href={action.url}
-                                        className="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-400 hover:text-blue-300 transition-colors p-1"
+                                        href={cta.href}
+                                        className="inline-flex items-center gap-2 text-sm font-medium text-blue-400 hover:text-blue-300 transition-colors"
                                       >
-                                        <span>{action.reviewLabel || "Reopen"}</span>
-                                        <ExternalLink className="h-3 w-3" />
+                                        <span>{cta.label}</span>
+                                        <ArrowUpRight className="w-4 h-4" />
                                       </Link>
-                                    )}
+                                      <button
+                                        type="button"
+                                        onClick={() => handleComplete(milestone.id)}
+                                        disabled={completingId !== null}
+                                        className="ml-auto inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors cursor-pointer"
+                                      >
+                                        {completingId === milestone.id ? (
+                                          <>
+                                            <Loader2 className="w-4 h-4 animate-spin" />
+                                            <span>Saving...</span>
+                                          </>
+                                        ) : (
+                                          <span>Mark as completed</span>
+                                        )}
+                                      </button>
+                                    </div>
+                                  )}
 
-                                    {isActive && action && (
-                                      <Link
-                                        href={action.url}
-                                        className="inline-flex items-center gap-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 text-xs font-bold transition-all shadow-md cursor-pointer"
-                                      >
-                                        <span>Open Feature</span>
-                                        <ArrowRight className="h-3.5 w-3.5" />
-                                      </Link>
-                                    )}
-                                  </div>
+                                  {isCompleted && (
+                                    <div className="flex items-center gap-2 mt-3 pt-3 border-t border-[#1E2D42]/40 text-emerald-400 text-sm font-medium">
+                                      <CheckCircle2 className="w-4 h-4" />
+                                      <span>Completed</span>
+                                    </div>
+                                  )}
                                 </div>
                               </div>
                             )

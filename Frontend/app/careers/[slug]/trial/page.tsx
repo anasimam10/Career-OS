@@ -2,11 +2,10 @@
 
 import { useParams } from "next/navigation"
 import Link from "next/link"
-import { ArrowLeft, Sparkles } from "lucide-react"
+import { ArrowLeft } from "lucide-react"
 import { useCareerAnalysis } from "@/hooks/useCareerAnalysis"
 import { TrialPlanView } from "@/components/career/TrialPlanView"
 import { SectionHeader } from "@/components/shared/SectionHeader"
-import { LoadingState } from "@/components/shared/LoadingState"
 import { ErrorState } from "@/components/shared/ErrorState"
 import { Button } from "@/components/ui/button"
 import { PageTransition } from "@/components/layout/PageTransition"
@@ -44,7 +43,39 @@ export default function TrialPlanPage() {
         />
 
         {loading ? (
-          <LoadingState message="Generating your custom 7-day trial plan..." />
+          <div className="max-w-5xl mx-auto px-2 py-6 animate-pulse space-y-8">
+            {/* Progress bar skeleton */}
+            <div className="rounded-2xl border border-slate-800 bg-slate-900/40 p-5 space-y-3">
+              <div className="flex justify-between">
+                <div className="h-4 w-32 bg-gray-700 rounded" />
+                <div className="h-4 w-20 bg-gray-800 rounded" />
+              </div>
+              <div className="h-2 w-full bg-gray-800 rounded-full" />
+            </div>
+
+            {/* Daily cards grid skeleton — 2 columns */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {[1, 2, 3, 4].map((i) => (
+                <div key={i} className="rounded-2xl border border-slate-800 bg-slate-900/30 p-6 space-y-4">
+                  <div className="flex justify-between items-center">
+                    <div className="h-4 w-20 bg-gray-800 rounded-md" />
+                    <div className="h-3 w-16 bg-gray-800 rounded" />
+                  </div>
+                  <div className="h-6 w-3/4 bg-gray-700 rounded" />
+                  <div className="space-y-2.5 pt-2">
+                    {[1, 2, 3].map((t) => (
+                      <div key={t} className="h-10 bg-gray-800/40 rounded-xl" />
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Subtle message */}
+            <p className="text-center text-gray-500 text-sm mt-8">
+              Generating your custom 7-day trial plan based on Pakistan market data...
+            </p>
+          </div>
         ) : error || !trialPlan ? (
           <ErrorState message={error || "Could not load trial plan"} onRetry={refetch} />
         ) : (

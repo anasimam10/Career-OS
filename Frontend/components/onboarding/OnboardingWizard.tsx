@@ -17,6 +17,8 @@ export function OnboardingWizard() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [sessionNotice, setSessionNotice] = useState<string | null>(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [loadingMessage, setLoadingMessage] = useState("Setting up your profile...")
 
   const {
     step,
@@ -37,13 +39,39 @@ export function OnboardingWizard() {
     }
   }, [searchParams])
 
+  // Cycling messages — runs during the Qwen AI call on submission
+  useEffect(() => {
+    if (!isSubmitting) return
+
+    const messages = [
+      "Setting up your profile...",
+      "Analyzing your career options...",
+      "Mapping Pakistani job market data...",
+      "Building your personal roadmap...",
+      "Calculating your first steps...",
+      "Almost ready...",
+    ]
+
+    let index = 0
+    const interval = setInterval(() => {
+      index = (index + 1) % messages.length
+      setLoadingMessage(messages[index])
+    }, 5000) // change message every 5 seconds
+
+    return () => clearInterval(interval)
+  }, [isSubmitting])
+
   const handleFinish = async () => {
+    setIsSubmitting(true)
     try {
       const res = await submit()
       if (res && res.student_id) {
         router.push("/journey")
+      } else {
+        setIsSubmitting(false)
       }
     } catch {
+      setIsSubmitting(false)
       // Error state captured by useOnboarding
     }
   }
@@ -59,6 +87,36 @@ export function OnboardingWizard() {
 
   return (
     <div className="mx-auto max-w-[760px] px-4 py-6 sm:py-10">
+      {/* Fullscreen Submitting Loading Screen */}
+      {isSubmitting && (
+        <div className="fixed inset-0 bg-[#0B0F1A] flex flex-col items-center justify-center z-50">
+          {/* Animated logo mark */}
+          <div className="w-16 h-16 rounded-2xl bg-blue-600/20 border border-blue-500/30 flex items-center justify-center mb-8">
+            <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
+          </div>
+
+          {/* Career OS wordmark */}
+          <p className="text-xs font-semibold tracking-widest text-blue-400 uppercase mb-6">
+            Career OS
+          </p>
+
+          {/* Cycling message */}
+          <h2 className="text-xl font-semibold text-white mb-3 text-center px-8 transition-all duration-500">
+            {loadingMessage}
+          </h2>
+
+          <p className="text-sm text-gray-500 text-center px-8">
+            We&apos;re personalizing your journey based on Pakistan&apos;s real job market.
+            <br />This takes about 30 seconds.
+          </p>
+
+          {/* Subtle progress bar (animates from 0% to 95% over 30s) */}
+          <div className="mt-10 w-64 h-0.5 bg-gray-800 rounded-full overflow-hidden">
+            <div className="h-full bg-blue-500 rounded-full animate-[loading_30s_linear_forwards]" />
+          </div>
+        </div>
+      )}
+
       {/* Session Expired Banner if redirected */}
       {sessionNotice && (
         <div className="mb-6 flex items-center gap-2.5 rounded-[8px] border border-amber-500/40 bg-amber-500/10 p-4 text-sm font-semibold text-amber-300">
@@ -142,7 +200,7 @@ export function OnboardingWizard() {
             <button
               type="button"
               onClick={prevStep}
-              disabled={loading}
+              disabled={loading || isSubmitting}
               className="inline-flex items-center gap-2 rounded-[8px] border border-[#2A3650] bg-transparent hover:bg-[#1C2539] px-5 py-2.5 text-sm font-semibold text-[#94A3B8] hover:text-[#F1F5F9] transition-colors disabled:opacity-50 min-h-[44px]"
             >
               <ArrowLeft className="h-4 w-4" />
@@ -165,10 +223,10 @@ export function OnboardingWizard() {
             <button
               type="button"
               onClick={handleFinish}
-              disabled={loading}
+              disabled={loading || isSubmitting}
               className="inline-flex items-center gap-2 rounded-[8px] bg-[#2563EB] hover:bg-[#1D4ED8] px-6 py-2.5 text-sm font-bold text-white transition-all shadow-md active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed min-h-[44px]"
             >
-              {loading ? (
+              {loading || isSubmitting ? (
                 <>
                   <Loader2 className="h-4 w-4 animate-spin text-white" />
                   <span>Bootstrapping Journey...</span>
