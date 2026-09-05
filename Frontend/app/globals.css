@@ -4,47 +4,49 @@
 
 @layer base {
   :root, .dark {
-    /* Deep navy (#08101C) */
-    --background: 216 56% 7%;
-    /* White/cool gray for text */
-    --foreground: 210 40% 98%;
+    /* Professional Dark-Navy System */
+    --color-bg: #0B0F1A;
+    --color-surface: #111827;
+    --color-surface-2: #1C2539;
+    --color-border: #2A3650;
+    --color-accent: #3B82F6;
+    --color-accent-glow: #60A5FA;
+    --color-success: #10B981;
+    --color-warning: #F59E0B;
+    --color-text-primary: #F1F5F9;
+    --color-text-secondary: #94A3B8;
+    --color-text-muted: #64748B;
+
+    /* Semantic Tailwind mapping */
+    --background: 222 40% 7%; /* #0B0F1A */
+    --foreground: 210 40% 98%; /* #F1F5F9 */
     
-    /* Primary navy (#0B1220) */
-    --card: 219 48% 8%;
+    --card: 222 47% 11%; /* #111827 */
     --card-foreground: 210 40% 98%;
     
-    /* Elevated navy (#111B2B) */
-    --popover: 217 43% 12%;
+    --popover: 220 33% 17%; /* #1C2539 */
     --popover-foreground: 210 40% 98%;
     
-    /* Electric blue for primary interaction */
-    --primary: 217 91% 60%;
-    --primary-foreground: 222 47% 11%;
+    --primary: 217 91% 60%; /* #3B82F6 */
+    --primary-foreground: 0 0% 100%;
     
-    /* Subtle elevated surface */
-    --secondary: 217 43% 12%;
+    --secondary: 220 33% 17%; /* #1C2539 */
     --secondary-foreground: 210 40% 98%;
     
-    /* Muted states */
-    --muted: 217 43% 12%;
-    --muted-foreground: 215 20% 65%;
+    --muted: 220 33% 17%;
+    --muted-foreground: 215 16% 47%; /* #64748B */
     
-    /* Warm amber specifically for NBA */
-    --accent: 38 92% 50%;
-    --accent-foreground: 222 47% 11%;
+    --accent: 217 91% 60%; /* #3B82F6 */
+    --accent-foreground: 0 0% 100%;
     
-    /* Risks / Destructive */
-    --destructive: 0 62% 30%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
     
-    /* Borders match elevated navy */
-    --border: 217 43% 12%;
-    --input: 217 43% 12%;
-    
-    /* Ring matches primary */
+    --border: 221 31% 24%; /* #2A3650 */
+    --input: 221 31% 24%;
     --ring: 217 91% 60%;
     
-    --radius: 0.75rem;
+    --radius: 6px;
   }
 }
 
@@ -53,8 +55,51 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground antialiased selection:bg-blue-100 selection:text-blue-900;
-    font-feature-settings: "rlig" 1, "calt" 1;
+    background-color: var(--color-bg);
+    color: var(--color-text-primary);
+    font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+    line-height: 1.625;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+  
+  h1 {
+    font-size: 2rem; /* 32px mobile */
+    line-height: 2.5rem;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    color: var(--color-text-primary);
+  }
+  @media (min-width: 768px) {
+    h1 {
+      font-size: 3rem; /* 48px desktop */
+      line-height: 3.5rem; /* 56px */
+    }
+  }
+
+  h2 {
+    font-size: 1.5rem; /* 24px mobile */
+    line-height: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--color-text-primary);
+  }
+  @media (min-width: 768px) {
+    h2 {
+      font-size: 2rem; /* 32px desktop */
+      line-height: 2.5rem; /* 40px */
+    }
+  }
+
+  h3 {
+    font-size: 1.25rem; /* 20px */
+    line-height: 1.75rem; /* 28px */
+    font-weight: 700;
+    color: var(--color-text-primary);
+  }
+
+  p {
+    max-width: 65ch;
   }
 }
 

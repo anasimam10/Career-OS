@@ -36,7 +36,9 @@ export interface JourneyStep {
   title: string
   description: string
   stage: EducationStage
-  estimated_duration: string
+  estimated_duration?: string
+  status?: "pending" | "active" | "completed" | "done" | "skipped" | "locked"
+  phase?: string
 }
 
 export interface JourneyResponse {

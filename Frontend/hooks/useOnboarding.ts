@@ -3,30 +3,21 @@
 import { useState } from "react"
 import { submitOnboarding } from "@/lib/api/onboarding"
 import { saveNewStudentSession, updateSession } from "@/lib/session"
-import type { OnboardingPayload, OnboardingResponse, Skill } from "@/lib/types/student.types"
+import type { OnboardingPayload, OnboardingResponse } from "@/lib/types/student.types"
 import type { EducationStage } from "@/lib/types/journey.types"
-
 
 export interface OnboardingState {
   education_stage: EducationStage
-  interests: string[]
-  career_interests: string[]
-  motivation_tags: string[]
-  sports_interest: string | null
-  future_goals: string[]
-  skills: Skill[]
   city: string
+  province: string
+  target_field: string
 }
 
 const initialState: OnboardingState = {
   education_stage: "HIGH_SCHOOL",
-  interests: [],
-  career_interests: [],
-  motivation_tags: [],
-  sports_interest: null,
-  future_goals: [],
-  skills: [],
   city: "Karachi",
+  province: "Sindh",
+  target_field: "Software Engineering",
 }
 
 export function useOnboarding() {
@@ -36,7 +27,7 @@ export function useOnboarding() {
   const [error, setError] = useState<string | null>(null)
   const [result, setResult] = useState<OnboardingResponse | null>(null)
 
-  const totalSteps = 8
+  const totalSteps = 2
 
   const nextStep = () => setStep((s) => Math.min(s + 1, totalSteps))
   const prevStep = () => setStep((s) => Math.max(s - 1, 1))
@@ -45,38 +36,31 @@ export function useOnboarding() {
     setData((prev) => ({ ...prev, ...updates }))
   }
 
-  const toggleArrayItem = (key: "interests" | "career_interests" | "motivation_tags" | "future_goals" | "skills", value: string) => {
-    setData((prev) => {
-      const arr = prev[key] as string[]
-      return {
-        ...prev,
-        [key]: arr.includes(value) ? arr.filter((x) => x !== value) : [...arr, value],
-      }
-    })
-  }
-
   const submit = async () => {
     try {
       setLoading(true)
       setError(null)
+      const interests =
+        data.target_field && data.target_field !== "I'm not sure yet"
+          ? [data.target_field]
+          : []
+
       const payload: OnboardingPayload = {
         education_stage: data.education_stage,
-        interests: data.interests,
-        career_interests: data.career_interests,
-        sports_interest: data.sports_interest === "No sport" ? null : data.sports_interest,
-        motivation_tags: data.motivation_tags,
-        skills: data.skills,
+        interests: interests,
+        career_interests: interests,
+        sports_interest: null,
+        motivation_tags: [],
+        skills: [],
         city: data.city || "Karachi",
       }
+
       const res = await submitOnboarding(payload)
-      if (res.student_id) {
-        saveNewStudentSession(res.student_id, "Student", payload.city)
-      } else {
-        updateSession({ onboarding_completed: true, city: payload.city })
-      }
+      const finalId = res.student_id || 1
+      saveNewStudentSession(finalId, "Student", payload.city)
+
       setResult(res)
       return res
-
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to submit onboarding")
       throw err
@@ -95,7 +79,6 @@ export function useOnboarding() {
     nextStep,
     prevStep,
     updateData,
-    toggleArrayItem,
     submit,
   }
 }

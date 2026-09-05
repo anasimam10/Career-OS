@@ -35,7 +35,7 @@ logger = logging.getLogger("ah_career.journey")
 
 # Milestone statuses a student may set through this endpoint
 # (pending/active are backend-managed, never student-set).
-STUDENT_SETTABLE_STATUSES = {"done", "skipped"}
+STUDENT_SETTABLE_STATUSES = {"done", "skipped", "completed"}
 
 
 class MilestoneNotFoundError(Exception):
@@ -57,7 +57,8 @@ def record_progress(
     3. Advance the stage through the backend state machine if appropriate.
     4. Recalculate and persist a new Next Best Action.
     """
-    if request.status not in STUDENT_SETTABLE_STATUSES:
+    normalized_status = "done" if request.status == "completed" else request.status
+    if normalized_status not in {"done", "skipped"}:
         raise InvalidStatusError(request.status)
 
     if request.milestone_id is not None and request.milestone_id > 0:
@@ -78,8 +79,8 @@ def record_progress(
         else:
             raise MilestoneNotFoundError(0)
 
-    milestone.status = request.status
-    if request.status == "done":
+    milestone.status = normalized_status
+    if normalized_status == "done":
         milestone.completed_at = datetime.now(timezone.utc)
     db.commit()
     logger.info(

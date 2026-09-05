@@ -28,9 +28,21 @@ logger = logging.getLogger("ah_career.students")
 router = APIRouter(prefix="/students", tags=["students"])
 
 
+import uuid
+
 class SkillItem(BaseModel):
     name: str
     level: str = "BEGINNER"
+
+
+class CreateStudentPayload(BaseModel):
+    name: Optional[str] = "Student"
+    education_stage: Optional[str] = "HIGH_SCHOOL"
+    city: Optional[str] = "Karachi"
+    province: Optional[str] = None
+    target_field: Optional[str] = None
+    career_interests: Optional[List[str]] = None
+    interests: Optional[List[str]] = None
 
 
 class UpdateStudentPayload(BaseModel):
@@ -107,6 +119,48 @@ def _build_profile_response(student: Student) -> StudentProfileResponse:
         created_at=student.created_at.isoformat() if student.created_at else None,
         updated_at=student.updated_at.isoformat() if student.updated_at else None,
     )
+
+
+from services import roadmap_service
+
+@router.post("", response_model=StudentProfileResponse)
+def create_student(
+    payload: CreateStudentPayload,
+    db: Session = Depends(get_db),
+) -> StudentProfileResponse:
+    """Create a new student session, initialize their profile, and bootstrap stage milestones."""
+    repo = StudentRepository(db)
+    clean_name = (payload.name or "Student").strip()
+    clean_stage = (payload.education_stage or "HIGH_SCHOOL").strip().upper()
+    clean_city = (payload.city or "Karachi").strip()
+    email = f"student_{uuid.uuid4().hex[:8]}@ahcareers.local"
+
+    student = repo.create_with_profile(
+        name=clean_name,
+        email=email,
+        password_hash="session_guest",
+        education_stage=clean_stage,
+    )
+    student.city = clean_city
+    if payload.target_field:
+        student.career_goal = payload.target_field.strip()
+    db.commit()
+
+    interests = payload.interests or []
+    if payload.target_field and payload.target_field not in interests:
+        interests.append(payload.target_field)
+
+    repo.update_profile(
+        student.id,
+        interests=json.dumps(interests, ensure_ascii=False),
+        skills=json.dumps([], ensure_ascii=False),
+    )
+
+    # Bootstrap journey milestones
+    roadmap_service.ensure_stage_milestones(db, student.id, student.education_stage)
+
+    db.refresh(student)
+    return _build_profile_response(student)
 
 
 @router.get("/me", response_model=StudentProfileResponse)

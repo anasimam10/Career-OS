@@ -1,3 +1,4 @@
+import React from "react"
 import { cn } from "@/lib/utils/cn"
 
 interface StepIndicatorProps {
@@ -7,27 +8,31 @@ interface StepIndicatorProps {
 
 export function StepIndicator({ currentStep, totalSteps }: StepIndicatorProps) {
   return (
-    <div className="flex items-center justify-center space-x-2">
-      {Array.from({ length: totalSteps }).map((_, i) => {
-        const stepNum = i + 1
-        const isActive = currentStep === stepNum
-        const isPast = currentStep > stepNum
+    <div className="flex flex-col items-center justify-center space-y-2">
+      <span className="text-xs font-semibold tracking-wider text-[#94A3B8] uppercase">
+        Step {currentStep} of {totalSteps}
+      </span>
+      <div className="flex items-center space-x-2">
+        {Array.from({ length: totalSteps }).map((_, i) => {
+          const stepNum = i + 1
+          const isActive = currentStep === stepNum
+          const isPast = currentStep > stepNum
 
-        return (
-          <div key={i} className="flex items-center">
+          return (
             <div
+              key={i}
               className={cn(
-                "h-1.5 rounded-full transition-all duration-500",
-                isActive ? "w-8 bg-indigo-500 shadow-[0_0_8px_rgba(99,102,241,0.8)]" : 
-                isPast ? "w-4 bg-indigo-500/50" : "w-2 bg-slate-800"
+                "h-1.5 rounded-full transition-all duration-300",
+                isActive
+                  ? "w-8 bg-[#3B82F6] shadow-[0_0_8px_rgba(59,130,246,0.6)]"
+                  : isPast
+                  ? "w-4 bg-[#3B82F6]/60"
+                  : "w-2.5 bg-[#2A3650]"
               )}
             />
-            {i < totalSteps - 1 && (
-              <div className="w-1.5" /> /* Gap between dots */
-            )}
-          </div>
-        )
-      })}
+          )
+        })}
+      </div>
     </div>
   )
 }

@@ -79,6 +79,7 @@ class JourneyStep(BaseModel):
     description: str
     stage: EducationStage
     estimated_duration: str
+    status: Optional[str] = "pending"
 
 
 class JourneyResponse(BaseModel):

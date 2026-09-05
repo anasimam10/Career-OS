@@ -4,7 +4,8 @@
  * Persists student identity in browser localStorage without hardcoding demo student id=1.
  */
 
-const SESSION_KEY = "ah_careers_session"
+export const STUDENT_ID_KEY = "career_os_student_id"
+export const SESSION_KEY = "ah_careers_session"
 export const DEMO_STUDENT_ID = 1
 const DEMO_STUDENT_NAME = "Student"
 
@@ -19,7 +20,18 @@ export function getSession(): Session | null {
   if (typeof window === "undefined") return null
   try {
     const raw = localStorage.getItem(SESSION_KEY)
-    if (!raw) return null
+    if (!raw) {
+      // Fallback: build minimal session from career_os_student_id if present
+      const directId = localStorage.getItem(STUDENT_ID_KEY)
+      if (directId && !isNaN(Number(directId)) && Number(directId) > 0) {
+        return {
+          student_id: Number(directId),
+          name: DEMO_STUDENT_NAME,
+          onboarding_completed: true,
+        }
+      }
+      return null
+    }
     return JSON.parse(raw) as Session
   } catch {
     return null
@@ -31,8 +43,6 @@ export function getOrCreateSession(): Session {
   if (existing) return existing
   
   if (process.env.NEXT_PUBLIC_USE_MOCK !== "true") {
-    // In real mode, we don't return Demo Student 1 automatically.
-    // Instead return a null-equivalent stub session so app redirects to onboarding
     return {
       student_id: 0,
       name: "",
@@ -51,7 +61,14 @@ export function getOrCreateSession(): Session {
 
 export function setSession(session: Session): void {
   if (typeof window === "undefined") return
-  localStorage.setItem(SESSION_KEY, JSON.stringify(session))
+  try {
+    localStorage.setItem(SESSION_KEY, JSON.stringify(session))
+    if (session.student_id > 0) {
+      localStorage.setItem(STUDENT_ID_KEY, String(session.student_id))
+    }
+  } catch (e) {
+    console.error("Error setting session in localStorage:", e)
+  }
 }
 
 export function updateSession(updates: Partial<Session>): void {
@@ -61,7 +78,6 @@ export function updateSession(updates: Partial<Session>): void {
       console.warn("Attempting to update session without an existing student identity in real mode.")
       return
     }
-    // Explicit mock-only fallback
     setSession({
       student_id: DEMO_STUDENT_ID,
       name: DEMO_STUDENT_NAME,
@@ -74,6 +90,13 @@ export function updateSession(updates: Partial<Session>): void {
 }
 
 export function saveNewStudentSession(studentId: number, name: string = "Student", city?: string): Session {
+  if (typeof window !== "undefined") {
+    try {
+      localStorage.setItem(STUDENT_ID_KEY, String(studentId))
+    } catch (e) {
+      console.error("Failed to store career_os_student_id in localStorage", e)
+    }
+  }
   const session: Session = {
     student_id: studentId,
     name: name,
@@ -86,26 +109,46 @@ export function saveNewStudentSession(studentId: number, name: string = "Student
 
 export function clearSession(): void {
   if (typeof window === "undefined") return
-  localStorage.removeItem(SESSION_KEY)
+  try {
+    localStorage.removeItem(STUDENT_ID_KEY)
+    localStorage.removeItem(SESSION_KEY)
+  } catch (e) {
+    console.error("Error clearing session:", e)
+  }
 }
 
 export function isOnboardingComplete(): boolean {
+  if (typeof window === "undefined") return false
+  const directId = localStorage.getItem(STUDENT_ID_KEY)
+  if (directId && !isNaN(Number(directId)) && Number(directId) > 0) {
+    return true
+  }
   return getSession()?.onboarding_completed ?? false
 }
 
 export function getStudentId(): number | null {
-  return getSession()?.student_id ?? null
+  if (typeof window === "undefined") return null
+  try {
+    const directId = localStorage.getItem(STUDENT_ID_KEY)
+    if (directId && !isNaN(Number(directId)) && Number(directId) > 0) {
+      return Number(directId)
+    }
+    const session = getSession()
+    if (session?.student_id && session.student_id > 0) {
+      return session.student_id
+    }
+    return null
+  } catch {
+    return null
+  }
 }
 
 export function getEffectiveStudentId(): number {
-  const sid = getSession()?.student_id
+  const sid = getStudentId()
   if (sid) return sid
   if (process.env.NEXT_PUBLIC_USE_MOCK === "true") {
     return DEMO_STUDENT_ID
   }
-  // In real mode, a missing session means the user needs to onboard.
-  // Returning 0 or throwing could break SSR, but returning a non-existent ID 
-  // explicitly prevents mixing up with Demo Student 1.
   return 0 
 }
 

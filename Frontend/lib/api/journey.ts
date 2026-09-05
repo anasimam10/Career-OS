@@ -1,11 +1,11 @@
-﻿import { apiGet, apiPost } from "./client"
+import { apiGet, apiPost } from "./client"
 import { USE_MOCK } from "@/lib/mock"
 import { MOCK_JOURNEY } from "@/lib/mock/journey.mock"
 import type { JourneyResponse, ProgressResponse, RoadmapResponse } from "@/lib/types/journey.types"
 
 const MAX_VISIBLE_STEPS = 3
 
-export async function getJourney(): Promise<JourneyResponse> {
+export async function getJourney(studentId?: number): Promise<JourneyResponse> {
   if (USE_MOCK) {
     await new Promise((r) => setTimeout(r, 400))
     return {
@@ -13,12 +13,13 @@ export async function getJourney(): Promise<JourneyResponse> {
       next_steps: MOCK_JOURNEY.next_steps.slice(0, MAX_VISIBLE_STEPS),
     }
   }
-  const data = await apiGet<JourneyResponse>("/journey")
+  const headers = studentId ? { "X-Student-Id": String(studentId) } : undefined
+  const data = await apiGet<JourneyResponse>("/journey", { headers })
   // Architecture rule: never show more than 3 visible steps
   return { ...data, next_steps: data.next_steps.slice(0, MAX_VISIBLE_STEPS) }
 }
 
-export async function markProgress(milestoneId: number): Promise<ProgressResponse> {
+export async function markProgress(milestoneId: number, studentId?: number): Promise<ProgressResponse> {
   if (USE_MOCK) {
     await new Promise((r) => setTimeout(r, 600))
     return {
@@ -26,7 +27,18 @@ export async function markProgress(milestoneId: number): Promise<ProgressRespons
       next_best_action: MOCK_JOURNEY.next_best_action,
     }
   }
-  return apiPost<ProgressResponse>("/progress", { milestone_id: milestoneId, status: "done" })
+  const headers = studentId ? { "X-Student-Id": String(studentId) } : undefined
+  return apiPost<ProgressResponse>(
+    "/progress",
+    {
+      milestone_id: milestoneId,
+      milestoneId: milestoneId,
+      student_id: studentId,
+      studentId: studentId,
+      status: "completed",
+    },
+    { headers }
+  )
 }
 
 export async function createRoadmap(careerSlug: string, targetStage: string): Promise<RoadmapResponse> {

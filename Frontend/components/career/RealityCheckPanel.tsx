@@ -24,7 +24,7 @@ export function RealityCheckPanel({
              <Database className="h-4 w-4" />
           </div>
           <span className="leading-relaxed">
-            <strong className="text-white tracking-wide">PKE Verified Intelligence:</strong> Grounded in official labour market statistics & university records.
+            <strong className="text-white tracking-wide">Verified Career Intelligence:</strong> Grounded in official labour market statistics & university records.
           </span>
         </div>
         {reality.data_source && (

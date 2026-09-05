@@ -86,7 +86,7 @@ export function ChatMessage({ message }: { message: ChatMessageType }) {
         {!isUser && message.sources && message.sources.length > 0 && (
           <div className="pt-3 mt-2 border-t border-slate-800 flex flex-wrap gap-2 items-center">
             <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
-              <ShieldCheck className="h-3.5 w-3.5 text-emerald-500" /> PKE Sources:
+              <ShieldCheck className="h-3.5 w-3.5 text-emerald-500" /> Verified Sources:
             </span>
             {message.sources.map((src, idx) =>
               src.source_url ? (

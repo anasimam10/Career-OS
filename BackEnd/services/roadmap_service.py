@@ -511,6 +511,7 @@ def to_journey_step(milestone: Milestone) -> JourneyStep:
         description=milestone.description or "",
         stage=milestone.stage,
         estimated_duration=duration,
+        status=milestone.status,
     )
 
 

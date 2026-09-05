@@ -91,8 +91,8 @@ export default function SportsPage() {
               <Trophy className="h-3.5 w-3.5" />
               <span>Athletic Intelligence</span>
             </div>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight uppercase italic">
-              Level Up Your <span className="text-amber-500">Game.</span>
+            <h1 className="text-3xl md:text-5xl font-extrabold text-[#F1F5F9] tracking-tight">
+              Sports opportunities in <span className="text-[#3B82F6]">Pakistan</span>
             </h1>
             <p className="text-slate-400 max-w-2xl mx-auto text-lg">
               Tournaments, trials, scholarships, and university sports programmes across Pakistan.

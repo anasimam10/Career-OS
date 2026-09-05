@@ -53,15 +53,15 @@ export function MockInterviewSetup() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto space-y-8 p-8 rounded-[2rem] border border-slate-800 bg-slate-900/50 backdrop-blur-sm shadow-2xl">
-      <div className="space-y-4 text-center">
-        <div className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-xs font-bold text-amber-400 uppercase tracking-widest">
+    <div className="max-w-2xl mx-auto space-y-8 p-8 rounded-[20px] border border-[#2A3650] bg-[#111827] shadow-2xl">
+      <div className="space-y-3 text-center">
+        <div className="inline-flex items-center gap-1.5 rounded-full border border-[#3B82F6]/30 bg-[#3B82F6]/10 px-3 py-1 text-xs font-semibold text-[#60A5FA] uppercase tracking-wider">
           <Sparkles className="h-3.5 w-3.5" />
           <span>Interactive Assessment</span>
         </div>
-        <h1 className="text-3xl font-extrabold text-white">Practice before the real interview.</h1>
-        <p className="text-slate-400 text-sm max-w-md mx-auto">
-          Choose what you&apos;re preparing for, answer a short set of questions, and find out where you need more practice.
+        <h1 className="text-3xl md:text-4xl font-extrabold text-[#F1F5F9]">AI Mock Interviews</h1>
+        <p className="text-[#94A3B8] text-sm max-w-md mx-auto">
+          Practice with AI before the real thing. Answer targeted questions and find out where you need more preparation.
         </p>
       </div>
 

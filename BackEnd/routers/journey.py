@@ -74,6 +74,21 @@ def create_roadmap(
         )
 
 
+@router.get("/journey/{target_student_id}", response_model=JourneyResponse)
+def get_journey_for_student(
+    target_student_id: int,
+    db: Session = Depends(get_db),
+) -> JourneyResponse | JSONResponse:
+    """Retrieve journey state for a specific student id."""
+    try:
+        return journey_service.get_journey(db, student_id=target_student_id)
+    except journey_service.StudentNotFoundError:
+        return JSONResponse(
+            status_code=404,
+            content={"error": "Student profile not found — complete onboarding first."},
+        )
+
+
 @router.post("/progress", response_model=ProgressResponse)
 def record_progress(
     request: ProgressRequest,
@@ -81,8 +96,11 @@ def record_progress(
     student_id: int = Depends(get_current_student_id),
 ) -> ProgressResponse | JSONResponse:
     """Mark a milestone done/skipped; the backend advances the stage if valid."""
+    effective_student_id = request.studentId or request.student_id or student_id
+    if request.milestone_id is None and request.milestoneId is not None:
+        request.milestone_id = request.milestoneId
     try:
-        return progress_service.record_progress(db, request, student_id=student_id)
+        return progress_service.record_progress(db, request, student_id=effective_student_id)
     except progress_service.MilestoneNotFoundError:
         return JSONResponse(
             status_code=404,
@@ -93,3 +111,13 @@ def record_progress(
             status_code=422,
             content={"error": f"Invalid milestone status '{request.status}'"},
         )
+
+
+@router.post("/journey/complete", response_model=ProgressResponse)
+def complete_journey(
+    request: ProgressRequest,
+    db: Session = Depends(get_db),
+    student_id: int = Depends(get_current_student_id),
+) -> ProgressResponse | JSONResponse:
+    """Alias for completing a milestone on /journey/complete."""
+    return record_progress(request, db=db, student_id=student_id)

@@ -14,7 +14,7 @@ export function Step8Transition() {
         We have a starting point.
       </h2>
       <p className="mt-4 text-lg text-slate-400 max-w-md mx-auto">
-        Your profile is set. We&apos;re connecting to the Pakistan Knowledge Engine to build your personalized career journey.
+        Your profile is set. We&apos;re preparing your personalized milestones and Next Best Action.
       </p>
     </div>
   )

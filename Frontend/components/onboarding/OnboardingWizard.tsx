@@ -1,22 +1,18 @@
 "use client"
 
-import { useRouter } from "next/navigation"
-import { ArrowLeft, ArrowRight, Sparkles } from "lucide-react"
+import React, { useEffect, useState } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
+import { ArrowLeft, ArrowRight, Loader2, AlertCircle, Sparkles } from "lucide-react"
 import { useOnboarding } from "@/hooks/useOnboarding"
 import { StepIndicator } from "./StepIndicator"
 import { Step1Education } from "./steps/Step1Education"
 import { Step2Location } from "./steps/Step2Location"
-import { Step3CareerField } from "./steps/Step3CareerField"
-import { Step4Motivation } from "./steps/Step4Motivation"
-import { Step5Skills } from "./steps/Step5Skills"
-import { Step6Future } from "./steps/Step6Future"
-import { Step5Sports as Step7Sports } from "./steps/Step5Sports"
-import { Step8Transition } from "./steps/Step8Transition"
-import { Button } from "@/components/ui/button"
-import { ErrorState } from "@/components/shared/ErrorState"
 
 export function OnboardingWizard() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const [sessionNotice, setSessionNotice] = useState<string | null>(null)
+
   const {
     step,
     totalSteps,
@@ -26,129 +22,114 @@ export function OnboardingWizard() {
     nextStep,
     prevStep,
     updateData,
-    toggleArrayItem,
     submit,
   } = useOnboarding()
 
+  useEffect(() => {
+    const reason = searchParams.get("reason")
+    if (reason === "expired") {
+      setSessionNotice("Your session expired — let's set you up again")
+    }
+  }, [searchParams])
+
   const handleFinish = async () => {
     try {
-      nextStep()
       await submit()
-      setTimeout(() => {
-        router.push("/journey")
-      }, 1200)
+      router.push("/journey")
     } catch {
-      // If submission fails, revert transition step so student can see error and retry
-      prevStep()
+      // Error state captured by useOnboarding
     }
   }
 
-  // Hide navigation buttons on the final transition screen
-  const isTransitionStep = step === 8
-
   return (
-    <div className="mx-auto max-w-3xl px-4 py-8 sm:py-16">
-      {!isTransitionStep && (
-        <div className="mb-12">
-          <StepIndicator currentStep={step} totalSteps={totalSteps - 1} />
+    <div className="mx-auto max-w-[720px] px-4 py-8 sm:py-12">
+      {/* Session Expired Banner if redirected */}
+      {sessionNotice && (
+        <div className="mb-6 flex items-center gap-2.5 rounded-[8px] border border-amber-500/40 bg-amber-500/10 p-4 text-sm font-semibold text-amber-300">
+          <AlertCircle className="h-4 w-4 shrink-0 text-amber-400" />
+          <span>{sessionNotice}</span>
         </div>
       )}
 
-      <div className="min-h-[400px] relative rounded-[2rem] border border-slate-800/60 bg-slate-900/40 p-6 sm:p-12 shadow-2xl backdrop-blur-sm overflow-hidden">
-        {/* Subtle background glow */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-1/2 bg-indigo-500/10 blur-[100px] pointer-events-none rounded-full" />
-        
-        <div className="relative z-10">
+      {/* Progress Step Indicator */}
+      <div className="mb-8">
+        <StepIndicator currentStep={step} totalSteps={totalSteps} />
+      </div>
+
+      {/* Wizard Card Container */}
+      <div className="relative rounded-[20px] border border-[#2A3650] bg-[#111827] p-6 sm:p-10 shadow-2xl">
+        <div>
           {step === 1 && (
             <Step1Education
               value={data.education_stage}
               onChange={(val) => updateData({ education_stage: val })}
             />
           )}
+
           {step === 2 && (
             <Step2Location
               city={data.city}
+              province={data.province}
+              targetField={data.target_field}
               onCityChange={(val) => updateData({ city: val })}
+              onProvinceChange={(val) => updateData({ province: val })}
+              onTargetFieldChange={(val) => updateData({ target_field: val })}
             />
-          )}
-          {step === 3 && (
-            <Step3CareerField
-              selected={data.career_interests}
-              onToggle={(val) => toggleArrayItem("career_interests", val)}
-            />
-          )}
-          {step === 4 && (
-            <Step4Motivation
-              selected={data.motivation_tags}
-              onToggle={(val) => toggleArrayItem("motivation_tags", val)}
-            />
-          )}
-          {step === 5 && (
-            <Step5Skills
-              selected={data.skills.map((s) => s.name)}
-              onToggle={(val) => {
-                const isSelected = data.skills.some((s) => s.name === val)
-                if (isSelected) {
-                  updateData({ skills: data.skills.filter((s) => s.name !== val) })
-                } else {
-                  updateData({ skills: [...data.skills, { name: val, level: "beginner" }] })
-                }
-              }}
-            />
-          )}
-          {step === 6 && (
-            <Step6Future
-              selectedGoals={data.future_goals}
-              city={data.city}
-              onToggleGoal={(val) => toggleArrayItem("future_goals", val)}
-              onCityChange={(val) => updateData({ city: val })}
-            />
-          )}
-          {step === 7 && (
-            <Step7Sports
-              selected={data.sports_interest}
-              onSelect={(val) => updateData({ sports_interest: val })}
-            />
-          )}
-          {step === 8 && (
-            <Step8Transition />
           )}
 
-          {error && <div className="mt-8"><ErrorState message={error} /></div>}
+          {error && (
+            <div className="mt-6 flex items-center gap-2 rounded-[6px] border border-rose-900/60 bg-rose-950/30 p-3.5 text-xs text-rose-400">
+              <AlertCircle className="h-4 w-4 shrink-0" />
+              <span>{error}</span>
+            </div>
+          )}
         </div>
 
-        {/* Navigation Buttons */}
-        <div className={`mt-12 flex items-center justify-between pt-6 border-t border-slate-800/60 relative z-10 transition-opacity duration-500 ${isTransitionStep ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
-          {step > 1 && !isTransitionStep ? (
-            <Button
-              variant="outline"
+        {/* Wizard Footer Navigation */}
+        <div className="mt-10 flex items-center justify-between pt-6 border-t border-[#2A3650]">
+          {step > 1 ? (
+            <button
+              type="button"
               onClick={prevStep}
               disabled={loading}
-              className="gap-2 border-slate-700 hover:bg-slate-800 hover:text-white"
+              className="inline-flex items-center gap-2 rounded-[6px] border border-[#2A3650] bg-transparent hover:bg-[#1C2539] px-5 py-2.5 text-sm font-medium text-[#94A3B8] hover:text-[#F1F5F9] transition-colors disabled:opacity-50"
             >
               <ArrowLeft className="h-4 w-4" />
-              Back
-            </Button>
+              <span>Back</span>
+            </button>
           ) : (
             <div />
           )}
 
-          {!isTransitionStep && (
-            step < totalSteps - 1 ? (
-              <Button onClick={nextStep} className="gap-2 bg-indigo-600 hover:bg-indigo-700 text-white">
-                Continue
-                <ArrowRight className="h-4 w-4" />
-              </Button>
-            ) : (
-              <Button
-                onClick={handleFinish}
-                disabled={loading}
-                className="gap-2 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold"
-              >
-                <Sparkles className="h-4 w-4" />
-                Finish
-              </Button>
-            )
+          {step < totalSteps ? (
+            <button
+              type="button"
+              onClick={nextStep}
+              className="inline-flex items-center gap-2 rounded-[6px] bg-[#3B82F6] hover:bg-[#2563EB] px-6 py-3 text-sm font-bold text-white transition-all shadow-sm"
+            >
+              <span>Continue</span>
+              <ArrowRight className="h-4 w-4" />
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={handleFinish}
+              disabled={loading}
+              className="inline-flex items-center gap-2 rounded-[6px] bg-[#3B82F6] hover:bg-[#2563EB] px-6 py-3 text-sm font-bold text-white transition-all shadow-md disabled:opacity-60 disabled:cursor-not-allowed"
+            >
+              {loading ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin text-white" />
+                  <span>Setting Up Journey...</span>
+                </>
+              ) : (
+                <>
+                  <Sparkles className="h-4 w-4" />
+                  <span>Start My Journey</span>
+                  <ArrowRight className="h-4 w-4" />
+                </>
+              )}
+            </button>
           )}
         </div>
       </div>

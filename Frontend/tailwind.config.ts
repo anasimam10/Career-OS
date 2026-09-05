@@ -10,13 +10,24 @@ const config: Config = {
   theme: {
     container: {
       center: true,
-      padding: "2rem",
+      padding: "1.5rem",
       screens: {
-        "2xl": "1400px",
+        "2xl": "1100px",
       },
     },
     extend: {
+      maxWidth: {
+        content: "1100px",
+      },
       colors: {
+        "navy-bg": "var(--color-bg)",
+        "navy-surface": "var(--color-surface)",
+        "navy-surface-2": "var(--color-surface-2)",
+        "navy-border": "var(--color-border)",
+        "navy-accent": "var(--color-accent)",
+        "navy-accent-glow": "var(--color-accent-glow)",
+        "navy-success": "var(--color-success)",
+        "navy-warning": "var(--color-warning)",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
