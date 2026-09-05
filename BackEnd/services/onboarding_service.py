@@ -77,7 +77,16 @@ def complete_onboarding(
         student.province = payload.province
     student.sports_interest = payload.sports_interest
     student.motivation_tags = json.dumps(payload.motivation_tags, ensure_ascii=False)
-    student.career_goal = career.slug if career is not None else None
+    if career is not None:
+        student.career_goal = career.slug
+    elif payload.career_interests:
+        first_interest = payload.career_interests[0].strip()
+        if first_interest.lower() not in _NO_GOAL_VALUES:
+            student.career_goal = first_interest
+        else:
+            student.career_goal = None
+    else:
+        student.career_goal = None
     db.commit()
 
     # ---- Profile row: interests, skills; invalidate the cached NBA -------
