@@ -48,6 +48,7 @@ class CreateStudentPayload(BaseModel):
 class UpdateStudentPayload(BaseModel):
     name: Optional[str] = None
     city: Optional[str] = None
+    province: Optional[str] = None
     education_stage: Optional[str] = None
     career_goal: Optional[str] = None
     sports_interest: Optional[str] = None
@@ -61,6 +62,7 @@ class StudentProfileResponse(BaseModel):
     name: str
     email: str
     city: Optional[str] = None
+    province: Optional[str] = None
     education_stage: str
     career_goal: Optional[str] = None
     sports_interest: Optional[str] = None
@@ -107,6 +109,7 @@ def _build_profile_response(student: Student) -> StudentProfileResponse:
         name=student.name,
         email=student.email,
         city=student.city,
+        province=student.province,
         education_stage=student.education_stage,
         career_goal=student.career_goal,
         sports_interest=student.sports_interest,
@@ -133,6 +136,7 @@ def create_student(
     clean_name = (payload.name or "Student").strip()
     clean_stage = (payload.education_stage or "HIGH_SCHOOL").strip().upper()
     clean_city = (payload.city or "Karachi").strip()
+    clean_province = (payload.province or "").strip() or None
     email = f"student_{uuid.uuid4().hex[:8]}@ahcareers.local"
 
     student = repo.create_with_profile(
@@ -142,6 +146,7 @@ def create_student(
         education_stage=clean_stage,
     )
     student.city = clean_city
+    student.province = clean_province
     if payload.target_field:
         student.career_goal = payload.target_field.strip()
     db.commit()
@@ -197,6 +202,8 @@ def update_my_profile(
         student.name = payload.name.strip()
     if payload.city is not None:
         student.city = payload.city.strip()
+    if payload.province is not None:
+        student.province = payload.province.strip() or None
     if payload.education_stage is not None:
         student.education_stage = payload.education_stage.strip().upper()
     if payload.career_goal is not None:
@@ -255,6 +262,8 @@ def update_student_by_id(
         student.name = payload.name.strip()
     if payload.city is not None:
         student.city = payload.city.strip()
+    if payload.province is not None:
+        student.province = payload.province.strip() or None
     if payload.education_stage is not None:
         student.education_stage = payload.education_stage.strip().upper()
     if payload.career_goal is not None:

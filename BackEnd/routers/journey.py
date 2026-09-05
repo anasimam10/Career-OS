@@ -121,3 +121,41 @@ def complete_journey(
 ) -> ProgressResponse | JSONResponse:
     """Alias for completing a milestone on /journey/complete."""
     return record_progress(request, db=db, student_id=student_id)
+
+
+@router.post("/journey/{student_id}/milestones/{milestone_id}/complete", response_model=JourneyResponse)
+@router.post("/{student_id}/milestones/{milestone_id}/complete", response_model=JourneyResponse)
+def complete_student_milestone_endpoint(
+    student_id: int,
+    milestone_id: int,
+    db: Session = Depends(get_db),
+) -> JourneyResponse | JSONResponse:
+    """Mark a milestone completed and advance the next eligible milestone to active."""
+    try:
+        return journey_service.complete_student_milestone(db, student_id=student_id, milestone_id=milestone_id)
+    except journey_service.StudentNotFoundError:
+        return JSONResponse(
+            status_code=404,
+            content={"detail": "Student profile not found", "error": "Student profile not found"},
+        )
+    except journey_service.MilestoneNotFoundError:
+        return JSONResponse(
+            status_code=404,
+            content={"detail": f"Milestone {milestone_id} not found", "error": f"Milestone {milestone_id} not found"},
+        )
+    except journey_service.MilestoneForbiddenError:
+        return JSONResponse(
+            status_code=403,
+            content={"detail": "Milestone does not belong to student's journey", "error": "Milestone does not belong to student's journey"},
+        )
+    except journey_service.MilestoneAlreadyCompletedError:
+        return JSONResponse(
+            status_code=400,
+            content={"detail": "already_completed", "error": "already_completed"},
+        )
+    except Exception as exc:
+        return JSONResponse(
+            status_code=500,
+            content={"detail": str(exc), "error": "Internal server error"},
+        )
+

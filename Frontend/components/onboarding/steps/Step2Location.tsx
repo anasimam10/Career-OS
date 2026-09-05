@@ -39,16 +39,16 @@ export const PROVINCES = [
 
 export const TARGET_FIELDS = [
   "Software Engineering",
-  "Medicine",
-  "Business",
-  "Engineering",
-  "Design",
-  "Data Science",
-  "Teaching",
+  "Business & Finance",
+  "Medicine & Healthcare",
+  "Engineering (non-CS)",
   "Law",
-  "Finance",
-  "Marketing",
-  "I'm not sure yet",
+  "Education",
+  "Design & Creative",
+  "Data Science & AI",
+  "Media & Communications",
+  "Accounting & Commerce",
+  "Not sure yet",
 ]
 
 export function Step2Location({
@@ -63,10 +63,10 @@ export function Step2Location({
     <div className="space-y-6">
       <div>
         <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#F1F5F9]">
-          Where are you based and what interests you?
+          Where are you based?
         </h2>
         <p className="mt-2 text-sm text-[#94A3B8]">
-          We use this to surface nearby university campuses, verified internships, and matching career intelligence.
+          Select your location and primary field of interest.
         </p>
       </div>
 
@@ -125,12 +125,12 @@ export function Step2Location({
         <div className="space-y-2">
           <label htmlFor="field-select" className="flex items-center gap-2 text-sm font-semibold text-[#F1F5F9]">
             <Target className="h-4 w-4 text-[#3B82F6]" />
-            <span>Target Field <span className="text-[#64748B] font-normal">(Optional)</span></span>
+            <span>What field interests you most? <span className="text-[#64748B] font-normal">(Optional)</span></span>
           </label>
           <div className="relative">
             <select
               id="field-select"
-              value={targetField || "I'm not sure yet"}
+              value={targetField || "Not sure yet"}
               onChange={(e) => onTargetFieldChange(e.target.value)}
               className="w-full h-12 px-4 rounded-[8px] border border-[#2A3650] bg-[#111827] text-[#F1F5F9] focus:outline-none focus:border-[#3B82F6] focus:ring-1 focus:ring-[#3B82F6] transition-colors appearance-none cursor-pointer"
             >

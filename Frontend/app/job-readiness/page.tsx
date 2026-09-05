@@ -44,26 +44,36 @@ export default function JobReadinessPage() {
       <div className="max-w-4xl mx-auto px-4 py-12 space-y-8">
         <SectionHeader
           title="Job Readiness Check"
-          subtitle="See how prepared you are for the job market based on your journey progress."
-          badge="Career Prep"
+          subtitle="Based on your completed milestones."
+          badge="Job readiness"
         />
 
         {!data && !loading && (
-          <Card>
+          <Card className="border border-[#1E2D42] bg-[#111827]">
             <CardContent className="flex flex-col items-center gap-4 py-12">
-              <ClipboardCheck className="h-12 w-12 text-muted-foreground" />
-              <p className="text-muted-foreground text-center max-w-md">
-                Click below to analyze your job readiness based on your profile, skills, and completed milestones.
-              </p>
-              <Button onClick={handleCheck} size="lg">
-                Check My Readiness
+              <ClipboardCheck className="h-12 w-12 text-[#94A3B8]" />
+              <Button onClick={handleCheck} size="lg" className="rounded-[8px] bg-[#2563EB] hover:bg-[#1D4ED8] text-white">
+                Check my readiness
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </CardContent>
           </Card>
         )}
 
-        {loading && <LoadingState message="Analyzing your job readiness..." />}
+        {loading && (
+          <div className="space-y-6 pt-2" aria-busy="true">
+            <div className="h-40 rounded-[12px] border border-[#1E2D42] bg-[#111827] p-6 animate-pulse space-y-4">
+              <div className="h-6 w-36 bg-[#1C2539] rounded" />
+              <div className="h-3.5 w-full bg-[#1C2539] rounded" />
+              <div className="h-3 w-2/3 bg-[#1C2539] rounded" />
+            </div>
+            <div className="h-52 rounded-[12px] border border-[#1E2D42] bg-[#111827] p-6 animate-pulse space-y-3">
+              <div className="h-5 w-40 bg-[#1C2539] rounded" />
+              <div className="h-3 w-full bg-[#1C2539] rounded" />
+              <div className="h-3 w-full bg-[#1C2539] rounded" />
+            </div>
+          </div>
+        )}
         {error && <ErrorState message={error} />}
 
         {data && (

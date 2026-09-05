@@ -87,9 +87,9 @@ export default function SportsPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 space-y-12 relative z-10">
           
           <div className="text-center space-y-4">
-            <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-4 py-1.5 text-xs font-bold tracking-widest text-amber-500 uppercase shadow-[0_0_15px_rgba(245,158,11,0.2)]">
-              <Trophy className="h-3.5 w-3.5" />
-              <span>Athletic Intelligence</span>
+            <div className="inline-flex items-center gap-2 rounded px-2.5 py-1 text-xs font-medium bg-[#1C2539] text-[#94A3B8] border border-[#1E2D42]">
+              <Trophy className="h-3.5 w-3.5 text-amber-500" />
+              <span>Sports</span>
             </div>
             <h1 className="text-3xl md:text-5xl font-extrabold text-[#F1F5F9] tracking-tight">
               Sports opportunities in <span className="text-[#3B82F6]">Pakistan</span>
@@ -256,7 +256,20 @@ export default function SportsPage() {
             </div>
 
             {loading ? (
-              <div className="pt-8"><LoadingState message="Loading sports opportunities..." /></div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-4">
+                {[1, 2, 3, 4, 5, 6].map((i) => (
+                  <div key={i} className="rounded-2xl border border-slate-800 bg-slate-900/40 p-6 space-y-4 animate-pulse">
+                    <div className="flex justify-between items-center">
+                      <div className="h-4 w-16 bg-slate-800 rounded" />
+                      <div className="h-4 w-16 bg-slate-800 rounded" />
+                    </div>
+                    <div className="h-6 w-3/4 bg-slate-800 rounded" />
+                    <div className="h-4 w-full bg-slate-800 rounded" />
+                    <div className="h-4 w-2/3 bg-slate-800 rounded" />
+                    <div className="h-10 w-full bg-slate-800 rounded-xl mt-4" />
+                  </div>
+                ))}
+              </div>
             ) : error ? (
               <div className="pt-8"><ErrorState message={error} /></div>
             ) : sports.length === 0 ? (

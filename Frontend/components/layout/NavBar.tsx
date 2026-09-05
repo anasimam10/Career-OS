@@ -20,9 +20,9 @@ import {
 import { cn } from "@/lib/utils/cn"
 import { isOnboardingComplete, getSession } from "@/lib/session"
 
-// Exactly 5 primary links per UX-01
+// Exactly 5 primary links per UX spec
 const primaryNavItems = [
-  { href: "/careers", label: "Explore Careers", icon: Target },
+  { href: "/careers", label: "Careers", icon: Target },
   { href: "/journey", label: "My Journey", icon: Map },
   { href: "/opportunities", label: "Opportunities", icon: Briefcase },
   { href: "/job-readiness", label: "Job Readiness", icon: ClipboardCheck },
@@ -31,8 +31,8 @@ const primaryNavItems = [
 
 // Secondary links available in mobile menu & footer
 const secondaryNavItems = [
-  { href: "/alumni", label: "Talk to Alumni", icon: Users },
   { href: "/sports", label: "Sports", icon: Trophy },
+  { href: "/alumni", label: "Alumni (Coming Soon)", icon: Users },
 ]
 
 export function NavBar() {
@@ -134,9 +134,9 @@ export function NavBar() {
           ) : (
             <Link
               href="/onboarding"
-              className="inline-flex items-center gap-2 rounded-[6px] bg-[#3B82F6] hover:bg-[#2563EB] px-4 py-2 text-xs font-bold text-white transition-all shadow-sm"
+              className="inline-flex items-center gap-2 rounded-[6px] bg-[#2563EB] hover:bg-[#1D4ED8] px-4 py-2 text-xs font-bold text-white transition-all shadow-sm"
             >
-              <span>Start My Journey</span>
+              <span>Start my journey</span>
               <ArrowRight className="h-3.5 w-3.5" />
             </Link>
           )}
@@ -213,9 +213,9 @@ export function NavBar() {
           <div className="pt-3">
             <Link
               href="/onboarding"
-              className="flex items-center justify-center gap-2 rounded-[6px] bg-[#3B82F6] hover:bg-[#2563EB] min-h-[44px] px-4 text-sm font-bold text-white transition-all shadow-md w-full"
+              className="flex items-center justify-center gap-2 rounded-[6px] bg-[#2563EB] hover:bg-[#1D4ED8] min-h-[44px] px-4 text-sm font-bold text-white transition-all shadow-md w-full"
             >
-              <span>Start My Journey</span>
+              <span>Start my journey</span>
               <ArrowRight className="h-4 w-4" />
             </Link>
           </div>

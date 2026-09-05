@@ -4,15 +4,20 @@
 
 @layer base {
   :root, .dark {
-    /* Professional Dark-Navy System */
+    /* Professional Minimal Design System */
     --color-bg: #0B0F1A;
     --color-surface: #111827;
     --color-surface-2: #1C2539;
-    --color-border: #2A3650;
-    --color-accent: #3B82F6;
-    --color-accent-glow: #60A5FA;
+    --color-border: #1E2D42;
+    --color-border-2: #2A3A54;
+    --color-accent: #2563EB;
+    --color-accent-lt: #3B82F6;
     --color-success: #10B981;
     --color-warning: #F59E0B;
+    --color-error: #EF4444;
+    --color-text: #F1F5F9;
+    --color-text-2: #94A3B8;
+    --color-text-3: #4B5563;
     --color-text-primary: #F1F5F9;
     --color-text-secondary: #94A3B8;
     --color-text-muted: #64748B;

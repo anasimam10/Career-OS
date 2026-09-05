@@ -19,6 +19,7 @@ class Student(Base):
     password_hash: Mapped[str] = mapped_column(String, nullable=False)
     education_stage: Mapped[str] = mapped_column(String, nullable=False, default="HIGH_SCHOOL")
     city: Mapped[str | None] = mapped_column(String, nullable=True)
+    province: Mapped[str | None] = mapped_column(String, nullable=True)
     career_goal: Mapped[str | None] = mapped_column(String, nullable=True)
     sports_interest: Mapped[str | None] = mapped_column(String, nullable=True)
     motivation_tags: Mapped[str | None] = mapped_column(String, nullable=True)  # JSON array

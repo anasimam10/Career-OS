@@ -7,7 +7,7 @@ from __future__ import annotations
 from datetime import date
 from typing import Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from schemas.shared import (
     EducationStage,
@@ -82,12 +82,24 @@ class JourneyStep(BaseModel):
     status: Optional[str] = "pending"
 
 
+class MilestoneItem(BaseModel):
+    id: int
+    title: str
+    description: str = ""
+    status: str = "locked"  # "completed" | "active" | "locked"
+    phase: int = 1
+    order: int = 1
+
+
 class JourneyResponse(BaseModel):
-    stage: EducationStage
-    current_step: str
+    milestones: list[MilestoneItem] = Field(default_factory=list)
     current_milestone_id: Optional[int] = None
-    next_steps: list[JourneyStep]
-    next_best_action: NextBestAction
+    completed_count: int = 0
+    total_count: int = 0
+    stage: Optional[EducationStage] = None
+    current_step: Optional[str] = None
+    next_steps: list[JourneyStep] = Field(default_factory=list)
+    next_best_action: Optional[NextBestAction] = None
 
 
 class ProgressResponse(BaseModel):

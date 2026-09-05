@@ -15,6 +15,35 @@ export const MOCK_NBA: NextBestAction = {
 }
 
 export const MOCK_JOURNEY: JourneyResponse = {
+  milestones: [
+    {
+      id: 1,
+      title: "Self-Assessment",
+      description: "Understand your starting point before choosing a direction.",
+      status: "completed",
+      phase: 1,
+      order: 1,
+    },
+    {
+      id: 2,
+      title: "Career Exploration",
+      description: "Explore in-demand career paths and match them with your profile.",
+      status: "active",
+      phase: 2,
+      order: 2,
+    },
+    {
+      id: 3,
+      title: "Reality Check",
+      description: "Review Pakistani salary ranges, competition, and academic routes.",
+      status: "locked",
+      phase: 3,
+      order: 3,
+    },
+  ],
+  current_milestone_id: 2,
+  completed_count: 1,
+  total_count: 3,
   stage: "CAREER_DISCOVERY",
   current_step: "Explore and decide on a career field",
   next_steps: [

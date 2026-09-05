@@ -41,7 +41,9 @@ export function useOnboarding() {
       setLoading(true)
       setError(null)
       const interests =
-        data.target_field && data.target_field !== "I'm not sure yet"
+        data.target_field &&
+        data.target_field !== "I'm not sure yet" &&
+        data.target_field !== "Not sure yet"
           ? [data.target_field]
           : []
 
@@ -58,6 +60,9 @@ export function useOnboarding() {
       const res = await submitOnboarding(payload)
       const finalId = res.student_id || 1
       saveNewStudentSession(finalId, "Student", payload.city)
+      if (typeof window !== "undefined") {
+        localStorage.setItem("career_os_student_id", String(finalId))
+      }
 
       setResult(res)
       return res

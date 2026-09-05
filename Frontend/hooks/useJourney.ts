@@ -58,7 +58,7 @@ export function useJourney() {
       // Advance local state immediately to avoid full page reload or flicker
       setJourney((prev) => {
         if (!prev) return prev
-        const steps = [...prev.next_steps]
+        const steps = [...(prev.next_steps || [])]
         const currentIndex = steps.findIndex((s) => s.id === targetId)
 
         let updatedSteps: JourneyStep[]

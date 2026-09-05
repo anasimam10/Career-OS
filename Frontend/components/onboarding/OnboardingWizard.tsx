@@ -34,7 +34,10 @@ export function OnboardingWizard() {
 
   const handleFinish = async () => {
     try {
-      await submit()
+      const res = await submit()
+      if (res?.student_id && typeof window !== "undefined") {
+        localStorage.setItem("career_os_student_id", String(res.student_id))
+      }
       router.push("/journey")
     } catch {
       // Error state captured by useOnboarding

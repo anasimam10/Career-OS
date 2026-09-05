@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Search, ExternalLink, MapPin, Clock, Sparkles } from "lucide-react"
 import { getOpportunities, matchOpportunities } from "@/lib/api/opportunities"
 import { SectionHeader } from "@/components/shared/SectionHeader"
@@ -14,6 +14,12 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 import { PageTransition } from "@/components/layout/PageTransition"
 import { getSession } from "@/lib/session"
 import type { Opportunity, OpportunityMatch, OpportunityMatchResponse } from "@/lib/types/opportunity.types"
+
+const PAKISTANI_CITIES = [
+  "Karachi", "Lahore", "Islamabad", "Rawalpindi", "Faisalabad",
+  "Multan", "Peshawar", "Quetta", "Sialkot", "Gujranwala",
+  "Hyderabad", "Abbottabad", "Other",
+]
 
 const TYPE_OPTIONS = [
   { value: "", label: "All Types" },
@@ -43,23 +49,24 @@ export default function OpportunitiesPage() {
   })
   const [matchType, setMatchType] = useState<"internship" | "job">("internship")
 
-  useEffect(() => {
-    async function load() {
-      try {
-        setLoading(true)
-        setError(null)
-        const list = await getOpportunities(
-          selectedType ? { type: selectedType } : undefined
-        )
-        setOpportunities(list)
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "Failed to load opportunities")
-      } finally {
-        setLoading(false)
-      }
+  const loadOpportunities = useCallback(async () => {
+    try {
+      setLoading(true)
+      setError(null)
+      const list = await getOpportunities(
+        selectedType ? { type: selectedType } : undefined
+      )
+      setOpportunities(list)
+    } catch {
+      setError("Couldn't load opportunities right now.")
+    } finally {
+      setLoading(false)
     }
-    load()
   }, [selectedType])
+
+  useEffect(() => {
+    loadOpportunities()
+  }, [loadOpportunities])
 
   const handleMatch = async () => {
     try {
@@ -70,8 +77,8 @@ export default function OpportunitiesPage() {
         opportunity_type: matchType,
       })
       setMatchResult(result)
-    } catch (err) {
-      setMatchError(err instanceof Error ? err.message : "Failed to match opportunities")
+    } catch {
+      setMatchError("Couldn't match opportunities right now.")
     } finally {
       setMatchLoading(false)
     }
@@ -99,18 +106,24 @@ export default function OpportunitiesPage() {
               AI-Powered Opportunity Match
             </CardTitle>
             <CardDescription>
-              Let AI search and rank the best opportunities for your profile, skills, and location.
+              Find matches for your profile.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex flex-col sm:flex-row gap-3">
               <div className="flex-1">
                 <label className="text-xs font-semibold text-muted-foreground mb-1 block">City</label>
-                <Input
+                <select
                   value={matchCity}
                   onChange={(e) => setMatchCity(e.target.value)}
-                  placeholder="e.g. Karachi, Lahore, Islamabad"
-                />
+                  className="w-full h-10 px-3 rounded-md border border-input bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring transition-colors"
+                >
+                  {PAKISTANI_CITIES.map((c) => (
+                    <option key={c} value={c}>
+                      {c}
+                    </option>
+                  ))}
+                </select>
               </div>
               <div className="flex-1">
                 <label className="text-xs font-semibold text-muted-foreground mb-1 block">Type</label>
@@ -198,9 +211,28 @@ export default function OpportunitiesPage() {
           </div>
 
           {loading ? (
-            <LoadingState message="Loading opportunities..." />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-2" aria-busy="true">
+              {[1, 2, 3, 4, 5, 6].map((i) => (
+                <div
+                  key={i}
+                  className="h-56 rounded-[12px] border border-border/60 bg-muted/20 p-6 animate-pulse flex flex-col justify-between"
+                >
+                  <div className="space-y-3">
+                    <div className="h-4 w-20 bg-muted rounded" />
+                    <div className="h-5 w-4/5 bg-muted rounded" />
+                    <div className="h-3.5 w-full bg-muted rounded" />
+                  </div>
+                  <div className="h-4 w-1/2 bg-muted rounded" />
+                </div>
+              ))}
+            </div>
           ) : error ? (
-            <ErrorState message={error} />
+            <div className="text-center py-12 space-y-3">
+              <p className="text-sm text-muted-foreground">{error}</p>
+              <Button variant="outline" size="sm" onClick={() => loadOpportunities()}>
+                Try again
+              </Button>
+            </div>
           ) : filtered.length === 0 ? (
             <EmptyState
               title="No opportunities found"

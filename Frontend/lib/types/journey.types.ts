@@ -41,12 +41,26 @@ export interface JourneyStep {
   phase?: string
 }
 
+export type MilestoneStateStatus = "locked" | "active" | "completed"
+
+export interface MilestoneItem {
+  id: number
+  title: string
+  description: string
+  status: MilestoneStateStatus
+  phase: number
+  order: number
+}
+
 export interface JourneyResponse {
-  stage: EducationStage
-  current_step: string
-  current_milestone_id?: number
-  next_steps: JourneyStep[]
-  next_best_action: NextBestAction
+  milestones: MilestoneItem[]
+  current_milestone_id?: number | null
+  completed_count: number
+  total_count: number
+  stage?: EducationStage
+  current_step?: string
+  next_steps?: JourneyStep[]
+  next_best_action?: NextBestAction
 }
 
 export interface ProgressResponse {

@@ -55,19 +55,20 @@ export function MockInterviewSetup() {
   return (
     <div className="max-w-2xl mx-auto space-y-8 p-8 rounded-[20px] border border-[#2A3650] bg-[#111827] shadow-2xl">
       <div className="space-y-3 text-center">
-        <div className="inline-flex items-center gap-1.5 rounded-full border border-[#3B82F6]/30 bg-[#3B82F6]/10 px-3 py-1 text-xs font-semibold text-[#60A5FA] uppercase tracking-wider">
-          <Sparkles className="h-3.5 w-3.5" />
-          <span>Interactive Assessment</span>
-        </div>
-        <h1 className="text-3xl md:text-4xl font-extrabold text-[#F1F5F9]">AI Mock Interviews</h1>
+        <span className="text-xs font-medium tracking-wider text-[#94A3B8] uppercase">
+          Mock interview
+        </span>
+        <h1 className="text-3xl md:text-4xl font-extrabold text-[#F1F5F9]">
+          Practice before the real interview
+        </h1>
         <p className="text-[#94A3B8] text-sm max-w-md mx-auto">
-          Practice with AI before the real thing. Answer targeted questions and find out where you need more preparation.
+          Answer targeted questions and find out where you need more preparation.
         </p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="space-y-2">
-          <label className="text-sm font-medium text-slate-300">Career / Field</label>
+          <label className="text-sm font-medium text-[#F1F5F9]">Career / Field</label>
           <input
             required
             type="text"
@@ -75,17 +76,17 @@ export function MockInterviewSetup() {
             onChange={(e) => setCareerContext(e.target.value)}
             placeholder="e.g. Software Engineering"
             disabled={loading}
-            className="w-full px-4 py-3 rounded-xl border border-slate-700 bg-slate-800 text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-colors disabled:opacity-50"
+            className="w-full px-4 py-2.5 rounded-[8px] border border-[#1E2D42] bg-[#0B0F1A] text-[#F1F5F9] placeholder-[#4B5563] focus:outline-none focus:border-[#2563EB] transition-colors disabled:opacity-50 text-sm"
           />
           <div className="flex flex-wrap items-center gap-1.5 pt-1">
-            <span className="text-[11px] text-slate-500 mr-1">Popular:</span>
+            <span className="text-[11px] text-[#64748B] mr-1">Popular:</span>
             {SUGGESTIONS.map((item) => (
               <button
                 key={item}
                 type="button"
                 disabled={loading}
                 onClick={() => setCareerContext(item)}
-                className="rounded-lg border border-slate-800 bg-slate-800/60 px-2.5 py-1 text-[11px] font-medium text-slate-400 hover:text-white hover:border-slate-700 transition"
+                className="rounded-[6px] border border-[#1E2D42] bg-[#1C2539]/60 px-2.5 py-1 text-[11px] font-medium text-[#94A3B8] hover:text-[#F1F5F9] hover:border-[#2A3A54] transition"
               >
                 {item}
               </button>
@@ -94,17 +95,24 @@ export function MockInterviewSetup() {
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm font-medium text-slate-300">Difficulty</label>
-          <select
-            value={difficulty}
-            onChange={(e) => setDifficulty(e.target.value)}
-            disabled={loading}
-            className="w-full px-4 py-3 rounded-xl border border-slate-700 bg-slate-800 text-white focus:outline-none focus:border-indigo-500 transition-colors disabled:opacity-50"
-          >
-            <option value="beginner">Beginner</option>
-            <option value="intermediate">Intermediate</option>
-            <option value="advanced">Advanced</option>
-          </select>
+          <label className="text-sm font-medium text-[#F1F5F9]">Difficulty</label>
+          <div className="grid grid-cols-3 gap-2.5">
+            {(["beginner", "intermediate", "advanced"] as const).map((lvl) => (
+              <button
+                key={lvl}
+                type="button"
+                disabled={loading}
+                onClick={() => setDifficulty(lvl)}
+                className={`rounded-[8px] py-2.5 px-4 text-xs font-semibold capitalize transition-all border ${
+                  difficulty === lvl
+                    ? "bg-[#2563EB] border-[#2563EB] text-white shadow-sm"
+                    : "bg-[#1C2539] border-[#1E2D42] text-[#94A3B8] hover:text-[#F1F5F9] hover:bg-[#1C2539]/80"
+                }`}
+              >
+                {lvl}
+              </button>
+            ))}
+          </div>
         </div>
 
         {loading ? (
