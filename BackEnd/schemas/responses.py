@@ -103,6 +103,11 @@ class JourneyResponse(BaseModel):
     current_step: Optional[str] = None
     next_steps: list[JourneyStep] = Field(default_factory=list)
     next_best_action: Optional[NextBestAction] = None
+    career_name: Optional[str] = None
+    career_slug: Optional[str] = None
+    city: Optional[str] = None
+    education_stage_label: Optional[str] = None
+    sports_interest: Optional[str] = None
 
 
 class ProgressResponse(BaseModel):

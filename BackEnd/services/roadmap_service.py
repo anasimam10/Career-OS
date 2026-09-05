@@ -626,17 +626,16 @@ def _get_or_create_roadmap(
 def _instantiate_milestones(db: Session, roadmap: Roadmap, stage: str) -> None:
     """Create milestone instances for the stage, skipping existing ones.
 
-    Dedupe key is (stage, title): several stages legitimately reuse the same
-    template title (e.g. the 7-Day Career Trial appears in HIGH_SCHOOL and
-    CAREER_DISCOVERY) — each stage still needs its own milestone instance.
+    Deduplicates across the entire student roadmap by title so a student never gets
+    duplicate steps (e.g. multiple 7-Day Trials or multiple Reality Checks).
     """
-    existing = {(m.stage, m.title) for m in roadmap.milestones}
+    existing_titles = {m.title for m in roadmap.milestones}
     templates = MILESTONE_TEMPLATES.get(stage, [])
     stage_offset = next(
         (i for i, s in enumerate(STAGE_ORDER) if s.value == stage), 0
     )
     for position, template in enumerate(templates):
-        if (stage, template["title"]) in existing:
+        if template["title"] in existing_titles:
             continue
         db.add(
             Milestone(
@@ -648,6 +647,7 @@ def _instantiate_milestones(db: Session, roadmap: Roadmap, stage: str) -> None:
                 order_index=stage_offset * 100 + position,
             )
         )
+        existing_titles.add(template["title"])
 
 
 def _template_for_title(title: str) -> Optional[dict]:

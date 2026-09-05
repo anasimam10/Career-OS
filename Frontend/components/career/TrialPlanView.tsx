@@ -1,15 +1,56 @@
-"use client"
-
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import Link from "next/link"
-import { Calendar, CheckCircle2, ArrowRight, Map, Briefcase, Check } from "lucide-react"
+import { useRouter } from "next/navigation"
+import { Calendar, CheckCircle2, ArrowRight, Map, Briefcase, Check, Loader2, Sparkles } from "lucide-react"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import type { CareerTrialPlan } from "@/lib/types/career.types"
+import { getJourney, completeMilestone } from "@/lib/api/journey"
 import { cn } from "@/lib/utils/cn"
 
 export function TrialPlanView({ plan }: { plan: CareerTrialPlan }) {
+  const router = useRouter()
   const [completedTasks, setCompletedTasks] = useState<Record<string, boolean>>({})
+  const [isCompleting, setIsCompleting] = useState(false)
+  const [trialMilestoneId, setTrialMilestoneId] = useState<number | null>(null)
+  const [isTrialAlreadyComplete, setIsTrialAlreadyComplete] = useState(false)
+  const [studentId, setStudentId] = useState<string | null>(null)
+
+  useEffect(() => {
+    const sid = typeof window !== "undefined" ? localStorage.getItem("career_os_student_id") : null
+    if (!sid) return
+    setStudentId(sid)
+
+    getJourney(sid)
+      .then((journey) => {
+        const trialM = journey.milestones?.find(
+          (m) =>
+            m.title.toLowerCase().includes("trial") ||
+            m.title.toLowerCase().includes("7-day")
+        )
+        if (trialM) {
+          setTrialMilestoneId(trialM.id)
+          if (trialM.status === "completed") {
+            setIsTrialAlreadyComplete(true)
+          }
+        }
+      })
+      .catch(() => {})
+  }, [])
+
+  const handleCompleteTrial = async () => {
+    if (!studentId || !trialMilestoneId || isCompleting) return
+    setIsCompleting(true)
+    try {
+      await completeMilestone(studentId, trialMilestoneId)
+      router.push("/journey")
+    } catch {
+      // If error or already completed, still safely navigate
+      router.push("/journey")
+    } finally {
+      setIsCompleting(false)
+    }
+  }
 
   const toggleTask = (key: string) => {
     setCompletedTasks((prev) => ({ ...prev, [key]: !prev[key] }))
@@ -124,7 +165,7 @@ export function TrialPlanView({ plan }: { plan: CareerTrialPlan }) {
 
           <div className="pt-4 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-slate-800">
             <p className="text-xs text-slate-400">
-              Finished exploring? Update your career pathway milestones or find verified Pakistani programs.
+              Finished exploring? Complete this trial step to advance your career roadmap.
             </p>
             <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
               <Button asChild variant="outline" className="w-full sm:w-auto gap-2 border-slate-700 bg-slate-800 hover:bg-slate-700 text-white text-xs">
@@ -133,13 +174,34 @@ export function TrialPlanView({ plan }: { plan: CareerTrialPlan }) {
                   Explore Opportunities
                 </Link>
               </Button>
-              <Button asChild className="w-full sm:w-auto gap-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold">
-                <Link href="/journey">
-                  <Map className="h-3.5 w-3.5" />
-                  Continue My Journey
-                  <ArrowRight className="h-3.5 w-3.5" />
-                </Link>
-              </Button>
+              {trialMilestoneId && !isTrialAlreadyComplete ? (
+                <Button
+                  onClick={handleCompleteTrial}
+                  disabled={isCompleting}
+                  className="w-full sm:w-auto gap-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow-lg shadow-emerald-950/40 cursor-pointer"
+                >
+                  {isCompleting ? (
+                    <>
+                      <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                      <span>Updating Journey...</span>
+                    </>
+                  ) : (
+                    <>
+                      <CheckCircle2 className="h-3.5 w-3.5" />
+                      <span>Complete Trial & Advance Journey</span>
+                      <ArrowRight className="h-3.5 w-3.5" />
+                    </>
+                  )}
+                </Button>
+              ) : (
+                <Button asChild className="w-full sm:w-auto gap-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold cursor-pointer">
+                  <Link href="/journey">
+                    <Map className="h-3.5 w-3.5" />
+                    Continue My Journey
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </Link>
+                </Button>
+              )}
             </div>
           </div>
         </div>

@@ -64,6 +64,11 @@ export interface JourneyResponse {
   current_step?: string
   next_steps?: JourneyStep[]
   next_best_action?: NextBestAction
+  career_name?: string | null
+  career_slug?: string | null
+  city?: string | null
+  education_stage_label?: string | null
+  sports_interest?: string | null
 }
 
 export interface ProgressResponse {

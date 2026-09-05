@@ -59,6 +59,20 @@ def get_journey(db: Session, student_id: int = DEMO_STUDENT_ID) -> JourneyRespon
     roadmap_service.ensure_full_roadmap_milestones(db, student.id, stage.value)
     all_milestones = roadmap_service.get_student_milestones(db, student.id)
 
+    # Self-healing: Deduplicate any milestones with identical titles on the student's roadmap
+    deduped_milestones = []
+    seen_titles = set()
+    for m in all_milestones:
+        if m.title in seen_titles:
+            # If the duplicate is completed and the previously recorded one wasn't, prioritize the completed one
+            prev_idx = next((i for i, x in enumerate(deduped_milestones) if x.title == m.title), None)
+            if prev_idx is not None and m.status in ("completed", "done") and deduped_milestones[prev_idx].status not in ("completed", "done"):
+                deduped_milestones[prev_idx] = m
+            continue
+        seen_titles.add(m.title)
+        deduped_milestones.append(m)
+    all_milestones = deduped_milestones
+
     # Ensure the first incomplete milestone has 'active' status if none is active
     has_active = any(m.status == "active" for m in all_milestones)
     first_incomplete = next((m for m in all_milestones if m.status not in ("completed", "done")), None)
@@ -140,6 +154,33 @@ def get_journey(db: Session, student_id: int = DEMO_STUDENT_ID) -> JourneyRespon
 
     nba = nba_service.generate_nba(db, student)
 
+    # Human-friendly stage label
+    stage_labels = {
+        "HIGH_SCHOOL": "High School / Intermediate",
+        "CAREER_DISCOVERY": "Career Discovery",
+        "CAREER_DECISION": "Career Decision",
+        "UNIVERSITY": "Undergraduate",
+        "SKILL_BUILDING": "Skill Building",
+        "PROJECTS": "Projects & Portfolio",
+        "INTERNSHIP": "Internship Prep",
+        "FINAL_YEAR": "Final Year / Thesis",
+        "JOB_PREPARATION": "Job Preparation",
+        "FIRST_JOB": "Early Career / First Job",
+    }
+    stage_val = stage.value if hasattr(stage, "value") else str(stage)
+    stage_label = stage_labels.get(stage_val, stage_val.replace("_", " ").title())
+
+    career_name = student.career_goal
+    if not career_name and student.profile and student.profile.interests:
+        try:
+            interests = json.loads(student.profile.interests)
+            if interests:
+                career_name = interests[0]
+        except Exception:
+            pass
+    if not career_name:
+        career_name = "Software Engineering"
+
     return JourneyResponse(
         milestones=milestone_items,
         current_milestone_id=current_milestone_id,
@@ -149,6 +190,11 @@ def get_journey(db: Session, student_id: int = DEMO_STUDENT_ID) -> JourneyRespon
         current_step=current_step,
         next_steps=next_steps,
         next_best_action=nba,
+        career_name=career_name,
+        career_slug=career_slug or "software-engineering",
+        city=student.city or "Pakistan",
+        education_stage_label=stage_label,
+        sports_interest=student.sports_interest,
     )
 
 
@@ -188,13 +234,21 @@ def complete_student_milestone(
         # Step 4 & 5: Mark completed and commit
         milestone.status = "completed"
         milestone.completed_at = datetime.now(timezone.utc)
+
+        # Mark any duplicate milestone on this student's roadmap as completed
+        if roadmap:
+            for other in roadmap.milestones:
+                if other.id != milestone.id and other.title == milestone.title:
+                    other.status = "completed"
+                    other.completed_at = milestone.completed_at
         db.commit()
 
         # Step 6 & 7: Calculate next eligible milestone and mark active
         all_milestones = roadmap_service.get_student_milestones(db, student.id)
+        completed_titles = {m.title for m in all_milestones if m.status in ("completed", "done")}
         next_milestone = None
         for m in all_milestones:
-            if m.id != milestone.id and m.status in ("locked", "pending"):
+            if m.id != milestone.id and m.title not in completed_titles and m.status in ("locked", "pending"):
                 next_milestone = m
                 break
 
@@ -202,8 +256,9 @@ def complete_student_milestone(
         if next_milestone is None:
             _advance_stage_if_ready(db, student)
             all_milestones = roadmap_service.get_student_milestones(db, student.id)
+            completed_titles = {m.title for m in all_milestones if m.status in ("completed", "done")}
             for m in all_milestones:
-                if m.status in ("locked", "pending"):
+                if m.title not in completed_titles and m.status in ("locked", "pending"):
                     next_milestone = m
                     break
 

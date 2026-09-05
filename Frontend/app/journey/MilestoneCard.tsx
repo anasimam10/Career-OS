@@ -107,8 +107,8 @@ export function MilestoneCard({
             )}
           </button>
         ) : (
-          <div className="h-11 flex items-center justify-center text-xs text-[#64748B] font-medium italic">
-            Locked · Complete previous step first
+          <div className="h-11 flex items-center justify-center text-xs text-[#64748B] font-medium">
+            Upcoming · Complete previous step to unlock
           </div>
         )}
       </div>

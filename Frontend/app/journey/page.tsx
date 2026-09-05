@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation"
 import Link from "next/link"
 import {
   CheckCircle2,
-  Lock,
   ArrowRight,
   Loader2,
   AlertCircle,
@@ -17,17 +16,23 @@ import {
   GraduationCap,
   Briefcase,
   Layers,
+  MapPin,
+  Trophy,
+  ExternalLink,
   ChevronRight,
+  Circle,
+  Clock,
 } from "lucide-react"
 import { getJourney, completeMilestone } from "@/lib/api/journey"
 import type { JourneyResponse, MilestoneItem } from "@/lib/types/journey.types"
 import { PageTransition } from "@/components/layout/PageTransition"
+import { TalkToAlumniSection } from "@/components/alumni/TalkToAlumniSection"
 import { cn } from "@/lib/utils/cn"
 
 const PHASE_METADATA: Record<number, { title: string; subtitle: string; icon: React.ElementType }> = {
   1: {
     title: "Exploration & Reality Check",
-    subtitle: "Explore in-demand careers, verify Pakistani market realities, and test-drive hands-on work.",
+    subtitle: "Explore target careers, evaluate Pakistan market realities, and test-drive hands-on work.",
     icon: Compass,
   },
   2: {
@@ -37,7 +42,7 @@ const PHASE_METADATA: Record<number, { title: string; subtitle: string; icon: Re
   },
   3: {
     title: "Skill Building & Resources",
-    subtitle: "Master required technical competencies with curated roadmaps and regular exercises.",
+    subtitle: "Master required technical competencies with curated roadmaps and hands-on practice.",
     icon: Layers,
   },
   4: {
@@ -52,31 +57,73 @@ const PHASE_METADATA: Record<number, { title: string; subtitle: string; icon: Re
   },
 }
 
-function resolveAction(milestone: MilestoneItem): { label: string; url: string } | null {
+function resolveAction(
+  milestone: MilestoneItem,
+  careerSlug: string = "software-engineering"
+): { label: string; url: string; reviewLabel?: string } | null {
   if (milestone.action_label && milestone.action_url) {
-    return { label: milestone.action_label, url: milestone.action_url }
+    return {
+      label: milestone.action_label,
+      url: milestone.action_url,
+      reviewLabel: milestone.action_label.replace("Start", "Review").replace("Run", "View"),
+    }
   }
   const title = milestone.title.toLowerCase()
   if (title.includes("reality check")) {
-    return { label: "Start Reality Check →", url: "/careers" }
+    return {
+      label: "Start Reality Check →",
+      url: `/careers/${careerSlug}/reality-check`,
+      reviewLabel: "Review Reality Check →",
+    }
   }
   if (title.includes("7-day") || title.includes("trial")) {
-    return { label: "Start 7-Day Trial →", url: "/careers/software-engineering/trial" }
+    return {
+      label: "Start 7-Day Trial →",
+      url: `/careers/${careerSlug}/trial`,
+      reviewLabel: "Review Trial Plan →",
+    }
   }
   if (title.includes("explore") || title.includes("compare")) {
-    return { label: "Explore Careers →", url: "/careers" }
+    return {
+      label: "Explore Careers →",
+      url: "/careers",
+      reviewLabel: "Browse Careers →",
+    }
   }
   if (title.includes("interview")) {
-    return { label: "Start Mock Interview →", url: "/mock-interview" }
+    return {
+      label: "Start Mock Interview →",
+      url: "/mock-interview",
+      reviewLabel: "Practice Interview →",
+    }
   }
   if (title.includes("skill") || title.includes("learn") || title.includes("practice")) {
-    return { label: "View Learning Roadmaps →", url: "/opportunities" }
+    return {
+      label: "View Learning Roadmaps →",
+      url: "/opportunities",
+      reviewLabel: "View Roadmaps →",
+    }
   }
   if (title.includes("cv") || title.includes("routine") || title.includes("readiness")) {
-    return { label: "Check Job Readiness →", url: "/job-readiness" }
+    return {
+      label: "Check Job Readiness →",
+      url: "/job-readiness",
+      reviewLabel: "View Readiness Score →",
+    }
   }
-  if (title.includes("goal") || title.includes("finalize")) {
-    return { label: "View Profile →", url: "/profile" }
+  if (title.includes("opportunity") || title.includes("scholarship") || title.includes("internship")) {
+    return {
+      label: "Find Opportunities →",
+      url: "/opportunities",
+      reviewLabel: "View Opportunities →",
+    }
+  }
+  if (title.includes("goal") || title.includes("finalize") || title.includes("profile")) {
+    return {
+      label: "View Profile →",
+      url: "/profile",
+      reviewLabel: "View Profile →",
+    }
   }
   return null
 }
@@ -101,7 +148,7 @@ export default function JourneyPage() {
   }, [router])
 
   // 2. Fetch journey data
-  const fetchJourneyData = (sid: string) => {
+  const fetchJourneyData = React.useCallback((sid: string) => {
     setLoading(true)
     setError(null)
     getJourney(sid)
@@ -118,12 +165,12 @@ export default function JourneyPage() {
         setError("Could not load your career roadmap.")
       })
       .finally(() => setLoading(false))
-  }
+  }, [router])
 
   useEffect(() => {
     if (!studentId) return
     fetchJourneyData(studentId)
-  }, [studentId])
+  }, [studentId, fetchJourneyData])
 
   // 3. Milestone completion handler
   const handleComplete = async (milestoneId: number) => {
@@ -135,7 +182,7 @@ export default function JourneyPage() {
       const updatedJourney = await completeMilestone(studentId, milestoneId)
       setJourneyData(updatedJourney)
 
-      // Auto-scroll to newly active milestone
+      // Smooth scroll to next active milestone
       const nextActive = updatedJourney.milestones?.find((m) => m.status === "active")
       if (nextActive) {
         setTimeout(() => {
@@ -154,11 +201,29 @@ export default function JourneyPage() {
     }
   }
 
-  const milestones: MilestoneItem[] = journeyData?.milestones || []
+  const milestones: MilestoneItem[] = useMemo(
+    () => journeyData?.milestones || [],
+    [journeyData?.milestones]
+  )
   const completedCount = journeyData?.completed_count ?? milestones.filter((m) => m.status === "completed").length
   const totalCount = journeyData?.total_count || milestones.length
   const progressPercent = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0
   const isAllComplete = totalCount > 0 && completedCount === totalCount
+
+  // Active (Current) and Up Next milestones
+  const activeMilestone = useMemo(
+    () => milestones.find((m) => m.status === "active") || null,
+    [milestones]
+  )
+
+  const upNextMilestone = useMemo(() => {
+    if (!activeMilestone) return null
+    const activeIdx = milestones.findIndex((m) => m.id === activeMilestone.id)
+    if (activeIdx !== -1 && activeIdx + 1 < milestones.length) {
+      return milestones[activeIdx + 1]
+    }
+    return null
+  }, [milestones, activeMilestone])
 
   // Group milestones by Phase
   const phases = useMemo(() => {
@@ -176,52 +241,86 @@ export default function JourneyPage() {
       .sort((a, b) => a.phase - b.phase)
   }, [milestones])
 
+  const careerSlug = journeyData?.career_slug || "software-engineering"
+  const careerName = journeyData?.career_name || "Software Engineering"
+  const userCity = journeyData?.city || "Karachi"
+  const userStage = journeyData?.education_stage_label || "Undergraduate"
+
   return (
     <PageTransition>
-      <div className="bg-[#0B0F1A] min-h-screen pt-10 pb-28 text-[#F1F5F9]">
-        <div className="mx-auto max-w-[1100px] px-4 sm:px-6 space-y-10">
-          
-          {/* Header & Overall Pathway Progress */}
-          <div className="space-y-4">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#1E2D42] bg-[#111827] text-xs font-semibold text-[#60A5FA]">
-              <Sparkles className="h-3.5 w-3.5 text-[#3B82F6]" />
-              <span>Full Career Pathway</span>
-            </div>
+      <div className="bg-[#0B0F1A] min-h-screen pt-8 pb-28 text-[#F1F5F9]">
+        <div className="mx-auto max-w-[1040px] px-4 sm:px-6 space-y-10">
 
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-              <div className="space-y-2">
-                <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#F1F5F9] tracking-tight">
-                  My Career Journey
+          {/* ========================================================================= */}
+          {/* SECTION A: CURRENT CONTEXT HEADER                                          */}
+          {/* ========================================================================= */}
+          <header className="rounded-3xl border border-[#1E2D42] bg-[#111827]/90 p-6 sm:p-8 backdrop-blur-md relative overflow-hidden shadow-xl">
+            <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600/5 rounded-full blur-3xl pointer-events-none" />
+
+            <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+              <div className="space-y-3">
+                <div className="flex flex-wrap items-center gap-2.5">
+                  <span className="inline-flex items-center gap-1.5 rounded-full border border-blue-500/30 bg-blue-500/10 px-3 py-1 text-xs font-semibold text-blue-400">
+                    <Sparkles className="h-3.5 w-3.5 text-blue-400" />
+                    Career OS Pathway
+                  </span>
+
+                  <span className="inline-flex items-center gap-1 rounded-full border border-[#1E2D42] bg-[#1C2539] px-2.5 py-0.5 text-xs text-[#94A3B8]">
+                    <MapPin className="h-3 w-3 text-blue-400" />
+                    {userCity}
+                  </span>
+
+                  <span className="inline-flex items-center rounded-full border border-[#1E2D42] bg-[#1C2539] px-2.5 py-0.5 text-xs text-[#94A3B8]">
+                    {userStage}
+                  </span>
+
+                  {journeyData?.sports_interest && (
+                    <Link
+                      href="/sports"
+                      className="inline-flex items-center gap-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-0.5 text-xs font-medium text-emerald-400 hover:bg-emerald-500/20 transition-colors"
+                    >
+                      <Trophy className="h-3 w-3 text-emerald-400" />
+                      Sports Pathway: {journeyData.sports_interest}
+                    </Link>
+                  )}
+                </div>
+
+                <h1 className="text-3xl sm:text-4xl font-black text-[#F1F5F9] tracking-tight">
+                  {careerName}
                 </h1>
-                <p className="text-sm sm:text-base text-[#94A3B8] max-w-2xl leading-relaxed">
-                  Your personalized, end-to-end roadmap connecting career exploration, hands-on trials, skills, and interview readiness.
+
+                <p className="text-xs sm:text-sm text-[#94A3B8] max-w-xl leading-relaxed">
+                  Your personalized career pathway connecting exploration, hands-on trials, degree programs, skills, and placement readiness in Pakistan.
                 </p>
               </div>
 
+              {/* Progress Tracker Card */}
               {!loading && !error && totalCount > 0 && (
-                <div className="shrink-0 bg-[#111827] border border-[#1E2D42] rounded-2xl p-4 sm:p-5 w-full md:w-80 shadow-lg space-y-2.5">
+                <div className="shrink-0 bg-[#0B0F1A]/80 border border-[#1E2D42] rounded-2xl p-5 w-full md:w-72 shadow-md space-y-3">
                   <div className="flex justify-between items-center text-xs font-bold">
-                    <span className="text-[#94A3B8]">Overall Progress</span>
-                    <span className="text-[#3B82F6] font-extrabold text-sm">{progressPercent}%</span>
+                    <span className="text-[#94A3B8] uppercase tracking-wider text-[11px]">Pathway Progress</span>
+                    <span className="text-blue-400 font-extrabold text-sm">{progressPercent}%</span>
                   </div>
-                  <div className="h-2.5 w-full bg-[#1C2539] rounded-full overflow-hidden">
+
+                  <div className="h-2 w-full bg-[#1C2539] rounded-full overflow-hidden">
                     <div
-                      className="h-full bg-gradient-to-r from-[#2563EB] to-[#3B82F6] rounded-full transition-all duration-700 ease-out"
+                      className="h-full bg-gradient-to-r from-blue-600 via-blue-500 to-emerald-400 rounded-full transition-all duration-700 ease-out"
                       style={{ width: `${progressPercent}%` }}
                     />
                   </div>
+
                   <div className="flex justify-between items-center text-[11px] text-[#64748B] font-medium">
-                    <span>{completedCount} of {totalCount} milestones completed</span>
+                    <span>{completedCount} of {totalCount} steps completed</span>
                     {isAllComplete && <span className="text-[#10B981] font-semibold">Ready for Job ✓</span>}
                   </div>
                 </div>
               )}
             </div>
-          </div>
+          </header>
 
           {/* Error Banner */}
           {completionError && (
-            <div className="flex items-center gap-3 rounded-xl border border-rose-900/60 bg-rose-950/40 p-4 text-xs font-medium text-rose-300 animate-fade-in">
+            <div className="flex items-center gap-3 rounded-2xl border border-rose-900/60 bg-rose-950/40 p-4 text-xs font-medium text-rose-300 animate-fade-in">
               <AlertCircle className="h-4 w-4 shrink-0 text-rose-400" />
               <span>{completionError}</span>
             </div>
@@ -230,24 +329,16 @@ export default function JourneyPage() {
           {/* Loading Skeleton */}
           {loading ? (
             <div className="space-y-8 pt-4" aria-busy="true" aria-label="Loading career journey">
-              {[1, 2, 3].map((p) => (
-                <div key={p} className="space-y-4">
-                  <div className="h-5 w-48 bg-[#1C2539] rounded animate-pulse" />
-                  <div className="space-y-3">
-                    {[1, 2].map((i) => (
-                      <div
-                        key={i}
-                        className="h-28 rounded-2xl border border-[#1E2D42] bg-[#111827] p-6 animate-pulse flex flex-col justify-between"
-                      >
-                        <div className="space-y-2.5">
-                          <div className="h-3 w-32 bg-[#1C2539] rounded" />
-                          <div className="h-4 w-3/5 bg-[#1C2539] rounded" />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
+              <div className="h-44 rounded-3xl border border-[#1E2D42] bg-[#111827] p-8 animate-pulse space-y-4">
+                <div className="h-4 w-32 bg-[#1C2539] rounded" />
+                <div className="h-6 w-3/5 bg-[#1C2539] rounded" />
+                <div className="h-4 w-4/5 bg-[#1C2539] rounded" />
+              </div>
+              <div className="space-y-4">
+                {[1, 2, 3].map((p) => (
+                  <div key={p} className="h-24 rounded-2xl border border-[#1E2D42] bg-[#111827] p-6 animate-pulse" />
+                ))}
+              </div>
             </div>
           ) : error ? (
             /* Error State with Retry Button */
@@ -260,7 +351,7 @@ export default function JourneyPage() {
                 <button
                   type="button"
                   onClick={() => studentId && fetchJourneyData(studentId)}
-                  className="inline-flex items-center gap-2 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white px-5 py-2.5 text-xs font-bold transition-all shadow-md cursor-pointer"
+                  className="inline-flex items-center gap-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white px-5 py-2.5 text-xs font-bold transition-all shadow-md cursor-pointer"
                 >
                   <RefreshCw className="h-3.5 w-3.5" />
                   <span>Retry</span>
@@ -279,245 +370,431 @@ export default function JourneyPage() {
               <p className="text-[#94A3B8] text-sm">Your roadmap is not initialized yet.</p>
               <Link
                 href="/onboarding"
-                className="inline-flex items-center gap-2 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] px-6 py-3 text-sm font-bold text-white transition-all shadow-md"
+                className="inline-flex items-center gap-2 rounded-xl bg-blue-600 hover:bg-blue-500 px-6 py-3 text-sm font-bold text-white transition-all shadow-md"
               >
                 <span>Start My Journey</span>
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
-          ) : (
-            /* Full Multi-Phase Journey Pathway */
-            <div className="space-y-12 pt-2">
-              {phases.map(({ phase, items }) => {
-                const meta = PHASE_METADATA[phase] || {
-                  title: `Phase ${phase}`,
-                  subtitle: "Advance your milestones toward graduation and career placement.",
-                  icon: Layers,
-                }
-                const PhaseIcon = meta.icon
-                const phaseCompleted = items.every((m) => m.status === "completed")
-                const hasActive = items.some((m) => m.status === "active")
+          ) : isAllComplete ? (
+            /* ========================================================================= */
+            /* SECTION 16: TERMINAL CAREER DASHBOARD (POST-COMPLETION LAUNCHPAD)         */
+            /* ========================================================================= */
+            <div className="space-y-8 animate-fade-in">
+              <div className="rounded-3xl border border-emerald-500/30 bg-gradient-to-b from-emerald-500/10 via-[#111827] to-[#111827] p-8 sm:p-10 text-center relative overflow-hidden shadow-2xl">
+                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 mb-4">
+                  <CheckCircle2 className="h-9 w-9 stroke-[2.5]" />
+                </div>
+                <div className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 px-3 py-1 text-xs font-bold text-emerald-400 mb-3">
+                  Core Pathway Completed
+                </div>
+                <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight mb-3">
+                  You&apos;re Prepared for {careerName}
+                </h2>
+                <p className="text-sm text-slate-300 max-w-xl mx-auto leading-relaxed mb-6">
+                  You have completed the foundational milestones from career reality testing to skill readiness. Now turn your preparation into applications and placement.
+                </p>
 
-                return (
-                  <section key={phase} className="space-y-4">
-                    {/* Phase Header */}
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-[#1E2D42]">
-                      <div className="flex items-center gap-3">
-                        <div
-                          className={cn(
-                            "flex h-8 w-8 items-center justify-center rounded-lg border text-xs font-bold transition-colors",
-                            phaseCompleted
-                              ? "border-[#10B981]/40 bg-[#10B981]/10 text-[#10B981]"
-                              : hasActive
-                              ? "border-[#3B82F6]/60 bg-[#3B82F6]/15 text-[#3B82F6]"
-                              : "border-[#1E2D42] bg-[#1C2539] text-[#64748B]"
-                          )}
-                        >
-                          <PhaseIcon className="h-4 w-4" />
-                        </div>
-                        <div>
-                          <h2 className="text-base sm:text-lg font-bold text-[#F1F5F9] tracking-tight">
-                            Phase {phase}: {meta.title}
-                          </h2>
-                          <p className="text-xs text-[#94A3B8] hidden sm:block">
-                            {meta.subtitle}
-                          </p>
-                        </div>
-                      </div>
+                <div className="pt-2 flex flex-wrap items-center justify-center gap-4">
+                  <Link
+                    href="/opportunities"
+                    className="inline-flex items-center gap-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white px-6 py-3 text-sm font-bold transition-all shadow-lg shadow-blue-900/30"
+                  >
+                    <Briefcase className="h-4 w-4" />
+                    <span>Explore Verified Opportunities</span>
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
+                  <Link
+                    href="/mock-interview"
+                    className="inline-flex items-center gap-2 rounded-xl border border-[#2A3A54] bg-[#1C2539] hover:bg-[#2563EB] hover:border-blue-500 text-white px-6 py-3 text-sm font-semibold transition-all"
+                  >
+                    <span>Practice AI Mock Interview</span>
+                  </Link>
+                </div>
+              </div>
 
-                      <div className="self-start sm:self-center">
-                        {phaseCompleted ? (
-                          <span className="inline-flex items-center gap-1.5 rounded-full bg-[#10B981]/15 px-3 py-1 text-[11px] font-bold text-[#10B981]">
-                            <CheckCircle2 className="h-3 w-3" />
-                            <span>Phase Complete</span>
-                          </span>
-                        ) : hasActive ? (
-                          <span className="inline-flex items-center gap-1.5 rounded-full bg-[#3B82F6]/15 px-3 py-1 text-[11px] font-bold text-[#60A5FA]">
-                            <span className="h-1.5 w-1.5 rounded-full bg-[#3B82F6] animate-pulse" />
-                            <span>In Progress</span>
-                          </span>
-                        ) : (
-                          <span className="inline-flex items-center gap-1 rounded-full bg-[#1C2539] px-2.5 py-0.5 text-[11px] font-semibold text-[#64748B]">
-                            <Lock className="h-3 w-3" />
-                            <span>Upcoming</span>
-                          </span>
-                        )}
-                      </div>
+              {/* Action Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <div className="rounded-2xl border border-[#1E2D42] bg-[#111827] p-6 space-y-3 flex flex-col justify-between">
+                  <div className="space-y-2">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-500/15 text-blue-400">
+                      <Briefcase className="h-4 w-4" />
                     </div>
+                    <h3 className="text-base font-bold text-white">Entry-Level Roles & Internships</h3>
+                    <p className="text-xs text-[#94A3B8] leading-relaxed">
+                      Discover verified Pakistani opportunities aligned with your completed skills.
+                    </p>
+                  </div>
+                  <Link
+                    href="/opportunities"
+                    className="text-xs font-semibold text-blue-400 hover:text-blue-300 inline-flex items-center gap-1.5 pt-2"
+                  >
+                    <span>Browse Opportunities</span>
+                    <ChevronRight className="h-3.5 w-3.5" />
+                  </Link>
+                </div>
 
-                    {/* Milestone Cards in Phase */}
-                    <div className="space-y-3 pl-1 sm:pl-2">
-                      {items.map((milestone) => {
-                        const isCompleted = milestone.status === "completed"
-                        const isActive = milestone.status === "active"
-                        const isLocked = milestone.status === "locked"
-                        const action = resolveAction(milestone)
+                <div className="rounded-2xl border border-[#1E2D42] bg-[#111827] p-6 space-y-3 flex flex-col justify-between">
+                  <div className="space-y-2">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-500/15 text-indigo-400">
+                      <GraduationCap className="h-4 w-4" />
+                    </div>
+                    <h3 className="text-base font-bold text-white">Mock Interview Practice</h3>
+                    <p className="text-xs text-[#94A3B8] leading-relaxed">
+                      Practice realistic behavioral and technical interview questions powered by Qwen.
+                    </p>
+                  </div>
+                  <Link
+                    href="/mock-interview"
+                    className="text-xs font-semibold text-blue-400 hover:text-blue-300 inline-flex items-center gap-1.5 pt-2"
+                  >
+                    <span>Start Interview</span>
+                    <ChevronRight className="h-3.5 w-3.5" />
+                  </Link>
+                </div>
 
-                        return (
-                          <div
-                            key={milestone.id}
-                            id={`milestone-${milestone.id}`}
-                            className={cn(
-                              "relative rounded-2xl border transition-all duration-300 p-5 sm:p-6",
-                              isActive && [
-                                "border-[#3B82F6] border-l-[5px] bg-[#111827] shadow-[0_0_25px_rgba(59,130,246,0.18)]",
-                                "ring-1 ring-[#3B82F6]/30",
-                              ],
-                              isCompleted && [
-                                "border-[#1E2D42]/80 border-l-[4px] border-l-[#10B981] bg-[#111827]/80 hover:border-[#2A3A54]",
-                              ],
-                              isLocked && [
-                                "border-[#1E2D42]/60 bg-[#111827]/40 opacity-55 hover:opacity-75 transition-opacity",
-                              ]
-                            )}
-                          >
-                            <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
-                              <div className="flex items-start gap-3.5 flex-1">
-                                {/* State Icon */}
-                                <div className="mt-0.5 shrink-0">
-                                  {isCompleted ? (
-                                    <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[#10B981]/20 text-[#10B981]">
-                                      <CheckCircle2 className="h-4 w-4 stroke-[2.5px]" />
-                                    </div>
-                                  ) : isActive ? (
-                                    <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[#3B82F6]/20 text-[#3B82F6] shadow-sm">
-                                      <span className="h-2.5 w-2.5 rounded-full bg-[#3B82F6] animate-ping" />
-                                    </div>
-                                  ) : (
-                                    <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[#1C2539] text-[#64748B]">
-                                      <Lock className="h-3.5 w-3.5" />
-                                    </div>
-                                  )}
-                                </div>
-
-                                <div className="space-y-1.5 flex-1">
-                                  <div className="flex items-center gap-2">
-                                    <span className="text-[11px] font-semibold text-[#64748B] uppercase tracking-wider">
-                                      Step {milestone.order}
-                                    </span>
-                                    {isActive && (
-                                      <span className="inline-flex items-center rounded px-2 py-0.5 text-[10px] font-bold bg-[#3B82F6]/20 text-[#60A5FA]">
-                                        Current Step
-                                      </span>
-                                    )}
-                                    {isCompleted && (
-                                      <span className="inline-flex items-center rounded px-2 py-0.5 text-[10px] font-semibold bg-[#10B981]/15 text-[#10B981]">
-                                        Completed ✓
-                                      </span>
-                                    )}
-                                  </div>
-
-                                  <h3
-                                    className={cn(
-                                      "text-base sm:text-lg font-bold tracking-tight",
-                                      isActive
-                                        ? "text-[#F1F5F9]"
-                                        : isCompleted
-                                        ? "text-[#E2E8F0]"
-                                        : "text-[#94A3B8]"
-                                    )}
-                                  >
-                                    {milestone.title}
-                                  </h3>
-
-                                  {milestone.description && (
-                                    <p
-                                      className={cn(
-                                        "text-xs sm:text-sm leading-relaxed max-w-2xl",
-                                        isActive
-                                          ? "text-[#94A3B8]"
-                                          : isCompleted
-                                          ? "text-[#64748B]"
-                                          : "text-[#64748B]"
-                                      )}
-                                    >
-                                      {milestone.description}
-                                    </p>
-                                  )}
-                                </div>
-                              </div>
-
-                              {/* Right Badge Status */}
-                              <div className="self-start sm:self-center shrink-0">
-                                {isLocked && (
-                                  <span className="inline-flex items-center gap-1 rounded-lg bg-[#1C2539] px-3 py-1 text-[11px] font-medium text-[#64748B] border border-[#2A3650]/40">
-                                    <Lock className="h-3 w-3" />
-                                    <span>Locked</span>
-                                  </span>
-                                )}
-                              </div>
+                <div className="rounded-2xl border border-[#1E2D42] bg-[#111827] p-6 space-y-3 flex flex-col justify-between">
+                  <div className="space-y-2">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-500/15 text-emerald-400">
+                      <CheckCircle2 className="h-4 w-4" />
+                    </div>
+                    <h3 className="text-base font-bold text-white">Job Readiness Audit</h3>
+                    <p className="text-xs text-[#94A3B8] leading-relaxed">
+                      Check your placement readiness score and final resume recommendations.
+                    </p>
+                  </div>
+                  <Link
+                    href="/job-readiness"
+                    className="text-xs font-semibold text-blue-400 hover:text-blue-300 inline-flex items-center gap-1.5 pt-2"
+                  >
+                    <span>View Readiness Score</span>
+                    <ChevronRight className="h-3.5 w-3.5" />
+                  </Link>
+                </div>
+              </div>
+            </div>
+          ) : (
+            /* ========================================================================= */
+            /* SECTIONS C & D: CURRENT FOCUS HERO & UP NEXT SPOTLIGHT                     */
+            /* ========================================================================= */
+            <div className="space-y-10">
+              {activeMilestone && (
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                  {/* Current Focus Card (2 Columns) */}
+                  {(() => {
+                    const action = resolveAction(activeMilestone, careerSlug)
+                    return (
+                      <div className="lg:col-span-2 rounded-3xl border-2 border-blue-500/70 bg-gradient-to-br from-blue-950/40 via-[#111827] to-[#111827] p-6 sm:p-8 shadow-[0_0_40px_rgba(59,130,246,0.18)] relative overflow-hidden flex flex-col justify-between gap-6">
+                        <div className="space-y-4">
+                          <div className="flex items-center justify-between gap-3">
+                            <div className="inline-flex items-center gap-2 rounded-full border border-blue-500/40 bg-blue-500/20 px-3 py-1 text-xs font-bold text-blue-300">
+                              <span className="h-2 w-2 rounded-full bg-blue-400 animate-ping" />
+                              <span>CURRENT FOCUS · STEP {activeMilestone.order}</span>
                             </div>
 
-                            {/* Active Step Actions */}
-                            {isActive && (
-                              <div className="mt-5 pt-4 border-t border-[#1E2D42] flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-                                <div className="flex flex-wrap items-center gap-3">
-                                  {action && (
-                                    <Link
-                                      href={action.url}
-                                      className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] active:scale-[0.98] text-white px-5 py-2.5 text-xs sm:text-sm font-bold transition-all shadow-md shadow-blue-900/30 group cursor-pointer"
-                                    >
-                                      <span>{action.label}</span>
-                                      <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
-                                    </Link>
-                                  )}
-
-                                  <button
-                                    type="button"
-                                    onClick={() => handleComplete(milestone.id)}
-                                    disabled={completingId !== null}
-                                    className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#2A3650] bg-[#1C2539] hover:bg-[#2A3A54] hover:text-white text-[#E2E8F0] px-4 py-2.5 text-xs sm:text-sm font-semibold transition-all disabled:opacity-50 cursor-pointer"
-                                  >
-                                    {completingId === milestone.id ? (
-                                      <>
-                                        <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                                        <span>Marking completed...</span>
-                                      </>
-                                    ) : (
-                                      <>
-                                        <FileCheck className="h-3.5 w-3.5 text-[#10B981]" />
-                                        <span>Mark as completed</span>
-                                      </>
-                                    )}
-                                  </button>
-                                </div>
-
-                                <div className="text-[11px] text-[#64748B] sm:text-right">
-                                  <span>Complete this step to unlock the next milestone</span>
-                                </div>
-                              </div>
-                            )}
+                            <span className="text-xs text-[#94A3B8] font-medium flex items-center gap-1">
+                              <Clock className="h-3 w-3 text-blue-400" />
+                              Phase {activeMilestone.phase}
+                            </span>
                           </div>
-                        )
-                      })}
-                    </div>
-                  </section>
-                )
-              })}
 
-              {/* Terminal Readiness Card */}
-              {isAllComplete && (
-                <div className="text-center py-14 space-y-4 rounded-3xl border border-[#10B981]/40 bg-[#111827] p-8 max-w-xl mx-auto shadow-2xl">
-                  <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[#10B981]/20 text-[#10B981]">
-                    <CheckCircle2 className="h-8 w-8" />
-                  </div>
-                  <h3 className="text-2xl font-black text-[#F1F5F9]">All Milestones Completed!</h3>
-                  <p className="text-sm text-[#94A3B8] max-w-md mx-auto leading-relaxed">
-                    You have successfully navigated your entire pathway from exploration to job preparation. Check your final job readiness score.
-                  </p>
-                  <div className="pt-2">
-                    <Link
-                      href="/job-readiness"
-                      className="inline-flex items-center gap-2 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] px-6 py-3 text-sm font-bold text-white transition-all shadow-lg shadow-blue-900/40"
-                    >
-                      <span>Check Job Readiness Score</span>
-                      <ArrowRight className="h-4 w-4" />
-                    </Link>
+                          <h2 className="text-2xl sm:text-3xl font-black text-[#F1F5F9] tracking-tight">
+                            {activeMilestone.title}
+                          </h2>
+
+                          {activeMilestone.description && (
+                            <p className="text-sm text-slate-300 leading-relaxed max-w-xl">
+                              {activeMilestone.description}
+                            </p>
+                          )}
+                        </div>
+
+                        {/* Action Buttons: Primary Feature CTA + Secondary Completion Button */}
+                        <div className="pt-4 border-t border-[#1E2D42] flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
+                          <div className="flex flex-wrap items-center gap-3">
+                            {action && (
+                              <Link
+                                href={action.url}
+                                className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 hover:bg-blue-500 active:scale-[0.98] text-white px-6 py-3 text-sm font-bold transition-all shadow-lg shadow-blue-900/30 group cursor-pointer"
+                              >
+                                <span>{action.label}</span>
+                                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                              </Link>
+                            )}
+
+                            <button
+                              type="button"
+                              onClick={() => handleComplete(activeMilestone.id)}
+                              disabled={completingId !== null}
+                              className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#2A3650] bg-[#1C2539] hover:bg-[#2A3A54] hover:text-white text-[#E2E8F0] px-4 py-3 text-xs sm:text-sm font-semibold transition-all disabled:opacity-50 cursor-pointer"
+                            >
+                              {completingId === activeMilestone.id ? (
+                                <>
+                                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                                  <span>Marking completed...</span>
+                                </>
+                              ) : (
+                                <>
+                                  <FileCheck className="h-3.5 w-3.5 text-emerald-400" />
+                                  <span>Mark as completed</span>
+                                </>
+                              )}
+                            </button>
+                          </div>
+
+                          <span className="text-[11px] text-[#64748B] sm:text-right">
+                            Completing advances you to the next step
+                          </span>
+                        </div>
+                      </div>
+                    )
+                  })()}
+
+                  {/* Up Next Card (1 Column) */}
+                  <div className="rounded-3xl border border-[#1E2D42] bg-[#111827]/80 p-6 sm:p-7 flex flex-col justify-between gap-4">
+                    <div className="space-y-3">
+                      <div className="inline-flex items-center gap-1.5 rounded-full border border-[#1E2D42] bg-[#1C2539] px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider text-[#94A3B8]">
+                        <ChevronRight className="h-3 w-3 text-blue-400" />
+                        <span>Up Next</span>
+                      </div>
+
+                      {upNextMilestone ? (
+                        <>
+                          <h3 className="text-lg font-bold text-white tracking-tight">
+                            {upNextMilestone.title}
+                          </h3>
+                          <p className="text-xs text-[#94A3B8] leading-relaxed line-clamp-3">
+                            {upNextMilestone.description || "The next step in your sequence once you complete your current focus."}
+                          </p>
+                        </>
+                      ) : (
+                        <>
+                          <h3 className="text-lg font-bold text-white tracking-tight">
+                            Final Step in Progress
+                          </h3>
+                          <p className="text-xs text-[#94A3B8] leading-relaxed">
+                            You are on the final step of your core pathway. Complete it to unlock full job readiness.
+                          </p>
+                        </>
+                      )}
+                    </div>
+
+                    {upNextMilestone && (
+                      <div className="pt-3 border-t border-[#1E2D42]">
+                        <span className="text-[11px] text-[#64748B] font-medium">
+                          Unlocks automatically after completing step {activeMilestone.order}
+                        </span>
+                      </div>
+                    )}
                   </div>
                 </div>
               )}
+
+              {/* ========================================================================= */}
+              {/* SECTION B, E, F: CONNECTED VERTICAL CAREER PATHWAY                        */}
+              {/* ========================================================================= */}
+              <div className="space-y-6 pt-4">
+                <div className="flex items-center justify-between pb-3 border-b border-[#1E2D42]">
+                  <div>
+                    <h2 className="text-xl font-bold text-white tracking-tight">
+                      Full Career Pathway
+                    </h2>
+                    <p className="text-xs text-[#94A3B8]">
+                      Chronological progression from foundational discovery to professional placement.
+                    </p>
+                  </div>
+                  <span className="text-xs font-semibold text-[#64748B]">
+                    {completedCount} / {totalCount} completed
+                  </span>
+                </div>
+
+                <div className="space-y-10">
+                  {phases.map(({ phase, items }) => {
+                    const meta = PHASE_METADATA[phase] || {
+                      title: `Phase ${phase}`,
+                      subtitle: "Advance your milestones toward graduation and placement.",
+                      icon: Layers,
+                    }
+                    const PhaseIcon = meta.icon
+                    const phaseCompleted = items.every((m) => m.status === "completed")
+                    const hasActive = items.some((m) => m.status === "active")
+
+                    return (
+                      <div key={phase} className="space-y-4">
+                        {/* Phase Header */}
+                        <div className="flex items-center justify-between gap-3 pb-2 border-b border-[#1E2D42]/60">
+                          <div className="flex items-center gap-3">
+                            <div
+                              className={cn(
+                                "flex h-8 w-8 items-center justify-center rounded-xl border text-xs font-bold transition-colors",
+                                phaseCompleted
+                                  ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-400"
+                                  : hasActive
+                                  ? "border-blue-500/60 bg-blue-500/15 text-blue-400"
+                                  : "border-[#1E2D42] bg-[#1C2539] text-[#64748B]"
+                              )}
+                            >
+                              <PhaseIcon className="h-4 w-4" />
+                            </div>
+                            <div>
+                              <h3 className="text-sm sm:text-base font-bold text-[#F1F5F9] tracking-tight">
+                                Phase {phase}: {meta.title}
+                              </h3>
+                              <p className="text-[11px] text-[#94A3B8] hidden sm:block">
+                                {meta.subtitle}
+                              </p>
+                            </div>
+                          </div>
+
+                          <div>
+                            {phaseCompleted ? (
+                              <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-[11px] font-bold text-emerald-400 border border-emerald-500/20">
+                                <CheckCircle2 className="h-3 w-3" />
+                                <span>Complete</span>
+                              </span>
+                            ) : hasActive ? (
+                              <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-500/15 px-2.5 py-0.5 text-[11px] font-bold text-blue-400 border border-blue-500/30">
+                                <span className="h-1.5 w-1.5 rounded-full bg-blue-400 animate-pulse" />
+                                <span>In Progress</span>
+                              </span>
+                            ) : (
+                              <span className="inline-flex items-center gap-1 rounded-full bg-[#1C2539] px-2.5 py-0.5 text-[11px] font-semibold text-[#64748B]">
+                                <span>Upcoming</span>
+                              </span>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Connected Vertical Timeline Spine */}
+                        <div className="relative pl-6 sm:pl-8 space-y-4">
+                          {/* Continuous Vertical Spine Line */}
+                          <div className="absolute left-2.5 sm:left-3.5 top-3 bottom-3 w-[2px] bg-[#1E2D42]" />
+
+                          {items.map((milestone) => {
+                            const isCompleted = milestone.status === "completed"
+                            const isActive = milestone.status === "active"
+                            const isUpcoming = milestone.status === "locked"
+                            const action = resolveAction(milestone, careerSlug)
+
+                            return (
+                              <div
+                                key={milestone.id}
+                                id={`milestone-${milestone.id}`}
+                                className={cn(
+                                  "relative rounded-2xl border transition-all duration-300 p-4 sm:p-5",
+                                  isActive && [
+                                    "border-blue-500 bg-[#111827] shadow-[0_0_25px_rgba(59,130,246,0.18)] ring-1 ring-blue-500/30",
+                                  ],
+                                  isCompleted && [
+                                    "border-[#1E2D42]/80 bg-[#111827]/70 hover:border-[#2A3A54]",
+                                  ],
+                                  isUpcoming && [
+                                    "border-[#1E2D42]/50 bg-[#111827]/40 opacity-70",
+                                  ]
+                                )}
+                              >
+                                {/* Spine Node Indicator on line */}
+                                <div className="absolute -left-[27px] sm:-left-[31px] top-5">
+                                  {isCompleted ? (
+                                    <div className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500 text-white shadow-sm ring-4 ring-[#0B0F1A]">
+                                      <CheckCircle2 className="h-3 w-3 stroke-[3]" />
+                                    </div>
+                                  ) : isActive ? (
+                                    <div className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-500 text-white shadow-[0_0_12px_rgba(59,130,246,0.8)] ring-4 ring-[#0B0F1A]">
+                                      <span className="h-2 w-2 rounded-full bg-white animate-ping" />
+                                    </div>
+                                  ) : (
+                                    <div className="flex h-5 w-5 items-center justify-center rounded-full bg-[#1C2539] border border-[#2A3650] text-[#64748B] ring-4 ring-[#0B0F1A]">
+                                      <Circle className="h-2 w-2 fill-current" />
+                                    </div>
+                                  )}
+                                </div>
+
+                                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
+                                  <div className="space-y-1.5 flex-1">
+                                    <div className="flex items-center gap-2">
+                                      <span className="text-[11px] font-bold text-[#64748B] uppercase tracking-wider">
+                                        Step {milestone.order}
+                                      </span>
+                                      {isActive && (
+                                        <span className="inline-flex items-center rounded px-2 py-0.5 text-[10px] font-bold bg-blue-500/20 text-blue-400 border border-blue-500/30">
+                                          Current Focus
+                                        </span>
+                                      )}
+                                      {isCompleted && (
+                                        <span className="inline-flex items-center rounded px-2 py-0.5 text-[10px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                                          Completed ✓
+                                        </span>
+                                      )}
+                                      {isUpcoming && (
+                                        <span className="inline-flex items-center rounded px-2 py-0.5 text-[10px] font-medium bg-[#1C2539] text-[#64748B]">
+                                          Upcoming
+                                        </span>
+                                      )}
+                                    </div>
+
+                                    <h4
+                                      className={cn(
+                                        "text-base font-bold tracking-tight",
+                                        isActive
+                                          ? "text-white"
+                                          : isCompleted
+                                          ? "text-slate-200"
+                                          : "text-[#94A3B8]"
+                                      )}
+                                    >
+                                      {milestone.title}
+                                    </h4>
+
+                                    {milestone.description && (
+                                      <p className="text-xs text-[#94A3B8] leading-relaxed max-w-2xl">
+                                        {milestone.description}
+                                      </p>
+                                    )}
+                                  </div>
+
+                                  {/* Right Action / Revisit link */}
+                                  <div className="self-start sm:self-center shrink-0 pt-2 sm:pt-0">
+                                    {isCompleted && action && (
+                                      <Link
+                                        href={action.url}
+                                        className="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-400 hover:text-blue-300 transition-colors p-1"
+                                      >
+                                        <span>{action.reviewLabel || "Reopen"}</span>
+                                        <ExternalLink className="h-3 w-3" />
+                                      </Link>
+                                    )}
+
+                                    {isActive && action && (
+                                      <Link
+                                        href={action.url}
+                                        className="inline-flex items-center gap-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 text-xs font-bold transition-all shadow-md cursor-pointer"
+                                      >
+                                        <span>Open Feature</span>
+                                        <ArrowRight className="h-3.5 w-3.5" />
+                                      </Link>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            )
+                          })}
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
             </div>
           )}
+
+          {/* ========================================================================= */}
+          {/* SECTION 17: TALK TO ALUMNI (COMING SOON FUTURE PREVIEW)                   */}
+          {/* ========================================================================= */}
+          <section className="pt-6 border-t border-[#1E2D42]">
+            <TalkToAlumniSection />
+          </section>
+
         </div>
       </div>
     </PageTransition>
