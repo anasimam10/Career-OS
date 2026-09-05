@@ -143,6 +143,9 @@ _COLUMN_MIGRATIONS: dict[str, list[tuple[str, str]]] = {
     "students": [
         ("city", "VARCHAR(100)"),
         ("province", "VARCHAR(100)"),
+        ("career_goal", "VARCHAR(255)"),
+        ("sports_interest", "VARCHAR(100)"),
+        ("motivation_tags", "TEXT"),
     ],
 }
 

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import logging
 from datetime import datetime
 from sqlalchemy.orm import Session
 
@@ -18,6 +19,8 @@ from schemas.mock_interview import (
 )
 from prompts.mock_interview import MOCK_INTERVIEW_SYSTEM_PROMPT, MOCK_INTERVIEW_USER_PROMPT_TEMPLATE
 from services.ai_service import get_ai_service, AIServiceError
+
+logger = logging.getLogger("ah_career.mock_interviews")
 
 def _build_grounded_fallback(career_context: str, difficulty: str, db: Session) -> MockInterviewGenerationResult:
     """Deterministic fallback questions grounded in verified career skills if AI provider is unreachable."""

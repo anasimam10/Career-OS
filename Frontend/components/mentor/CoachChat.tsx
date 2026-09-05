@@ -53,10 +53,10 @@ function CoachChatContent() {
           </div>
           <div>
             <h3 className="font-bold text-foreground text-base leading-none">
-              Career OS AI Mentor
+              Career OS Qwen Mentor
             </h3>
             <span className="text-xs text-muted-foreground mt-0.5 block">
-              Context-aware guidance for your career journey in Pakistan
+              Powered by Qwen 3.6-plus • Context-aware guidance for your career journey in Pakistan
             </span>
           </div>
         </div>

@@ -1,0 +1,112 @@
+[
+  {
+    "name": "Health Gateway",
+    "method": "GET",
+    "url": "/health",
+    "status": 200,
+    "size_bytes": 15,
+    "first_ms": 12.28,
+    "warm_avg_ms": 3.49,
+    "min_ms": 2.78,
+    "max_ms": 4.46
+  },
+  {
+    "name": "Careers Catalog (All 22)",
+    "method": "GET",
+    "url": "/api/v1/careers",
+    "status": 200,
+    "size_bytes": 2212,
+    "first_ms": 35.48,
+    "warm_avg_ms": 6.03,
+    "min_ms": 4.41,
+    "max_ms": 7.74
+  },
+  {
+    "name": "Career Detail (Software Engineering)",
+    "method": "GET",
+    "url": "/api/v1/careers/software-engineering",
+    "status": 200,
+    "size_bytes": 825,
+    "first_ms": 5.63,
+    "warm_avg_ms": 5.02,
+    "min_ms": 4.04,
+    "max_ms": 6.95
+  },
+  {
+    "name": "7-Step Onboarding POST",
+    "method": "POST",
+    "url": "/api/v1/onboarding",
+    "status": 200,
+    "size_bytes": 610,
+    "first_ms": 37460.13,
+    "warm_avg_ms": 34195.9,
+    "min_ms": 21939.78,
+    "max_ms": 43469.09
+  },
+  {
+    "name": "Journey Fetch (Student 20)",
+    "method": "GET",
+    "url": "/api/v1/journey/20",
+    "status": 200,
+    "size_bytes": 5183,
+    "first_ms": 92.7,
+    "warm_avg_ms": 11.17,
+    "min_ms": 9.15,
+    "max_ms": 12.18
+  },
+  {
+    "name": "Student Profile (Student 20)",
+    "method": "GET",
+    "url": "/api/v1/students/20",
+    "status": 200,
+    "size_bytes": 1129,
+    "first_ms": 32.38,
+    "warm_avg_ms": 4.91,
+    "min_ms": 4.39,
+    "max_ms": 5.39
+  },
+  {
+    "name": "Opportunities Catalog",
+    "method": "GET",
+    "url": "/api/v1/opportunities",
+    "status": 200,
+    "size_bytes": 20798,
+    "first_ms": 9.94,
+    "warm_avg_ms": 6.79,
+    "min_ms": 6.08,
+    "max_ms": 7.41
+  },
+  {
+    "name": "Universities Catalog",
+    "method": "GET",
+    "url": "/api/v1/universities",
+    "status": 200,
+    "size_bytes": 25675,
+    "first_ms": 11.01,
+    "warm_avg_ms": 4.83,
+    "min_ms": 3.95,
+    "max_ms": 6.43
+  },
+  {
+    "name": "Sports Catalog",
+    "method": "GET",
+    "url": "/api/v1/sports",
+    "status": 200,
+    "size_bytes": 13420,
+    "first_ms": 8.52,
+    "warm_avg_ms": 5.94,
+    "min_ms": 4.88,
+    "max_ms": 8.35
+  },
+  {
+    "name": "Mock Interview Setup",
+    "method": "POST",
+    "url": "/api/v1/mock-interviews/setup",
+    "status": 422,
+    "size_bytes": 336,
+    "first_ms": 4.88,
+    "warm_avg_ms": 4.73,
+    "min_ms": 3.99,
+    "max_ms": 5.88
+  }
+]
