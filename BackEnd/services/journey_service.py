@@ -10,6 +10,7 @@ valid (Phase 4 spec §15) — no Qwen call on dashboard refreshes.
 """
 
 from datetime import datetime, timezone
+import json
 import logging
 from typing import Optional
 
@@ -53,12 +54,10 @@ def get_journey(db: Session, student_id: int = DEMO_STUDENT_ID) -> JourneyRespon
         raise StudentNotFoundError()
 
     stage = parse_stage(student.education_stage) or EducationStage.HIGH_SCHOOL
-    stage_rank = {s.value: idx for idx, s in enumerate(STAGE_ORDER)}
 
+    # Ensure full roadmap milestone progression exists
+    roadmap_service.ensure_full_roadmap_milestones(db, student.id, stage.value)
     all_milestones = roadmap_service.get_student_milestones(db, student.id)
-    if not all_milestones:
-        roadmap_service.ensure_stage_milestones(db, student.id, stage.value)
-        all_milestones = roadmap_service.get_student_milestones(db, student.id)
 
     # Ensure the first incomplete milestone has 'active' status if none is active
     has_active = any(m.status == "active" for m in all_milestones)
@@ -70,6 +69,25 @@ def get_journey(db: Session, student_id: int = DEMO_STUDENT_ID) -> JourneyRespon
             db.commit()
         except Exception:
             db.rollback()
+
+    # Determine contiguous phases for user-friendly display
+    unique_stages = []
+    for m in all_milestones:
+        if m.stage not in unique_stages:
+            unique_stages.append(m.stage)
+    phase_rank = {stg: i + 1 for i, stg in enumerate(unique_stages)}
+
+    # Resolve target career slug for action URLs
+    career_slug = None
+    if student.profile and student.profile.interests:
+        try:
+            interests = json.loads(student.profile.interests)
+            if interests:
+                career_slug = interests[0].lower().replace(" ", "-")
+        except Exception:
+            pass
+    if not career_slug and student.career_goal:
+        career_slug = student.career_goal.lower().replace(" ", "-")
 
     milestone_items: list[MilestoneItem] = []
     completed_count = 0
@@ -86,7 +104,11 @@ def get_journey(db: Session, student_id: int = DEMO_STUDENT_ID) -> JourneyRespon
         else:
             status = "locked"
 
-        phase_num = stage_rank.get(m.stage, 0) + 1
+        phase_num = phase_rank.get(m.stage, 1)
+        template = roadmap_service._template_for_title(m.title)
+        act_type = template.get("action_type") if template else None
+        act_label, act_url = roadmap_service.get_action_details(act_type, career_slug)
+
         milestone_items.append(
             MilestoneItem(
                 id=m.id,
@@ -95,6 +117,9 @@ def get_journey(db: Session, student_id: int = DEMO_STUDENT_ID) -> JourneyRespon
                 status=status,
                 phase=phase_num,
                 order=idx + 1,
+                action_type=act_type,
+                action_label=act_label,
+                action_url=act_url,
             )
         )
 
@@ -175,13 +200,12 @@ def complete_student_milestone(
 
         # If no locked/pending left in current stage milestones, check stage advancement
         if next_milestone is None:
-            new_stage = _advance_stage_if_ready(db, student)
-            if new_stage != student.education_stage:
-                all_milestones = roadmap_service.get_student_milestones(db, student.id)
-                for m in all_milestones:
-                    if m.status in ("locked", "pending"):
-                        next_milestone = m
-                        break
+            _advance_stage_if_ready(db, student)
+            all_milestones = roadmap_service.get_student_milestones(db, student.id)
+            for m in all_milestones:
+                if m.status in ("locked", "pending"):
+                    next_milestone = m
+                    break
 
         if next_milestone is not None:
             next_milestone.status = "active"

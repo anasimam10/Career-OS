@@ -73,6 +73,8 @@ def complete_onboarding(
     # ---- Student row: journey state + scalar profile fields --------------
     student.education_stage = payload.education_stage.value
     student.city = payload.city
+    if payload.province:
+        student.province = payload.province
     student.sports_interest = payload.sports_interest
     student.motivation_tags = json.dumps(payload.motivation_tags, ensure_ascii=False)
     student.career_goal = career.slug if career is not None else None

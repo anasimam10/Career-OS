@@ -50,6 +50,9 @@ export interface MilestoneItem {
   status: MilestoneStateStatus
   phase: number
   order: number
+  action_type?: string | null
+  action_label?: string | null
+  action_url?: string | null
 }
 
 export interface JourneyResponse {

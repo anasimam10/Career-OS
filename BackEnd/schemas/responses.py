@@ -89,6 +89,9 @@ class MilestoneItem(BaseModel):
     status: str = "locked"  # "completed" | "active" | "locked"
     phase: int = 1
     order: int = 1
+    action_type: Optional[str] = None
+    action_label: Optional[str] = None
+    action_url: Optional[str] = None
 
 
 class JourneyResponse(BaseModel):

@@ -24,6 +24,7 @@ class OnboardingPayload(BaseModel):
     motivation_tags: list[str]
     skills: list[Skill]
     city: str
+    province: Optional[str] = None
 
 
 class CareerAnalyzeRequest(BaseModel):

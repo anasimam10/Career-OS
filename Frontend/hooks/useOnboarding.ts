@@ -55,6 +55,7 @@ export function useOnboarding() {
         motivation_tags: [],
         skills: [],
         city: data.city || "Karachi",
+        province: data.province || "Sindh",
       }
 
       const res = await submitOnboarding(payload)

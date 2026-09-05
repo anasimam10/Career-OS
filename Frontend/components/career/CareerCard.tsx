@@ -54,15 +54,22 @@ export function CareerCard({ career }: { career: CareerListItem }) {
         </div>
       </div>
 
-      <div className="relative z-10 pt-6 mt-auto">
+      <div className="relative z-10 pt-5 mt-auto flex flex-col gap-2">
         <Link 
           href={`/careers/${career.slug}/reality-check`}
-          className="flex items-center justify-between w-full p-3 rounded-xl border border-slate-800 bg-slate-900/80 text-sm font-semibold text-slate-300 hover:bg-slate-800 hover:text-white transition-all group/btn"
+          className="flex items-center justify-between w-full p-2.5 px-3.5 rounded-xl border border-blue-500/30 bg-blue-600/10 text-xs font-semibold text-blue-300 hover:bg-blue-600 hover:text-white transition-all group/btn"
         >
           <span>Run Reality Check</span>
-          <div className="h-6 w-6 rounded-full bg-indigo-500/20 flex items-center justify-center text-indigo-400 group-hover/btn:bg-indigo-500 group-hover/btn:text-white transition-colors">
+          <div className="h-5 w-5 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400 group-hover/btn:bg-white group-hover/btn:text-blue-600 transition-colors">
             <ArrowRight className="h-3 w-3" />
           </div>
+        </Link>
+
+        <Link
+          href={`/careers/${career.slug}/trial`}
+          className="flex items-center justify-center gap-1.5 w-full py-2 rounded-lg border border-slate-800 bg-slate-900/60 text-[11px] font-medium text-slate-400 hover:text-slate-200 hover:border-slate-700 transition-colors"
+        >
+          <span>Start 7-Day Trial →</span>
         </Link>
       </div>
     </div>

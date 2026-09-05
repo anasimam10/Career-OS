@@ -13,6 +13,7 @@ export interface OnboardingPayload {
   motivation_tags: string[]
   skills: Skill[]
   city: string
+  province?: string
 }
 
 export interface OnboardingResponse {

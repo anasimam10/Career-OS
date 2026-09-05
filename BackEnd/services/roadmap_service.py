@@ -443,6 +443,64 @@ def ensure_stage_milestones(
     db.commit()
 
 
+def get_progressive_stages_for(start_stage: str) -> list[str]:
+    """Return the sequential list of stages from start_stage to FIRST_JOB."""
+    mapping = {
+        "HIGH_SCHOOL": ["HIGH_SCHOOL", "CAREER_DECISION", "SKILL_BUILDING", "JOB_PREPARATION", "FIRST_JOB"],
+        "CAREER_DISCOVERY": ["CAREER_DISCOVERY", "CAREER_DECISION", "SKILL_BUILDING", "JOB_PREPARATION", "FIRST_JOB"],
+        "CAREER_DECISION": ["CAREER_DECISION", "SKILL_BUILDING", "JOB_PREPARATION", "FIRST_JOB"],
+        "UNIVERSITY": ["UNIVERSITY", "SKILL_BUILDING", "PROJECTS", "JOB_PREPARATION", "FIRST_JOB"],
+        "SKILL_BUILDING": ["SKILL_BUILDING", "PROJECTS", "JOB_PREPARATION", "FIRST_JOB"],
+        "PROJECTS": ["PROJECTS", "JOB_PREPARATION", "FIRST_JOB"],
+        "INTERNSHIP": ["INTERNSHIP", "JOB_PREPARATION", "FIRST_JOB"],
+        "FINAL_YEAR": ["FINAL_YEAR", "JOB_PREPARATION", "FIRST_JOB"],
+        "JOB_PREPARATION": ["JOB_PREPARATION", "FIRST_JOB"],
+        "FIRST_JOB": ["FIRST_JOB"],
+    }
+    return mapping.get(start_stage, [start_stage])
+
+
+def ensure_full_roadmap_milestones(
+    db: Session, student_id: int, stage: str, career_id: Optional[int] = None
+) -> None:
+    """Ensure milestones for the entire sequential career pathway exist."""
+    roadmap = (
+        db.query(Roadmap).filter(Roadmap.student_id == student_id).first()
+    )
+    if roadmap is None:
+        roadmap = Roadmap(student_id=student_id, career_id=career_id, current_stage=stage)
+        db.add(roadmap)
+        db.flush()
+    elif career_id is not None and roadmap.career_id != career_id:
+        roadmap.career_id = career_id
+
+    for s in get_progressive_stages_for(stage):
+        _instantiate_milestones(db, roadmap, s)
+    db.commit()
+
+
+def get_action_details(action_type: Optional[str], career_slug: Optional[str] = None) -> tuple[Optional[str], Optional[str]]:
+    """Return (action_label, action_url) for a given milestone action type."""
+    slug = career_slug or "software-engineering"
+    if action_type == "CAREER_REALITY":
+        return "Start Reality Check →", f"/careers/{slug}/reality-check"
+    elif action_type == "CAREER_TRIAL":
+        return "Start 7-Day Trial →", f"/careers/{slug}/trial"
+    elif action_type in ("EXPLORE_CAREERS", "COMPARE_CAREERS"):
+        return "Explore Careers →", "/careers"
+    elif action_type in ("INTERVIEW_PREP", "MOCK_INTERVIEW"):
+        return "Start Mock Interview →", "/mock-interview"
+    elif action_type in ("LEARN_FIRST_SKILL", "PRACTICE_SKILL", "REVIEW_CAREER_DATA"):
+        return "View Learning Roadmaps →", "/opportunities"
+    elif action_type in ("PREPARE_CV", "JOB_SEARCH_ROUTINE"):
+        return "Check Job Readiness →", "/job-readiness"
+    elif action_type in ("BUILD_PROJECT", "DOCUMENT_PROJECT"):
+        return "Explore Opportunities →", "/opportunities"
+    elif action_type in ("SET_90_DAY_GOALS", "PROFESSIONAL_SKILLS", "FINALIZE_DECISION"):
+        return "View My Profile →", "/profile"
+    return None, None
+
+
 def build_roadmap_response(db: Session, roadmap_id: int) -> RoadmapResponse:
     """RoadmapResponse with the current step and 1-3 visible next steps."""
     roadmap = db.get(Roadmap, roadmap_id)

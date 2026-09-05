@@ -19,12 +19,20 @@ export default function TrialPlanPage() {
   return (
     <PageTransition>
       <div className="mx-auto max-w-5xl px-4 sm:px-6 py-10 space-y-8">
-        <Button asChild variant="ghost" size="sm" className="gap-2 -ml-2 text-muted-foreground">
-          <Link href={`/careers/${slug}/reality-check`}>
-            <ArrowLeft className="h-4 w-4" />
-            Back to Reality Check
-          </Link>
-        </Button>
+        <div className="flex items-center gap-3">
+          <Button asChild variant="ghost" size="sm" className="gap-2 -ml-2 text-muted-foreground hover:text-white">
+            <Link href={`/careers/${slug}/reality-check`}>
+              <ArrowLeft className="h-4 w-4" />
+              Back to Reality Check
+            </Link>
+          </Button>
+          <span className="text-slate-600">•</span>
+          <Button asChild variant="ghost" size="sm" className="gap-2 text-muted-foreground hover:text-white">
+            <Link href="/journey">
+              Return to My Journey
+            </Link>
+          </Button>
+        </div>
 
         <SectionHeader
           badge="Action Trial"
