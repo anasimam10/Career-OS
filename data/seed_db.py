@@ -81,10 +81,29 @@ def main() -> int:
                     ["I genuinely love this subject", "High salary potential"]
                 ),
             )
+            starter_nba = {
+                "candidate_id": "career_trial",
+                "action": {
+                    "title": "Complete the 7-Day Career Trial",
+                    "description": "Test one career hands-on for seven days using the trial plan.",
+                    "steps": [
+                        "Open the career's Trial page",
+                        "Generate your 7-day trial plan",
+                        "Complete the daily tasks",
+                        "Answer the reflection prompt on day 7"
+                    ],
+                    "estimated_time": "7 days",
+                    "why_this_matters": "A 7-day hands-on trial helps you test if Software Engineering matches your passions before committing years to study.",
+                    "stage": "HIGH_SCHOOL"
+                },
+                "completed_milestone_titles": [],
+                "generated_at": datetime.utcnow().isoformat() + "Z"
+            }
             student_repo.update_profile(
                 1,
                 interests=json.dumps(["Technology", "Mathematics"]),
                 skills=json.dumps([{"name": "Python", "level": "beginner"}]),
+                next_best_action=json.dumps(starter_nba, ensure_ascii=False),
             )
             demo_created = True
     finally:

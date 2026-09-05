@@ -14,7 +14,10 @@ import { PageTransition } from "@/components/layout/PageTransition"
 export default function RealityCheckPage() {
   const params = useParams()
   const slug = Array.isArray(params?.slug) ? params.slug[0] : (params?.slug as string) || "software-engineering"
-  const { career, analysis, loading, error, refetch } = useCareerAnalysis(slug)
+  const { career, analysis, loading, error, refetch } = useCareerAnalysis(slug, {
+    includeAnalysis: true,
+    includeTrialPlan: false,
+  })
 
   return (
     <PageTransition>

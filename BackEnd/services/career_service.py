@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import json
 import logging
+import os
 from typing import Optional
 
 from sqlalchemy.orm import Session
@@ -53,6 +54,10 @@ TRIAL_DURATION_DAYS = 7
 # Honest value for metric fields the database does not have yet
 # (sparse template careers have no competition/difficulty levels).
 UNKNOWN_METRIC = "UNKNOWN"
+
+# In-memory caches to eliminate repeated expensive Qwen calls: (career_slug, student_id) -> result
+_REALITY_CACHE: dict[tuple[str, int], CareerRealityResponse] = {}
+_TRIAL_PLAN_CACHE: dict[tuple[str, int], CareerTrialPlan] = {}
 
 
 class CareerNotFoundError(Exception):
@@ -132,6 +137,12 @@ def analyze_career(
         CareerNotFoundError -- career_slug not in the database.
         AIValidationError / AIUnavailableError -- propagated from ai_service.
     """
+    cache_key = (career_slug.strip().lower(), student_id)
+    is_testing = bool(os.getenv("PYTEST_CURRENT_TEST"))
+    if not is_testing and cache_key in _REALITY_CACHE:
+        logger.info("Career analysis cache hit: slug=%s (student=%s)", career_slug, student_id)
+        return _REALITY_CACHE[cache_key]
+
     repo = CareerRepository(db)
     career = repo.get_by_slug(career_slug)
     if career is None:
@@ -164,6 +175,9 @@ def analyze_career(
     result.reality.pk_opportunities = career_data["pk_opportunities"]
     result.reality.risks = career_data["risks"]
     result.reality.data_source = _data_source(career_data)
+
+    if not is_testing:
+        _REALITY_CACHE[cache_key] = result
     return result
 
 
@@ -178,6 +192,12 @@ def generate_trial_plan(
         CareerNotFoundError -- career_slug not in the database.
         AIValidationError / AIUnavailableError -- propagated from ai_service.
     """
+    cache_key = (career_slug.strip().lower(), student_id)
+    is_testing = bool(os.getenv("PYTEST_CURRENT_TEST"))
+    if not is_testing and cache_key in _TRIAL_PLAN_CACHE:
+        logger.info("Trial plan cache hit: slug=%s (student=%s)", career_slug, student_id)
+        return _TRIAL_PLAN_CACHE[cache_key]
+
     repo = CareerRepository(db)
     career = repo.get_by_slug(career_slug)
     if career is None:
@@ -202,6 +222,8 @@ def generate_trial_plan(
     # ---- enforce the MVP contract in code -------------------------------
     plan.career_slug = career_slug
     plan.duration_days = TRIAL_DURATION_DAYS
+    if not is_testing:
+        _TRIAL_PLAN_CACHE[cache_key] = plan
     return plan
 
 

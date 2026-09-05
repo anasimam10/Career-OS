@@ -14,7 +14,10 @@ import { PageTransition } from "@/components/layout/PageTransition"
 export default function TrialPlanPage() {
   const params = useParams()
   const slug = Array.isArray(params?.slug) ? params.slug[0] : (params?.slug as string) || "software-engineering"
-  const { trialPlan, career, loading, error, refetch } = useCareerAnalysis(slug)
+  const { trialPlan, career, loading, error, refetch } = useCareerAnalysis(slug, {
+    includeAnalysis: false,
+    includeTrialPlan: true,
+  })
 
   return (
     <PageTransition>

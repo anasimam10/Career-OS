@@ -27,6 +27,7 @@ import { getJourney, completeMilestone } from "@/lib/api/journey"
 import type { JourneyResponse, MilestoneItem } from "@/lib/types/journey.types"
 import { PageTransition } from "@/components/layout/PageTransition"
 import { TalkToAlumniSection } from "@/components/alumni/TalkToAlumniSection"
+import { getSession } from "@/lib/session"
 import { cn } from "@/lib/utils/cn"
 
 const PHASE_METADATA: Record<number, { title: string; subtitle: string; icon: React.ElementType }> = {
@@ -138,6 +139,12 @@ function resolveAction(
 export default function JourneyPage() {
   const router = useRouter()
   const [studentId, setStudentId] = useState<string | null>(null)
+  const [localSession, setLocalSession] = useState<{
+    career_goal?: string
+    city?: string
+    education_stage?: string
+    sports_interest?: string
+  } | null>(null)
   const [journeyData, setJourneyData] = useState<JourneyResponse | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -152,6 +159,10 @@ export default function JourneyPage() {
       return
     }
     setStudentId(id)
+    const sess = getSession()
+    if (sess) {
+      setLocalSession(sess)
+    }
   }, [router])
 
   // 2. Fetch journey data
@@ -248,10 +259,18 @@ export default function JourneyPage() {
       .sort((a, b) => a.phase - b.phase)
   }, [milestones])
 
-  const careerSlug = journeyData?.career_slug || "software-engineering"
-  const careerName = journeyData?.career_name || "Software Engineering"
-  const userCity = journeyData?.city || "Karachi"
-  const userStage = journeyData?.education_stage_label || "Undergraduate"
+  const careerSlug =
+    journeyData?.career_slug ||
+    localSession?.career_goal?.toLowerCase().replace(/\s+/g, "-") ||
+    "software-engineering"
+  const careerName = journeyData?.career_name || localSession?.career_goal || "Career Pathway"
+  const userCity = journeyData?.city || localSession?.city || "Pakistan"
+  const userStage =
+    journeyData?.education_stage_label ||
+    (localSession?.education_stage
+      ? localSession.education_stage.replace(/_/g, " ").toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase())
+      : "Undergraduate")
+  const userSport = journeyData?.sports_interest || localSession?.sports_interest
 
   return (
     <PageTransition>
@@ -281,13 +300,13 @@ export default function JourneyPage() {
                     {userStage}
                   </span>
 
-                  {journeyData?.sports_interest && (
+                  {userSport && (
                     <Link
                       href="/sports"
                       className="inline-flex items-center gap-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-0.5 text-xs font-medium text-emerald-400 hover:bg-emerald-500/20 transition-colors"
                     >
                       <Trophy className="h-3 w-3 text-emerald-400" />
-                      Sports Pathway: {journeyData.sports_interest}
+                      Sports Pathway: {userSport}
                     </Link>
                   )}
                 </div>
@@ -302,7 +321,16 @@ export default function JourneyPage() {
               </div>
 
               {/* Progress Tracker Card */}
-              {!loading && !error && totalCount > 0 && (
+              {loading ? (
+                <div className="shrink-0 bg-[#0B0F1A]/80 border border-[#1E2D42] rounded-2xl p-5 w-full md:w-72 shadow-md space-y-3 animate-pulse">
+                  <div className="flex justify-between items-center text-xs">
+                    <div className="h-3 w-28 bg-[#1C2539] rounded" />
+                    <div className="h-3 w-8 bg-[#1C2539] rounded" />
+                  </div>
+                  <div className="h-2 w-full bg-[#1C2539] rounded-full" />
+                  <div className="h-3 w-36 bg-[#1C2539] rounded" />
+                </div>
+              ) : !error && totalCount > 0 ? (
                 <div className="shrink-0 bg-[#0B0F1A]/80 border border-[#1E2D42] rounded-2xl p-5 w-full md:w-72 shadow-md space-y-3">
                   <div className="flex justify-between items-center text-xs font-bold">
                     <span className="text-[#94A3B8] uppercase tracking-wider text-[11px]">Pathway Progress</span>
@@ -321,7 +349,7 @@ export default function JourneyPage() {
                     {isAllComplete && <span className="text-[#10B981] font-semibold">Ready for Job ✓</span>}
                   </div>
                 </div>
-              )}
+              ) : null}
             </div>
           </header>
 
