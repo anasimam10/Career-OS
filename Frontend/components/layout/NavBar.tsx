@@ -20,18 +20,25 @@ import {
 import { cn } from "@/lib/utils/cn"
 import { isOnboardingComplete, getSession } from "@/lib/session"
 
-// Primary navigation links: Careers | My Journey | Opportunities | Job Readiness | Mock Interview | Alumni Soon
-const primaryNavItems = [
+interface NavItem {
+  href: string
+  label: string
+  icon: React.ComponentType<{ className?: string }>
+  badge?: string
+}
+
+// Primary navigation links: Careers | My Journey | Opportunities | Job Readiness | Mock Interview | Alumni
+const primaryNavItems: NavItem[] = [
   { href: "/careers", label: "Careers", icon: Target },
   { href: "/journey", label: "My Journey", icon: Map },
   { href: "/opportunities", label: "Opportunities", icon: Briefcase },
   { href: "/job-readiness", label: "Job Readiness", icon: ClipboardCheck },
   { href: "/mock-interview", label: "Mock Interview", icon: ClipboardCheck },
-  { href: "/alumni", label: "Alumni", icon: Users, badge: "Soon" },
+  { href: "/alumni", label: "Alumni", icon: Users },
 ]
 
 // Secondary links available in mobile menu & footer
-const secondaryNavItems = [
+const secondaryNavItems: NavItem[] = [
   { href: "/sports", label: "Sports Pathway", icon: Trophy },
 ]
 
@@ -79,7 +86,7 @@ export function NavBar() {
           </div>
         </Link>
 
-        {/* Desktop Primary Navigation (6 Links: Careers, Journey, Opportunities, Job Readiness, Mock Interview, Alumni Soon) */}
+        {/* Desktop Primary Navigation (6 Links: Careers, Journey, Opportunities, Job Readiness, Mock Interview, Alumni) */}
         <nav className="hidden md:flex items-center gap-1 bg-[#111827] rounded-full px-2 py-1 border border-[#2A3650]">
           {primaryNavItems.map((item) => {
             const isActive =
@@ -141,7 +148,7 @@ export function NavBar() {
               href="/onboarding"
               className="inline-flex items-center gap-2 rounded-[6px] bg-[#2563EB] hover:bg-[#1D4ED8] px-4 py-2 text-xs font-bold text-white transition-all shadow-sm"
             >
-              <span>Start my journey</span>
+              <span>Create Profile</span>
               <ArrowRight className="h-3.5 w-3.5" />
             </Link>
           )}
@@ -225,7 +232,7 @@ export function NavBar() {
               href="/onboarding"
               className="flex items-center justify-center gap-2 rounded-[6px] bg-[#2563EB] hover:bg-[#1D4ED8] min-h-[44px] px-4 text-sm font-bold text-white transition-all shadow-md w-full"
             >
-              <span>Start my journey</span>
+              <span>Create Profile</span>
               <ArrowRight className="h-4 w-4" />
             </Link>
           </div>

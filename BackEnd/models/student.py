@@ -35,6 +35,12 @@ class Student(Base):
     roadmaps: Mapped[list[Roadmap]] = relationship(  # noqa: F821
         "Roadmap", back_populates="student", cascade="all, delete-orphan"
     )
+    mock_interview_sessions: Mapped[list[MockInterviewSession]] = relationship(  # noqa: F821
+        "MockInterviewSession", cascade="all, delete-orphan"
+    )
+    opportunity_matches: Mapped[list[StudentOpportunityMatch]] = relationship(  # noqa: F821
+        "StudentOpportunityMatch", cascade="all, delete-orphan"
+    )
 
 
 class StudentProfile(Base):

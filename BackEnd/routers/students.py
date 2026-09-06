@@ -1,11 +1,13 @@
 """
 Student Profile Router.
 
-Provides endpoints to fetch and update the authenticated student's profile:
+Provides endpoints to fetch, update, and delete the authenticated student's profile:
 - GET /api/v1/students/me
 - PUT /api/v1/students/me
+- DELETE /api/v1/students/me
 - GET /api/v1/students/{student_id}
 - PUT /api/v1/students/{student_id}
+- DELETE /api/v1/students/{student_id}
 """
 
 from __future__ import annotations
@@ -74,6 +76,11 @@ class StudentProfileResponse(BaseModel):
     next_best_action: Optional[Dict[str, Any]] = None
     created_at: Optional[str] = None
     updated_at: Optional[str] = None
+
+
+class DeleteStudentResponse(BaseModel):
+    success: bool = True
+    message: str = "Profile and all associated data permanently deleted."
 
 
 def _parse_json_list(val: Optional[str]) -> list:
@@ -286,3 +293,65 @@ def update_student_by_id(
     db.commit()
     db.refresh(student)
     return _build_profile_response(student)
+
+
+@router.delete("/me", response_model=DeleteStudentResponse)
+def delete_my_profile(
+    student_id: int = Depends(get_current_student_id),
+    db: Session = Depends(get_db),
+) -> DeleteStudentResponse:
+    """Permanently delete the active student session, profile, and all associated personal records."""
+    student = db.get(Student, student_id)
+    if not student:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Student profile not found.",
+        )
+
+    repo = StudentRepository(db)
+    success = repo.delete_student_cascade(student_id)
+    if not success:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to delete student profile.",
+        )
+    return DeleteStudentResponse(
+        success=True,
+        message="Profile and all associated data permanently deleted.",
+    )
+
+
+@router.delete("/{target_student_id}", response_model=DeleteStudentResponse)
+def delete_student_by_id(
+    target_student_id: int,
+    current_student_id: int = Depends(get_current_student_id),
+    db: Session = Depends(get_db),
+) -> DeleteStudentResponse:
+    """
+    Permanently delete profile by student ID.
+    Enforces authorization: A student may only delete their own profile.
+    """
+    if target_student_id != current_student_id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Unauthorized: You can only delete your own profile.",
+        )
+
+    student = db.get(Student, target_student_id)
+    if not student:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Student with ID {target_student_id} not found.",
+        )
+
+    repo = StudentRepository(db)
+    success = repo.delete_student_cascade(target_student_id)
+    if not success:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to delete student profile.",
+        )
+    return DeleteStudentResponse(
+        success=True,
+        message="Profile and all associated data permanently deleted.",
+    )

@@ -112,6 +112,8 @@ export function clearSession(): void {
   try {
     localStorage.removeItem(STUDENT_ID_KEY)
     localStorage.removeItem(SESSION_KEY)
+    sessionStorage.removeItem(STUDENT_ID_KEY)
+    sessionStorage.removeItem(SESSION_KEY)
   } catch (e) {
     console.error("Error clearing session:", e)
   }

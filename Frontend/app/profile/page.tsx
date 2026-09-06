@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import {
   User,
   MapPin,
@@ -18,11 +19,14 @@ import {
   X,
   Save,
   Activity,
+  AlertTriangle,
+  Trash2,
+  Loader2,
 } from "lucide-react"
 import { PageTransition } from "@/components/layout/PageTransition"
 import { LoadingState } from "@/components/shared/LoadingState"
 import { ErrorState } from "@/components/shared/ErrorState"
-import { getStudentProfile, updateStudentProfile, type StudentProfileData } from "@/lib/api/students"
+import { getStudentProfile, updateStudentProfile, deleteStudentProfile, type StudentProfileData } from "@/lib/api/students"
 import { isOnboardingComplete, getSession, clearSession } from "@/lib/session"
 
 const CITIES = ["Karachi", "Lahore", "Islamabad", "Rawalpindi", "Peshawar", "Quetta", "Multan", "Faisalabad"]
@@ -36,12 +40,18 @@ const STAGES = [
 const SPORTS = ["No sport", "Cricket", "Football", "Badminton", "Hockey", "Tennis", "Squash", "Swimming", "Basketball"]
 
 export default function ProfilePage() {
+  const router = useRouter()
   const [profile, setProfile] = useState<StudentProfileData | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [editing, setEditing] = useState(false)
   const [saving, setSaving] = useState(false)
   const [saveSuccess, setSaveSuccess] = useState(false)
+
+  // Deletion state
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [deleting, setDeleting] = useState(false)
+  const [deleteError, setDeleteError] = useState<string | null>(null)
 
   // Edit form state
   const [editName, setEditName] = useState("")
@@ -100,6 +110,30 @@ export default function ProfilePage() {
       alert(err instanceof Error ? err.message : "Failed to update profile")
     } finally {
       setSaving(false)
+    }
+  }
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && showDeleteModal && !deleting) {
+        setShowDeleteModal(false)
+        setDeleteError(null)
+      }
+    }
+    window.addEventListener("keydown", handleKeyDown)
+    return () => window.removeEventListener("keydown", handleKeyDown)
+  }, [showDeleteModal, deleting])
+
+  const handleDeleteProfile = async () => {
+    try {
+      setDeleting(true)
+      setDeleteError(null)
+      await deleteStudentProfile()
+      clearSession()
+      router.push("/")
+    } catch (err: any) {
+      setDeleteError(err?.message || "Couldn’t delete your profile. Please try again.")
+      setDeleting(false)
     }
   }
 
@@ -358,6 +392,35 @@ export default function ProfilePage() {
                 </div>
 
               </div>
+
+              {/* Danger Zone */}
+              <div className="rounded-[2.5rem] border border-red-900/40 bg-red-950/10 p-6 sm:p-8 backdrop-blur-md shadow-2xl relative overflow-hidden space-y-6">
+                <div className="flex items-center gap-2 text-xs font-bold text-red-400 uppercase tracking-wider">
+                  <AlertTriangle className="h-4 w-4" />
+                  Danger Zone
+                </div>
+
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+                  <div className="space-y-1">
+                    <h3 className="text-lg font-bold text-white">Delete your Career OS profile</h3>
+                    <p className="text-sm text-slate-400 max-w-xl leading-relaxed">
+                      Permanently remove your profile, Journey progress, preferences, and other student-specific data.
+                    </p>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setDeleteError(null)
+                      setShowDeleteModal(true)
+                    }}
+                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-red-600/90 hover:bg-red-600 text-white px-5 py-3 text-xs font-bold transition shadow-[0_0_20px_rgba(220,38,38,0.25)] hover:shadow-[0_0_25px_rgba(220,38,38,0.4)] whitespace-nowrap self-start sm:self-auto cursor-pointer"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                    Delete Profile
+                  </button>
+                </div>
+              </div>
             </>
           ) : null}
 
@@ -494,8 +557,86 @@ export default function ProfilePage() {
             </div>
           )}
 
+          {/* Delete Profile Confirmation Modal */}
+          {showDeleteModal && (
+            <div
+              className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="delete-dialog-title"
+            >
+              <div
+                className="fixed inset-0"
+                onClick={() => {
+                  if (!deleting) {
+                    setShowDeleteModal(false)
+                    setDeleteError(null)
+                  }
+                }}
+              />
+              <div className="relative w-full max-w-md rounded-3xl border border-red-900/50 bg-slate-900 p-6 sm:p-8 shadow-2xl space-y-6 z-10">
+                <div className="flex items-start gap-4">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-red-500/10 border border-red-500/20 text-red-400">
+                    <AlertTriangle className="h-6 w-6" />
+                  </div>
+                  <div className="space-y-1">
+                    <h3 id="delete-dialog-title" className="text-xl font-bold text-white">
+                      Delete your profile?
+                    </h3>
+                    <p className="text-xs text-slate-400 leading-relaxed">
+                      This will permanently remove your Career OS profile, Journey progress, preferences, and other student-specific data.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="rounded-xl border border-red-950/80 bg-red-950/30 p-3.5 text-xs text-red-300 font-medium">
+                  ⚠️ This action cannot be undone. You will be redirected to the public homepage.
+                </div>
+
+                {deleteError && (
+                  <div className="rounded-xl border border-red-500/30 bg-red-500/10 p-3 text-xs font-semibold text-red-400">
+                    {deleteError}
+                  </div>
+                )}
+
+                <div className="flex items-center justify-end gap-3 pt-2 border-t border-slate-800">
+                  <button
+                    type="button"
+                    disabled={deleting}
+                    onClick={() => {
+                      setShowDeleteModal(false)
+                      setDeleteError(null)
+                    }}
+                    className="px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800 transition disabled:opacity-50"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    disabled={deleting}
+                    onClick={handleDeleteProfile}
+                    className="inline-flex items-center gap-2 rounded-xl bg-red-600 px-5 py-2.5 text-xs font-bold text-white hover:bg-red-500 transition shadow-[0_0_15px_rgba(220,38,38,0.3)] disabled:opacity-50"
+                  >
+                    {deleting ? (
+                      <>
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                        Deleting profile…
+                      </>
+                    ) : (
+                      <>
+                        <Trash2 className="h-4 w-4" />
+                        Delete Profile
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
         </div>
       </div>
     </PageTransition>
   )
 }
+

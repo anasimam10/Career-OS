@@ -38,6 +38,11 @@ class InMemoryRateLimiter:
             self._store[student_id].append(now)
             return True
 
+    def clear(self, student_id: int) -> None:
+        """Purge rate-limiting records for a deleted student."""
+        with self._lock:
+            self._store.pop(student_id, None)
+
 
 # Singleton instance
 rate_limiter = InMemoryRateLimiter(max_requests=20, window_hours=1)

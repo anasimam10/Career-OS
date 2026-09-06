@@ -29,13 +29,14 @@ export class ApiClientError extends Error {
 
 async function handleResponse<T>(res: Response): Promise<T> {
   if (!res.ok) {
-    let errorBody: ApiError = { error: `HTTP ${res.status}` }
+    let errorBody: any = { error: `HTTP ${res.status}` }
     try {
       errorBody = await res.json()
     } catch {
       // ignore parse error
     }
-    throw new ApiClientError(errorBody.error, res.status, errorBody)
+    const message = errorBody.detail || errorBody.error || `HTTP ${res.status}`
+    throw new ApiClientError(message, res.status, errorBody)
   }
   const json = await res.json()
   return json as T
@@ -98,6 +99,18 @@ export async function apiPut<T>(
     ...init,
     headers: getRequestHeaders(init?.headers),
     body: JSON.stringify(body),
+  })
+  return handleResponse<T>(res)
+}
+
+export async function apiDelete<T>(
+    path: string,
+    init?: RequestInit
+): Promise<T> {
+  const res = await fetch(`${BASE_URL}${path}`, {
+    method: "DELETE",
+    ...init,
+    headers: getRequestHeaders(init?.headers),
   })
   return handleResponse<T>(res)
 }

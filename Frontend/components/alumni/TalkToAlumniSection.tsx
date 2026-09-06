@@ -30,9 +30,8 @@ export function TalkToAlumniSection() {
             <div className="flex items-center gap-2.5">
               <span className="inline-flex items-center gap-1.5 rounded-full border border-blue-500/30 bg-blue-500/10 px-3 py-1 text-xs font-semibold text-blue-400">
                 <Sparkles className="h-3 w-3" />
-                Coming Soon
               </span>
-              <span className="text-xs text-[#64748B]">Future update</span>
+
             </div>
 
             <div className="flex items-center gap-3">
@@ -157,7 +156,7 @@ export function TalkToAlumniSection() {
                   className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2 text-xs font-bold text-white hover:bg-blue-500 transition-all active:scale-95 shrink-0 shadow-md cursor-pointer"
                 >
                   <Bell className="h-3.5 w-3.5" />
-                  <span>Notify Me at Launch</span>
+                  <span>Alumni</span>
                 </button>
               )}
             </div>

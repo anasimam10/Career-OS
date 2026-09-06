@@ -1,6 +1,6 @@
-import { apiGet, apiPut } from "./client"
+import { apiGet, apiPut, apiDelete } from "./client"
 import { USE_MOCK } from "@/lib/mock"
-import { getSession, updateSession } from "@/lib/session"
+import { getSession, updateSession, clearSession } from "@/lib/session"
 
 export interface StudentProfileData {
   id: number
@@ -97,3 +97,21 @@ export async function updateStudentProfile(
   }
   return result
 }
+
+export interface DeleteProfileResponse {
+  success: boolean
+  message: string
+}
+
+export async function deleteStudentProfile(): Promise<DeleteProfileResponse> {
+  if (USE_MOCK) {
+    await new Promise((r) => setTimeout(r, 600))
+    clearSession()
+    return { success: true, message: "Profile deleted successfully" }
+  }
+
+  const result = await apiDelete<DeleteProfileResponse>("/students/me")
+  clearSession()
+  return result
+}
+
