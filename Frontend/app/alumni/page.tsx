@@ -31,10 +31,7 @@ export default function AlumniPage() {
           </div>
 
           <div className="space-y-4">
-            <div className="inline-flex items-center gap-2 rounded px-2.5 py-1 text-xs font-medium bg-[#1C2539] text-[#94A3B8] border border-[#1E2D42]">
-              <Clock className="h-3.5 w-3.5 text-[#3B82F6]" />
-              <span>Coming soon</span>
-            </div>
+
 
             <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-[#F1F5F9]">
               Talk to Alumni
@@ -47,14 +44,10 @@ export default function AlumniPage() {
 
           {/* Status Panel */}
           <div className="rounded-xl border border-[#1E2D42] bg-[#111827] p-6 sm:p-8 space-y-6">
-            <div className="flex flex-wrap items-center justify-between gap-4">
-              <span className="inline-flex items-center gap-1.5 rounded px-3 py-1 text-xs font-medium bg-[#1C2539] text-[#3B82F6] border border-[#2A3A54]">
-                In development — launching soon
-              </span>
-            </div>
+
 
             <p className="text-[#94A3B8] text-sm leading-relaxed">
-              We&apos;re building a verified alumni network. Check back soon.
+              We are building a verified alumni network.
             </p>
 
             <div className="grid sm:grid-cols-2 gap-4 pt-2">
@@ -84,7 +77,7 @@ export default function AlumniPage() {
               {submitted ? (
                 <div className="inline-flex items-center gap-2 text-sm text-[#10B981] font-medium">
                   <CheckCircle2 className="h-4 w-4" />
-                  <span>Thanks! We&apos;ll notify you when the alumni network launches.</span>
+                  <span>Thanks! We&apos;ll notify you when the alumni network is ready.</span>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md">

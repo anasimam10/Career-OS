@@ -44,7 +44,7 @@ export function TalkToAlumniSection() {
             </div>
 
             <p className="text-base text-[#94A3B8] font-medium leading-relaxed">
-              Connect with graduates from top Pakistani institutions in future updates.
+              Connect with graduates from top Pakistani institutions.
             </p>
 
             <p className="text-sm text-[#64748B] leading-relaxed">
@@ -74,13 +74,13 @@ export function TalkToAlumniSection() {
               <div className="space-y-1.5">
                 <div className="inline-flex items-center gap-1.5 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-3 py-0.5 text-xs font-semibold text-indigo-400">
                   <Sparkles className="h-3 w-3" />
-                  Verified Mentorship
+                  Mentorship
                 </div>
                 <h2 className="text-2xl font-extrabold text-white tracking-tight">
                   Talk to Alumni Network
                 </h2>
                 <p className="text-sm text-slate-400">
-                  Direct mentorship connecting prospective students with verified Pakistani alumni.
+                  Direct mentorship connecting prospective students with Pakistani alumni.
                 </p>
               </div>
 
@@ -98,7 +98,7 @@ export function TalkToAlumniSection() {
               <div className="rounded-2xl border border-slate-800/80 bg-slate-900/40 p-4 space-y-2">
                 <div className="flex items-center gap-2 text-indigo-400 font-semibold text-sm">
                   <ShieldCheck className="h-4 w-4" />
-                  <span>Verified Credentials</span>
+                  <span>Qualifications</span>
                 </div>
                 <p className="text-xs text-slate-400 leading-relaxed">
                   Only graduates with verified degrees from recognized Pakistani institutions (NUST, FAST, LUMS, IBA, GIKI, etc.) participate.
@@ -121,7 +121,7 @@ export function TalkToAlumniSection() {
                   <span>Ground-Truth Advice</span>
                 </div>
                 <p className="text-xs text-slate-400 leading-relaxed">
-                  Honest perspectives on entry test preparation, GPA expectations, and real campus placement rates without PR spin.
+                  Honest perspectives on entry test preparation, GPA expectations, and real campus placement rates.
                 </p>
               </div>
 

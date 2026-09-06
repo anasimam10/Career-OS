@@ -99,25 +99,6 @@ export function FeaturesSection() {
 
         {/* Talk to Alumni Component */}
         <TalkToAlumniSection />
-
-        {/* CTA Strip */}
-        <div className="rounded-[16px] border border-[#1E2D42] bg-[#111827] p-8 sm:p-12 text-center space-y-6 max-w-2xl mx-auto shadow-xl">
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#F1F5F9]">
-            Ready to plan your next step?
-          </h2>
-          <p className="text-sm text-[#94A3B8] max-w-md mx-auto">
-            Get personalized milestones tailored to your academic stage and target field.
-          </p>
-          <div>
-            <Link
-              href="/onboarding"
-              className="inline-flex items-center gap-2 rounded-[8px] bg-[#2563EB] hover:bg-[#1D4ED8] active:scale-[0.98] px-7 py-3.5 text-sm font-semibold text-white transition-all shadow-md"
-            >
-              <span>Start My Journey</span>
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
-        </div>
       </div>
     </section>
   )
