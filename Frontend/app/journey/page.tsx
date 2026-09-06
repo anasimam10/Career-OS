@@ -22,6 +22,7 @@ import {
   ChevronRight,
   Circle,
   Clock,
+  ExternalLink,
 } from "lucide-react"
 import { getJourney, completeMilestone } from "@/lib/api/journey"
 import type { JourneyResponse, MilestoneItem } from "@/lib/types/journey.types"
@@ -29,7 +30,7 @@ import { PageTransition } from "@/components/layout/PageTransition"
 import { TalkToAlumniSection } from "@/components/alumni/TalkToAlumniSection"
 import { getSession } from "@/lib/session"
 import { cn } from "@/lib/utils/cn"
-import { resolveMilestoneCTA } from "@/lib/constants/journeyCta"
+import { resolveMilestoneCta } from "@/lib/milestoneCta"
 
 const PHASE_METADATA: Record<number, { title: string; subtitle: string; icon: React.ElementType }> = {
   1: {
@@ -184,6 +185,8 @@ export default function JourneyPage() {
 
   const careerSlug =
     journeyData?.career_slug ||
+    (journeyData as any)?.career_goal_slug ||
+    (journeyData as any)?.student?.career_goal_slug ||
     localSession?.career_goal?.toLowerCase().replace(/\s+/g, "-") ||
     "software-engineering"
   const careerName = journeyData?.career_name || localSession?.career_goal || "Career Pathway"
@@ -463,7 +466,7 @@ export default function JourneyPage() {
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                   {/* Current Focus Card (2 Columns) */}
                   {(() => {
-                    const cta = resolveMilestoneCTA(activeMilestone.title, careerSlug)
+                    const cta = resolveMilestoneCta(activeMilestone, careerSlug)
                     return (
                       <div className="lg:col-span-2 rounded-3xl border-2 border-blue-500/70 bg-gradient-to-br from-blue-950/40 via-[#111827] to-[#111827] p-6 sm:p-8 shadow-[0_0_40px_rgba(59,130,246,0.18)] relative overflow-hidden flex flex-col justify-between gap-6">
                         <div className="space-y-4">
@@ -494,19 +497,32 @@ export default function JourneyPage() {
                         <div className="pt-4 border-t border-[#1E2D42] flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
                           <div className="flex flex-wrap items-center gap-3">
                             {cta && (
-                              <Link
-                                href={cta.href}
-                                className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 hover:bg-blue-500 active:scale-[0.98] text-white px-6 py-3 text-sm font-bold transition-all shadow-lg shadow-blue-900/30 group cursor-pointer"
-                              >
-                                <span>{cta.label}</span>
-                                <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                              </Link>
+                              cta.type === "external" ? (
+                                <a
+                                  href={cta.url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 hover:bg-blue-500 active:scale-[0.98] text-white px-6 py-3 text-sm font-bold transition-all shadow-lg shadow-blue-900/30 group cursor-pointer"
+                                >
+                                  <span>{cta.label}</span>
+                                  <ExternalLink className="h-4 w-4" aria-label="opens in new tab" />
+                                </a>
+                              ) : (
+                                <Link
+                                  href={cta.url}
+                                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 hover:bg-blue-500 active:scale-[0.98] text-white px-6 py-3 text-sm font-bold transition-all shadow-lg shadow-blue-900/30 group cursor-pointer"
+                                >
+                                  <span>{cta.label}</span>
+                                  <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                                </Link>
+                              )
                             )}
 
                             <button
                               type="button"
                               onClick={() => handleComplete(activeMilestone.id)}
                               disabled={completingId !== null}
+                              aria-label={`Mark "${activeMilestone.title}" as completed`}
                               className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#2A3650] bg-[#1C2539] hover:bg-[#2A3A54] hover:text-white text-[#E2E8F0] px-4 py-3 text-xs sm:text-sm font-semibold transition-all disabled:opacity-50 cursor-pointer"
                             >
                               {completingId === activeMilestone.id ? (
@@ -667,7 +683,7 @@ export default function JourneyPage() {
                             const isCompleted = milestone.status === "completed"
                             const isActive = milestone.status === "active"
                             const isUpcoming = milestone.status === "locked"
-                            const cta = resolveMilestoneCTA(milestone.title, careerSlug)
+                            const cta = resolveMilestoneCta(milestone, careerSlug)
 
                             return (
                               <div
@@ -747,24 +763,39 @@ export default function JourneyPage() {
                                   </div>
 
                                   {/* Milestone Contextual Action Area */}
-                                  {isActive && cta && (
+                                  {isActive && (
                                     <div className="flex flex-wrap items-center gap-3 mt-3 pt-3 border-t border-[#1E2D42]/60">
-                                      <Link
-                                        href={cta.href}
-                                        className="inline-flex items-center gap-2 text-sm font-medium text-blue-400 hover:text-blue-300 transition-colors"
-                                      >
-                                        <span>{cta.label}</span>
-                                        <ArrowUpRight className="w-4 h-4" />
-                                      </Link>
+                                      {cta && (
+                                        cta.type === "external" ? (
+                                          <a
+                                            href={cta.url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="inline-flex items-center gap-1.5 text-sm font-medium text-blue-400 hover:text-blue-300 transition-colors"
+                                          >
+                                            <span>{cta.label}</span>
+                                            <ExternalLink className="w-3.5 h-3.5" aria-label="opens in new tab" />
+                                          </a>
+                                        ) : (
+                                          <Link
+                                            href={cta.url}
+                                            className="inline-flex items-center gap-1.5 text-sm font-medium text-blue-400 hover:text-blue-300 transition-colors"
+                                          >
+                                            <span>{cta.label}</span>
+                                            <ArrowUpRight className="w-3.5 h-3.5" />
+                                          </Link>
+                                        )
+                                      )}
                                       <button
                                         type="button"
                                         onClick={() => handleComplete(milestone.id)}
                                         disabled={completingId !== null}
-                                        className="ml-auto inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors cursor-pointer"
+                                        aria-label={`Mark "${milestone.title}" as completed`}
+                                        className="ml-auto inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-semibold px-4 py-2 rounded-lg transition-all cursor-pointer"
                                       >
                                         {completingId === milestone.id ? (
                                           <>
-                                            <Loader2 className="w-4 h-4 animate-spin" />
+                                            <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" />
                                             <span>Saving...</span>
                                           </>
                                         ) : (
@@ -776,7 +807,7 @@ export default function JourneyPage() {
 
                                   {isCompleted && (
                                     <div className="flex items-center gap-2 mt-3 pt-3 border-t border-[#1E2D42]/40 text-emerald-400 text-sm font-medium">
-                                      <CheckCircle2 className="w-4 h-4" />
+                                      <CheckCircle2 className="w-4 h-4" aria-hidden="true" />
                                       <span>Completed</span>
                                     </div>
                                   )}

@@ -2,9 +2,9 @@
 
 import React from "react"
 import Link from "next/link"
-import { CheckCircle2, Lock, Loader2, AlertCircle, ArrowUpRight } from "lucide-react"
+import { CheckCircle2, Lock, Loader2, AlertCircle, ArrowUpRight, ExternalLink } from "lucide-react"
 import type { JourneyStep } from "@/lib/types/journey.types"
-import { resolveMilestoneCTA } from "@/lib/constants/journeyCta"
+import { resolveMilestoneCta } from "@/lib/milestoneCta"
 
 export type MilestoneCardState = "completed" | "active" | "locked"
 
@@ -30,7 +30,14 @@ export function MilestoneCard({
   error = null,
 }: MilestoneCardProps) {
   const displayPhase = phaseLabel || `Phase ${phaseIndex} · ${step.title.split(" ")[0] || "Step"}`
-  const cta = resolveMilestoneCTA(step.title, careerSlug)
+  const cta = resolveMilestoneCta(
+    {
+      title: step.title,
+      description: step.description,
+      phase: phaseIndex,
+    },
+    careerSlug
+  )
 
   return (
     <div
@@ -92,29 +99,42 @@ export function MilestoneCard({
       <div className="pt-5 mt-4 border-t border-[#2A3650]/60">
         {state === "completed" ? (
           <div className="flex items-center gap-2 text-emerald-400 text-sm font-medium">
-            <CheckCircle2 className="w-4 h-4" />
+            <CheckCircle2 className="w-4 h-4" aria-hidden="true" />
             <span>Completed</span>
           </div>
         ) : state === "active" ? (
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3">
             {cta && (
-              <Link
-                href={cta.href}
-                className="inline-flex items-center gap-2 text-sm font-medium text-blue-400 hover:text-blue-300 transition-colors"
-              >
-                <span>{cta.label}</span>
-                <ArrowUpRight className="w-4 h-4" />
-              </Link>
+              cta.type === "external" ? (
+                <a
+                  href={cta.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-sm font-medium text-blue-400 hover:text-blue-300 transition-colors"
+                >
+                  <span>{cta.label}</span>
+                  <ExternalLink className="w-3.5 h-3.5" aria-label="opens in new tab" />
+                </a>
+              ) : (
+                <Link
+                  href={cta.url}
+                  className="inline-flex items-center gap-1.5 text-sm font-medium text-blue-400 hover:text-blue-300 transition-colors"
+                >
+                  <span>{cta.label}</span>
+                  <ArrowUpRight className="w-3.5 h-3.5" />
+                </Link>
+              )
             )}
             <button
               type="button"
               onClick={() => onComplete && onComplete(step.id)}
               disabled={isCompleting}
-              className="ml-auto inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors cursor-pointer"
+              aria-label={`Mark "${step.title}" as completed`}
+              className="ml-auto inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-semibold px-4 py-2 rounded-lg transition-all cursor-pointer"
             >
               {isCompleting ? (
                 <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" />
                   <span>Saving...</span>
                 </>
               ) : (

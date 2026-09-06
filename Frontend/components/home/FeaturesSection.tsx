@@ -36,7 +36,7 @@ const FEATURES = [
     icon: GraduationCap,
     title: "248 Universities & Programs",
     description: "Accredited HEC institutions with entry test requirements, degree types, and eligibility rules.",
-    href: "/programs",
+    href: "/universities",
   },
   {
     icon: Briefcase,
