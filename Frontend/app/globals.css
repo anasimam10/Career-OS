@@ -128,3 +128,34 @@
   from { width: 0%; }
   to { width: 95%; }
 }
+
+/* AI Career Coach Hero 3D Perspective & Motion */
+.hero-perspective-wrapper {
+  perspective: 1200px;
+}
+
+.hero-perspective-card {
+  transform: rotateX(12deg) scale(0.98);
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+.hero-perspective-card.scrolled {
+  transform: rotateX(0deg) scale(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-perspective-card {
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+.hero-grid-pattern {
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, #000 40%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, #000 40%, transparent 100%);
+}

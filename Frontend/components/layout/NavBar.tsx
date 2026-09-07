@@ -63,31 +63,31 @@ export function NavBar() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-[#2A3650] bg-[#0B0F1A]/95 backdrop-blur-md">
-      <div className="mx-auto flex h-16 max-w-[1100px] items-center justify-between px-4 sm:px-6">
-        {/* Logo Branding (Serves as Home) */}
-        <Link href="/" className="flex items-center gap-2.5 shrink-0 group">
-          <div className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-full overflow-hidden shadow-sm transition-transform group-hover:scale-105">
+      <div className="flex h-20 w-full items-center justify-between px-4 sm:px-8 lg:px-12">
+        {/* Logo Branding (Serves as Home) — Top Left */}
+        <Link href="/" className="flex items-center gap-3 shrink-0 group">
+          <div className="relative flex h-10 w-10 sm:h-11 sm:w-11 shrink-0 items-center justify-center rounded-full overflow-hidden shadow-sm transition-transform group-hover:scale-105">
             <Image
               src="/images/career-os-logo.png"
               alt="Career OS"
-              width={32}
-              height={32}
+              width={44}
+              height={44}
               priority
-              className="h-8 w-8 rounded-full object-contain"
+              className="h-full w-full rounded-full object-contain"
             />
           </div>
           <div className="flex flex-col">
-            <span className="font-bold tracking-tight text-[#F1F5F9] text-base leading-none">
+            <span className="font-extrabold tracking-tight text-[#F1F5F9] text-lg sm:text-xl leading-none">
               Career OS
             </span>
-            <span className="text-[10px] text-[#60A5FA] font-medium leading-tight mt-0.5 tracking-wider">
+            <span className="text-[11px] sm:text-xs text-[#60A5FA] font-medium leading-tight mt-1 tracking-wider">
               For Pakistani Students
             </span>
           </div>
         </Link>
 
         {/* Desktop Primary Navigation (6 Links: Careers, Journey, Opportunities, Job Readiness, Mock Interview, Alumni) */}
-        <nav className="hidden md:flex items-center gap-1 bg-[#111827] rounded-full px-2 py-1 border border-[#2A3650]">
+        <nav className="hidden md:flex items-center gap-1.5 bg-[#111827] rounded-full px-3 py-1.5 border border-[#2A3650] shadow-sm">
           {primaryNavItems.map((item) => {
             const isActive =
               pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href))
@@ -97,7 +97,7 @@ export function NavBar() {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold whitespace-nowrap transition-colors",
+                  "flex items-center gap-2 rounded-full px-3.5 py-1.5 text-xs lg:text-sm font-semibold whitespace-nowrap transition-colors",
                   isActive
                     ? "bg-[#1C2539] text-[#F1F5F9] border border-[#2A3650]"
                     : "text-[#94A3B8] hover:bg-[#1C2539]/60 hover:text-[#F1F5F9]"
@@ -105,7 +105,7 @@ export function NavBar() {
               >
                 <Icon
                   className={cn(
-                    "h-3.5 w-3.5 shrink-0",
+                    "h-4 w-4 shrink-0",
                     isActive ? "text-[#3B82F6]" : "text-[#64748B]"
                   )}
                 />
@@ -120,36 +120,36 @@ export function NavBar() {
           })}
         </nav>
 
-        {/* Right Desktop CTA Action */}
+        {/* Right Desktop CTA Action — Top Right */}
         <div className="hidden md:flex items-center gap-3 shrink-0">
           {onboarded ? (
-            <div className="flex items-center gap-2.5">
+            <div className="flex items-center gap-3">
               <Link
                 href="/mentor"
-                className="flex items-center gap-1.5 rounded-full border border-[#3B82F6]/30 bg-[#3B82F6]/10 px-3 py-1.5 text-xs font-semibold text-[#60A5FA] hover:bg-[#3B82F6]/20 transition"
+                className="flex items-center gap-2 rounded-full border border-[#3B82F6]/30 bg-[#3B82F6]/10 px-4 py-2 text-xs sm:text-sm font-semibold text-[#60A5FA] hover:bg-[#3B82F6]/20 transition"
               >
-                <MessageSquare className="h-3.5 w-3.5 text-[#3B82F6] shrink-0" />
+                <MessageSquare className="h-4 w-4 text-[#3B82F6] shrink-0" />
                 <span>Qwen Mentor</span>
               </Link>
               <Link
                 href="/profile"
-                className="flex h-8 w-8 items-center justify-center rounded-full bg-[#1C2539] text-[#F1F5F9] border border-[#2A3650] hover:border-[#3B82F6] transition"
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-[#1C2539] text-[#F1F5F9] border border-[#2A3650] hover:border-[#3B82F6] transition"
                 title="Your Profile"
               >
                 {userInitial ? (
-                  <span className="text-xs font-bold">{userInitial}</span>
+                  <span className="text-sm font-bold">{userInitial}</span>
                 ) : (
-                  <User className="h-4 w-4" />
+                  <User className="h-5 w-5" />
                 )}
               </Link>
             </div>
           ) : (
             <Link
               href="/onboarding"
-              className="inline-flex items-center gap-2 rounded-[6px] bg-[#2563EB] hover:bg-[#1D4ED8] px-4 py-2 text-xs font-bold text-white transition-all shadow-sm"
+              className="inline-flex items-center gap-2 rounded-lg bg-[#2563EB] hover:bg-[#1D4ED8] active:scale-[0.98] px-5 py-2.5 text-xs sm:text-sm font-semibold text-white transition-all shadow-md shadow-blue-600/20 hover:shadow-blue-600/35"
             >
               <span>Create Profile</span>
-              <ArrowRight className="h-3.5 w-3.5" />
+              <ArrowRight className="h-4 w-4" />
             </Link>
           )}
         </div>
@@ -160,7 +160,7 @@ export function NavBar() {
             type="button"
             onClick={() => setMobileMenuOpen((prev) => !prev)}
             aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
-            className="flex h-11 w-11 items-center justify-center rounded-[6px] border border-[#2A3650] bg-[#111827] text-[#F1F5F9] hover:bg-[#1C2539] transition-colors"
+            className="flex h-11 w-11 items-center justify-center rounded-lg border border-[#2A3650] bg-[#111827] text-[#F1F5F9] hover:bg-[#1C2539] transition-colors"
           >
             {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>

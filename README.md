@@ -1,120 +1,187 @@
 # Career OS
 ### Pakistan's Career Operating System
 
-Career OS is a Pakistan-focused Career Operating System that guides students from high school uncertainty to their first job through a structured, personalized journey.
+**Career OS** is an enterprise-grade Career Operating System engineered specifically for the Pakistani education and labor ecosystem. It replaces fragmented searches, conflicting advice, and social media hype with a deterministic, personalized pathway guiding students from high school through university selection to their first job.
 
 ---
 
-## Who It Is For
+## Live Deployments & Verification
 
-Career OS is built for **students, university applicants, and early-career individuals across Pakistan** who need structured, reliable direction during critical educational and career transitions.
-
----
-
-## The Real Problem
-
-Students today are not suffering from a lack of career information—they are overwhelmed by it. 
-
-Every day, young Pakistanis face a barrage of YouTube career videos, viral social media advice, peer pressure, family and societal expectations, salary hype, and conflicting opinions. University program criteria and scholarship deadlines remain scattered across dozens of disjointed portals.
-
-The fundamental issue is clear:
-> **Students have too much scattered information, but no clear, personalized pathway from where they are now to where they want to go.**
-
-Without personalized guidance, students experience FOMO, make high-stakes academic choices based on rumors or short-term trends, and remain uncertain about what practical step to take next.
-
----
-
-## The Solution
-
-Career OS replaces fragmented searches with **one continuous, personalized operating system**. 
-
-Rather than offering generic advice, the platform takes into account a student's:
-- **Education Stage** (Matric, FSc/A-Levels, Undergraduate, Fresh Graduate)
-- **City & Region** (access to local campuses and regional opportunities)
-- **Interests & Motivations**
-- **Baseline Skills**
-- **Career Goals & Milestone Progress**
-
-Career OS turns career decision-making into a structured, step-by-step roadmap with clear next actions.
-
----
-
-## The End-to-End Pathway
-
-Career OS is designed to guide a student along an end-to-end journey from high school toward their first job:
-
-```
-HIGH SCHOOL / INTERMEDIATE
-  ↓
-FIELD & CAREER EXPLORATION
-  ↓
-REALITY CHECK (Market Demand & PKR Salaries)
-  ↓
-UNIVERSITY & PROGRAM DISCOVERY
-  ↓
-7-DAY CAREER TRIALS
-  ↓
-SKILL DEVELOPMENT & LEARNING RESOURCES
-  ↓
-SCHOLARSHIPS & OPPORTUNITIES
-  ↓
-EXPERIENCE & SPORTS PATHWAYS
-  ↓
-INTERVIEW PREPARATION (Qwen-Powered Mock Screening)
-  ↓
-FIRST JOB
-```
-
----
-
-## What We Built
-
-We engineered a responsive, full-stack web application tailored specifically to the realities of Pakistan's education and labor market:
-
-- **Personalized Onboarding & Student Journey**: Multi-step profiling that establishes the student's baseline, displays their current stage, and tracks progress toward milestones.
-- **Career Discovery & Reality Checks**: Grounded Pakistan labor market intelligence across 22 career pathways, providing realistic local employer expectations, actual work conditions, and starting-to-peak PKR salary bands.
-- **University & Program Directory**: Searchable directory covering 248 Pakistani universities and 174 degree programs across all provinces, including verified entrance test requirements.
-- **Practical 7-Day Career Trials**: Actionable, day-by-day micro-tasks allowing students to test-drive real industry work before investing years into a degree.
-- **Curated Learning Resources**: Technical and foundational skill roadmaps mapped directly to in-demand career competencies.
-- **Scholarships & Opportunities Registry**: Verified listings of national and regional financial aid (HEC, PEEF, Ehsaas), corporate internships, and trainee programs.
-- **Sports & Athletic Pathways**: Dedicated listings across PCB regional academies, departmental athletic trials (WAPDA, Armed Forces), and university sports quotas.
-- **Course-Aware Mock Interview System**: Interactive technical interview practice powered by Alibaba Qwen, providing domain-specific questions, structured rubric evaluations, and actionable feedback for skill gaps.
-- **Talk to Alumni (Future Preview)**: A frontend entry point previewing future verified mentorship and community networking with graduates from top Pakistani institutions.
-
----
-
-## The Differentiator
-
-Career OS does not simply provide more information; it **organizes that information into a personalized pathway and actionable next steps**. 
-
-It transforms anxiety and uncertainty into a coherent, confidence-building roadmap from the classroom to the workforce.
-
----
-
-## Live Links
-
-- **Live Application (Vercel)**: [https://career-os-seven-flame.vercel.app](https://career-os-seven-flame.vercel.app)
-- **Backend API (Render)**: [https://ah-career-backend.onrender.com](https://ah-career-backend.onrender.com)
-- **Interactive API Docs (Swagger)**: [https://ah-career-backend.onrender.com/docs](https://ah-career-backend.onrender.com/docs)
-- **API Health Check**: [https://ah-career-backend.onrender.com/health](https://ah-career-backend.onrender.com/health)
+- **Production Frontend (Vercel)**: [https://career-os-seven-flame.vercel.app](https://career-os-seven-flame.vercel.app)
+- **Production Backend (Render)**: [https://ah-career-backend.onrender.com](https://ah-career-backend.onrender.com)
+- **Interactive API Documentation (Swagger)**: [https://ah-career-backend.onrender.com/docs](https://ah-career-backend.onrender.com/docs)
+- **API Gateway Health Check**: [https://ah-career-backend.onrender.com/health](https://ah-career-backend.onrender.com/health)
 - **GitHub Repository**: [https://github.com/anasimam10/Career-OS](https://github.com/anasimam10/Career-OS)
 
 ---
 
-## Quick Local Setup
+## The Problem & Solution
 
-### Backend (FastAPI + Python 3.11+)
+### The Challenge
+Pakistani youth constitute over 64% of the national population, yet face severe structural information friction:
+- **Scattered Information**: University criteria, merit cutoffs, and scholarship deadlines are fragmented across dozens of provincial and institutional portals.
+- **Unrealistic Advice**: Social media and viral videos create false expectations around tech salaries, entry requirements, and job availability.
+- **Neglected Pathways**: Athletic opportunities, vocational tracks, and regional quotas are poorly documented and largely inaccessible to students outside major metropolitan hubs.
+
+### The Career OS Solution
+Career OS provides **one continuous, personalized operating system** that grounds every recommendation in verified Pakistani institutional data and labor market facts. Recommendations adapt to the student's:
+1. **Education Stage**: Matric, FSc / A-Levels, Undergraduate, or Fresh Graduate
+2. **Geographic Reality**: Province, city, local campuses, and regional quotas
+3. **Verified Pathways**: 248 universities, 210 degree programs, and 22 curated career tracks
+4. **Actionable Progression**: Deterministic 7-day trials, milestone tracking, and mock interviews
+
+---
+
+## Core System Features
+
+1. **Personalized 7-Step Onboarding**: Establishes student baseline, educational stage, career motivations, and target cities.
+2. **Career Reality Checks**: In-depth intelligence across 22 career pathways, including verified Pakistani starting-to-peak PKR salary bands, local employer demand, and work conditions.
+3. **University & Degree Catalog**: Directory covering 248 universities and 210 degree programs across all provinces, including entrance test requirements (MDCAT, ECAT, NAT, USAT) and verified criteria.
+4. **7-Day Career Trials**: Actionable, structured day-by-day micro-tasks allowing students to test-drive careers before committing years to a degree.
+5. **Curated Learning Roadmaps**: Foundational and technical competency roadmaps mapped directly to in-demand career skills.
+6. **Scholarships & Opportunities Registry**: Verified listings of national and provincial aid (HEC, PEEF, Ehsaas, Sindh HEC), corporate internships, and trainee programs.
+7. **Sports & Athletic Pathways**: Structured sports directory covering PCB regional academies, departmental athletic trials (WAPDA, Armed Forces), and university sports quotas.
+8. **Qwen Multi-Model Fallback Architecture**: Production AI services powered by Alibaba Cloud DashScope (`qwen3.6-plus` primary), with deterministic multi-model fallback and strict JSON schema output validation.
+9. **Model Context Protocol (MCP)**: Strict tool-mediated retrieval barriers isolating LLM generation from hallucinating career figures, admissions criteria, or university stats.
+10. **Interactive Mock Interviews**: Technical and behavioral interview simulation with domain-specific questions, structured rubric evaluations, and actionable feedback.
+
+---
+
+## Technology Stack
+
+| Layer | Technologies |
+|---|---|
+| **Frontend** | Next.js 14 (App Router), React 18, TypeScript, Tailwind CSS, Framer Motion, Radix UI, Lucide Icons |
+| **Backend** | FastAPI (Python 3.11+), SQLite (WAL mode + JSONType), SQLAlchemy 2.0, Pydantic v2, Uvicorn |
+| **AI & LLM Runtime** | Alibaba Cloud Model Studio / DashScope (`qwen3.6-plus` primary), Model Context Protocol (MCP) |
+| **Data & Seed Engine** | Python ETL, 8 normalized seed datasets (Universities, Programs, Careers, Scholarships, Sports) |
+| **Testing & Quality** | Pytest (806 passing tests), Playwright automated browser validation, ESLint, TypeScript compiler |
+| **Cloud Deployment** | Vercel (Edge CDN Frontend), Render (Docker Containerized Backend) |
+
+---
+
+## Project Structure
+
+```text
+Career-OS/
+├── BackEnd/
+│   ├── ingestion/          # PKE data ingestion and deduplication pipeline
+│   ├── knowledge_engine/   # Source registry and staging services
+│   ├── models/             # SQLAlchemy ORM models
+│   ├── prompts/            # Grounded system prompts and schema definitions
+│   ├── repositories/       # Data access layer
+│   ├── retrieval/          # Visibility rules and full-text retrieval
+│   ├── routers/            # FastAPI API route controllers (14 endpoints)
+│   ├── schemas/            # Pydantic v2 request/response contracts
+│   ├── services/           # Business logic (AI, Journey, Opportunity, Interview)
+│   ├── tests/              # 806 automated pytest unit & integration tests
+│   ├── config.py           # Typed settings from environment variables
+│   ├── database.py         # SQLAlchemy engine and WAL mode session factory
+│   ├── main.py             # Application entrypoint and MCP SSE transport mounts
+│   └── requirements.txt    # Production Python dependencies
+│
+├── Frontend/
+│   ├── app/                # Next.js 14 App Router routes (11 feature pages)
+│   ├── components/         # Reusable UI, Layout, Journey, Career, and Home components
+│   ├── hooks/              # Custom React hooks
+│   ├── lib/                # API client, session management, and utilities
+│   ├── public/             # Static assets (Career OS logo, Hero visual)
+│   └── package.json        # Frontend scripts and dependencies
+│
+├── Mcp/                    # Model Context Protocol servers (Career, Opportunity, PKE)
+├── data/                   # Production seed datasets (JSON) and seed_db.py loader
+├── Docs/                   # Final deliverables: presentation deck and technical reports
+├── scripts/                # Verification, extraction, and deck generation utilities
+├── .gitignore              # Multi-tier exclusion rules
+├── README.md               # Project documentation
+└── render.yaml             # Infrastructure-as-code deployment blueprint
+```
+
+---
+
+## Local Setup & Quickstart
+
+### Prerequisites
+- **Node.js** 18+ and **npm** 9+
+- **Python** 3.11+
+- **Git**
+
+### 1. Backend Setup
+
 ```bash
 cd BackEnd
-pip install -r requirements.txt
-python -m uvicorn main:app --host 127.0.0.1 --port 8000
-```
-*API runs at `http://127.0.0.1:8000` with Swagger docs at `/docs`.*
 
-### Frontend (Next.js 14 + Node 18+)
+# Create and activate virtual environment
+python -m venv .venv
+# On Windows:
+.venv\Scripts\activate
+# On macOS/Linux:
+source .venv/bin/activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Configure environment
+cp .env.example .env
+# Edit .env and supply your DASHSCOPE_API_KEY (optional for mock/offline runs)
+
+# Seed the database (from repository root)
+cd ..
+python data/seed_db.py
+
+# Start the FastAPI server
+cd BackEnd
+python -m uvicorn main:app --host 127.0.0.1 --port 8000 --reload
+```
+
+*API will be available at `http://127.0.0.1:8000` with interactive Swagger docs at `http://127.0.0.1:8000/docs`.*
+
+### 2. Frontend Setup
+
 ```bash
 cd Frontend
+
+# Install dependencies
 npm install
+
+# Configure environment
+cp .env.local.example .env.local
+
+# Start the development server
 npm run dev
 ```
-*Application runs at `http://localhost:3000`.*
+
+*Application will be available at `http://localhost:3000`.*
+
+---
+
+## Verification & Test Suite
+
+### Backend Test Suite (806 Tests)
+```bash
+cd BackEnd
+.venv\Scripts\python -m pytest -q
+```
+
+### Data Integrity Suite (47 Tests)
+```bash
+cd BackEnd
+.venv\Scripts\python -m pytest tests/test_data_integrity.py -q
+```
+
+### Frontend Code Quality
+```bash
+cd Frontend
+npm run lint
+npm run build
+```
+
+---
+
+## Submission Materials
+
+- **Final Presentation Deck**: [`Docs/Career_OS_Presentation_FINAL.pptx`](Docs/Career_OS_Presentation_FINAL.pptx)
+- **Technical & Product Study Report**: [`Docs/PROJECT_REPORT.md`](Docs/PROJECT_REPORT.md)
+- **System Architecture Specification**: [`Docs/architecture_corrected.md`](Docs/architecture_corrected.md)
+- **Pakistan Knowledge Engine (PKE) Reference**: [`Docs/pakistan_knowledge_engine.md`](Docs/pakistan_knowledge_engine.md)
+
