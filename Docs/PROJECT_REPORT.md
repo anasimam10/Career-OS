@@ -15,7 +15,7 @@
 Career OS bridges this structural gap by combining:
 1. **Pakistan Knowledge Engine (PKE)**: A high-integrity data ingestion, normalization, and provenance tracking engine that grounds all facts in verified Pakistani primary institutional data.
 2. **Model Context Protocol (MCP)**: Strict tool-mediated retrieval barriers that isolate LLMs from hallucinating career figures, admissions criteria, or university stats.
-3. **Qwen Multi-Model Fallback Chain**: A production AI runtime powered by Alibaba Cloud DashScope (`qwen3.6-plus` primary), operating under strict JSON Schema contracts with deterministic model fallbacks.
+3. **Qwen Multi-Model Fallback Chain**: A production AI runtime powered by Alibaba Cloud DashScope (`qwen-plus-2025-07-28` primary), operating under strict JSON Schema contracts with deterministic model fallbacks.
 4. **Interactive Action Engine**: Personalized 7-step onboarding, deterministic 7-day career trial plans, milestone-driven progression roadmaps, job readiness diagnostics, interactive mock interviews, and athletic opportunities.
 
 **Current Deployment Status**:
@@ -89,7 +89,7 @@ Career OS is fundamentally designed as an **Operating System**, not an informati
    - Tracks current milestone, completed milestones, and upcoming pathway phases.
    - Recalculates the student’s Next Best Action upon milestone completion.
 5. **Grounded AI Mentor (Coach Chat)**:
-   - Interactive conversational assistant powered by `qwen3.6-plus` via DashScope.
+   - Interactive conversational assistant powered by `qwen-plus-2025-07-28` via DashScope.
    - Strictly grounded in Pakistani labor and education context; cites specific universities, entry tests, and employer realities.
 6. **AI Mock Interview Engine**:
    - Provides role-tailored technical and behavioral interview sessions.
@@ -125,7 +125,7 @@ Career OS is fundamentally designed as an **Operating System**, not an informati
    ↓
 8. Opportunity Matching (/opportunities -> Filter local scholarships & internships)
    ↓
-9. AI Mentor Consultation (/mentor -> Grounded advisory chat via Qwen 3.6-plus)
+9. AI Mentor Consultation (/mentor -> Grounded advisory chat via Qwen Plus)
    ↓
 10. Mock Interview Practice (/mock-interview -> Live technical screening & feedback)
     ↓
@@ -162,10 +162,9 @@ Career OS is fundamentally designed as an **Operating System**, not an informati
 ┌──────▼─────────────────────────────▼─────────────────────────────▼──────┐
 │                       AI RUNTIME SUBSYSTEM                              │
 │         Alibaba Cloud DashScope (Singapore Compatible Mode)             │
-│   Primary: qwen3.6-plus                                                 │
-│   Fallback 1: qwen-plus-2025-07-28                                      │
-│   Fallback 2: qwen3-vl-235b-a22b-thinking                               │
-│   Fallback 3: qwen-turbo                                                │
+│   Primary: qwen-plus-2025-07-28                                         │
+│   Fallback 1: qwen3-vl-235b-a22b-thinking                               │
+│   Fallback 2: qwen-turbo                                                │
 └────────────────────────────────────┬────────────────────────────────────┘
                                      │
 ┌────────────────────────────────────▼────────────────────────────────────┐
@@ -266,13 +265,12 @@ Career OS embeds MCP SSE servers (`Mcp/career_server.py`, `Mcp/opportunity_serve
 
 ### Production Model Configuration
 - **Provider**: Alibaba Cloud DashScope (Singapore Region Compatible Mode).
-- **Primary Model**: `qwen3.6-plus` (Verified active and responsive).
-- **Retired Models**: `qwen3.7-plus` was removed and retired after quota expiration; it is not called anywhere in the runtime.
-- **Four-Model Fallback Chain**:
-  1. `qwen3.6-plus` (Primary high-reasoning model)
-  2. `qwen-plus-2025-07-28` (Secondary fallback)
-  3. `qwen3-vl-235b-a22b-thinking` (Deep reasoning fallback)
-  4. `qwen-turbo` (High-speed capacity backup)
+- **Primary Model**: `qwen-plus-2025-07-28` (Verified active and responsive).
+- **Retired Models**: `qwen3.7-plus` and `qwen3.6-plus` were removed and retired after quota expiration; they are not called anywhere in the runtime.
+- **Model Fallback Chain**:
+  1. `qwen-plus-2025-07-28` (Primary high-reasoning model)
+  2. `qwen3-vl-235b-a22b-thinking` (Deep reasoning fallback)
+  3. `qwen-turbo` (High-speed capacity backup)
 - **Fallback Trigger Policy**: Fallback occurs **only** on model-availability failures (HTTP 429 rate limit, quota exhaustion, 404 not found, or 5xx provider outages). Client errors (400, 401, 422) fail fast without switching models.
 - **Gemini Status**: Google Gemini / Antigravity is used exclusively as an **external developer IDE coding assistant** during development; it is **NOT** part of the Career OS production runtime.
 
@@ -410,4 +408,4 @@ Grounded UI Response with Verified Actionable Guidance
 
 ## 31. FINAL TECHNICAL SUMMARY
 
-Career OS demonstrates that generative AI in education achieves maximum utility only when coupled with deterministic, localized data governance. By architecting an operating system grounded in the **Pakistan Knowledge Engine**, mediated by **Model Context Protocol** servers, resiliently powered by **Qwen 3.6-plus multi-model fallback chains**, and delivered through a high-performance **Next.js 14** client, Career OS provides Pakistani youth with a trustworthy, dignified, and empirical career navigation infrastructure.
+Career OS demonstrates that generative AI in education achieves maximum utility only when coupled with deterministic, localized data governance. By architecting an operating system grounded in the **Pakistan Knowledge Engine**, mediated by **Model Context Protocol** servers, resiliently powered by **Qwen multi-model fallback chains**, and delivered through a high-performance **Next.js 14** client, Career OS provides Pakistani youth with a trustworthy, dignified, and empirical career navigation infrastructure.

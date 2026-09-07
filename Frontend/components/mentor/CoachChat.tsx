@@ -56,7 +56,7 @@ function CoachChatContent() {
               Career OS Qwen Mentor
             </h3>
             <span className="text-xs text-muted-foreground mt-0.5 block">
-              Powered by Qwen 3.6-plus • Context-aware guidance for your career journey in Pakistan
+              Powered by Qwen Plus • Context-aware guidance for your career journey in Pakistan
             </span>
           </div>
         </div>

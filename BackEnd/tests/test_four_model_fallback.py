@@ -47,7 +47,6 @@ from services.ai_service import (
 )
 
 MODELS = [
-    "qwen3.6-plus",
     "qwen-plus-2025-07-28",
     "qwen3-vl-235b-a22b-thinking",
     "qwen-turbo",
@@ -199,7 +198,12 @@ def test_model_2_failure_moves_to_model_3():
     assert models_used(client) == MODELS[:3]
 
 
-def test_model_3_failure_moves_to_model_4():
+def test_model_3_failure_moves_to_model_4(monkeypatch):
+    monkeypatch.setattr(
+        settings,
+        "QWEN_FALLBACK_MODELS",
+        "qwen3-vl-235b-a22b-thinking,qwen-turbo,qwen3.5-plus",
+    )
     client = mock_client(
         [
             rate_limit_error(),
@@ -213,7 +217,7 @@ def test_model_3_failure_moves_to_model_4():
     result = service.call_structured("Generate one action.", NextBestAction)
 
     assert isinstance(result, NextBestAction)
-    assert models_used(client) == MODELS
+    assert models_used(client) == MODELS + ["qwen3.5-plus"]
 
 
 # ---------------------------------------------------------------------------
@@ -228,13 +232,13 @@ def test_all_four_fail():
     with pytest.raises(AIUnavailableError):
         service.call_structured("Generate one action.", NextBestAction)
 
-    # existing graceful AI failure behaviour, after exactly four attempts
+    # existing graceful AI failure behaviour, after all attempts
     assert models_used(client) == MODELS
 
 
 def test_no_infinite_fallback():
     # far more failures supplied than models — the sequence must be exactly
-    # 1 -> 2 -> 3 -> 4, never repeating, never restarting at model 1
+    # 1 -> 2 -> 3, never repeating, never restarting at model 1
     client = mock_client([rate_limit_error() for _ in range(10)])
     service = AIService(client=client)
 
@@ -242,7 +246,7 @@ def test_no_infinite_fallback():
         service.call_structured("Generate one action.", NextBestAction)
 
     used = models_used(client)
-    assert client.chat.completions.create.call_count == 4
+    assert client.chat.completions.create.call_count == len(MODELS)
     assert used == MODELS
     # no model is ever attempted twice
     assert len(used) == len(set(used))
@@ -387,22 +391,22 @@ def test_secret_not_leaked(monkeypatch, caplog):
 
 
 def test_future_model_extensibility(monkeypatch):
-    # a FIFTH model is added through configuration ONLY — no router,
+    # an ADDITIONAL model is added through configuration ONLY — no router,
     # service, or caller changes; the chain simply gets one more entry
     monkeypatch.setattr(
         settings,
         "QWEN_FALLBACK_MODELS",
-        "qwen-plus-2025-07-28,qwen3-vl-235b-a22b-thinking,qwen-turbo,qwen3.5-plus",
+        "qwen3-vl-235b-a22b-thinking,qwen-turbo,qwen3.5-plus",
     )
     client = mock_client(
-        [rate_limit_error() for _ in range(4)] + [json.dumps(VALID_NBA)]
+        [rate_limit_error() for _ in range(3)] + [json.dumps(VALID_NBA)]
     )
     service = AIService(client=client)
 
     result = service.call_structured("Generate one action.", NextBestAction)
 
     assert isinstance(result, NextBestAction)
-    assert models_used(client) == ["qwen3.6-plus", "qwen-plus-2025-07-28", "qwen3-vl-235b-a22b-thinking", "qwen-turbo", "qwen3.5-plus"]
+    assert models_used(client) == ["qwen-plus-2025-07-28", "qwen3-vl-235b-a22b-thinking", "qwen-turbo", "qwen3.5-plus"]
 
     # callers still never pass or know about model selection
     for method in (AIService.call_structured, AIService.call_with_mcp):

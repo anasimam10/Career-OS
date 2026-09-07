@@ -41,7 +41,7 @@ Career OS provides **one continuous, personalized operating system** that ground
 5. **Curated Learning Roadmaps**: Foundational and technical competency roadmaps mapped directly to in-demand career skills.
 6. **Scholarships & Opportunities Registry**: Verified listings of national and provincial aid (HEC, PEEF, Ehsaas, Sindh HEC), corporate internships, and trainee programs.
 7. **Sports & Athletic Pathways**: Structured sports directory covering PCB regional academies, departmental athletic trials (WAPDA, Armed Forces), and university sports quotas.
-8. **Qwen Multi-Model Fallback Architecture**: Production AI services powered by Alibaba Cloud DashScope (`qwen3.6-plus` primary), with deterministic multi-model fallback and strict JSON schema output validation.
+8. **Qwen Multi-Model Fallback Architecture**: Production AI services powered by Alibaba Cloud DashScope (`qwen-plus-2025-07-28` primary), with deterministic multi-model fallback and strict JSON schema output validation.
 9. **Model Context Protocol (MCP)**: Strict tool-mediated retrieval barriers isolating LLM generation from hallucinating career figures, admissions criteria, or university stats.
 10. **Interactive Mock Interviews**: Technical and behavioral interview simulation with domain-specific questions, structured rubric evaluations, and actionable feedback.
 
@@ -53,7 +53,7 @@ Career OS provides **one continuous, personalized operating system** that ground
 |---|---|
 | **Frontend** | Next.js 14 (App Router), React 18, TypeScript, Tailwind CSS, Framer Motion, Radix UI, Lucide Icons |
 | **Backend** | FastAPI (Python 3.11+), SQLite (WAL mode + JSONType), SQLAlchemy 2.0, Pydantic v2, Uvicorn |
-| **AI & LLM Runtime** | Alibaba Cloud Model Studio / DashScope (`qwen3.6-plus` primary), Model Context Protocol (MCP) |
+| **AI & LLM Runtime** | Alibaba Cloud Model Studio / DashScope (`qwen-plus-2025-07-28` primary), Model Context Protocol (MCP) |
 | **Data & Seed Engine** | Python ETL, 8 normalized seed datasets (Universities, Programs, Careers, Scholarships, Sports) |
 | **Testing & Quality** | Pytest (806 passing tests), Playwright automated browser validation, ESLint, TypeScript compiler |
 | **Cloud Deployment** | Vercel (Edge CDN Frontend), Render (Docker Containerized Backend) |

@@ -25,14 +25,14 @@ class Settings:
     DASHSCOPE_API_KEY: str = os.getenv("DASHSCOPE_API_KEY", "")
     DASHSCOPE_WORKSPACE_ID: str = os.getenv("DASHSCOPE_WORKSPACE_ID", "ws-knn10vssjylmv6s0")
     DASHSCOPE_BASE_URL: str = os.getenv("DASHSCOPE_BASE_URL", "https://ws-knn10vssjylmv6s0.ap-southeast-1.maas.aliyuncs.com")
-    QWEN_MODEL: str = os.getenv("QWEN_MODEL", "qwen3.6-plus")
+    QWEN_MODEL: str = os.getenv("QWEN_MODEL", "qwen-plus-2025-07-28")
     # Ordered backup models tried ONLY when the primary fails with an
     # eligible model-availability error (HTTP 429 / 404 / 5xx). Comma-
     # separated, order preserved; empty entries and duplicates of earlier
     # models are ignored. An empty value disables the fallback entirely.
     QWEN_FALLBACK_MODELS: str = os.getenv(
         "QWEN_FALLBACK_MODELS",
-        "qwen-plus-2025-07-28,qwen3-vl-235b-a22b-thinking,qwen-turbo",
+        "qwen3-vl-235b-a22b-thinking,qwen-turbo",
     )
     AI_TIMEOUT_SECONDS: float = float(os.getenv("AI_TIMEOUT_SECONDS", "60"))
 
@@ -42,7 +42,7 @@ class Settings:
     MCP_SERVER_BASE_URL: str = os.getenv("MCP_SERVER_BASE_URL", "http://127.0.0.1:8000")
 
     # --- Application ---
-    SECRET_KEY: str = os.getenv("SECRET_KEY", "change-me-to-a-random-string")
+    SECRET_KEY: str = os.getenv("SECRET_KEY", "change-me-to-random-string")
     CORS_ORIGINS: list[str] = [
         origin.strip()
         for origin in os.getenv(
@@ -60,12 +60,11 @@ class Settings:
     ADMIN_TOKEN: str = os.getenv("ADMIN_TOKEN", "")
 
 
-# Mandated deployment chain (four-model fallback, 2026-08-30). Application
+# Mandated deployment chain (model fallback). Application
 # startup validates that every model below is present in the resolved
 # chain — a configuration check only, never a live API call. Future chain
 # changes update QWEN_MODEL / QWEN_FALLBACK_MODELS and this list together.
 REQUIRED_QWEN_MODELS = [
-    "qwen3.6-plus",
     "qwen-plus-2025-07-28",
     "qwen3-vl-235b-a22b-thinking",
     "qwen-turbo",

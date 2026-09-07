@@ -47,7 +47,7 @@ const FEATURES = [
   {
     icon: MessageSquare,
     title: "AI Mock Interviews",
-    description: "Role-specific practice powered by Qwen 3.6-plus with instant scoring and feedback.",
+    description: "Role-specific practice powered by Qwen Plus with instant scoring and feedback.",
     href: "/mock-interview",
   },
 ]

@@ -39,11 +39,10 @@ from services.ai_service import (
     AIValidationError,
 )
 
-PRIMARY = "qwen3.6-plus"
-FALLBACK = "qwen-plus-2025-07-28"  # first fallback (kept for the single-transition scenarios)
-FALLBACK_2 = "qwen3-vl-235b-a22b-thinking"
-FALLBACK_3 = "qwen-turbo"
-CHAIN = [PRIMARY, FALLBACK, FALLBACK_2, FALLBACK_3]
+PRIMARY = "qwen-plus-2025-07-28"
+FALLBACK = "qwen3-vl-235b-a22b-thinking"  # first fallback (kept for the single-transition scenarios)
+FALLBACK_2 = "qwen-turbo"
+CHAIN = [PRIMARY, FALLBACK, FALLBACK_2]
 
 VALID_NBA = {
     "title": "Start Python basics",
@@ -164,7 +163,7 @@ class TestModelConfiguration:
 
     def test_fallback_models_loaded_in_order(self):
         assert settings.QWEN_FALLBACK_MODELS == ",".join(
-            [FALLBACK, FALLBACK_2, FALLBACK_3]
+            [FALLBACK, FALLBACK_2]
         )
 
     def test_model_chain_primary_then_fallbacks(self):
@@ -303,14 +302,13 @@ class TestChainExhaustion:
         with pytest.raises(AIUnavailableError):
             service.call_structured("Generate one action.", NextBestAction)
 
-        assert client.chat.completions.create.call_count == 4
+        assert client.chat.completions.create.call_count == len(CHAIN)
         assert models_used(client) == CHAIN
 
     def test_fallback_never_recurses_to_another_fallback(self):
         # the last model failing must NOT re-invoke the primary
         client = mock_client(
             [
-                rate_limit_error(),
                 rate_limit_error(),
                 rate_limit_error(),
                 capacity_error(),
@@ -321,7 +319,7 @@ class TestChainExhaustion:
         with pytest.raises(AIUnavailableError):
             service.call_structured("Generate one action.", NextBestAction)
 
-        assert client.chat.completions.create.call_count == 4
+        assert client.chat.completions.create.call_count == len(CHAIN)
         assert models_used(client) == CHAIN
 
 
@@ -600,7 +598,7 @@ class TestFutureExtensibility:
 
         assert isinstance(result, NextBestAction)
         assert models_used(client) == [
-            "qwen3.6-plus",
+            "qwen-plus-2025-07-28",
             "qwen3.5-plus",
             "qwen3.4-plus",
         ]

@@ -21,12 +21,11 @@ Pattern B (Phase 5) — MCP tool calling:
       -> tool results returned to Qwen
       -> final answer + tool-call evidence trail
 
-Model fallback chain (four models, 2026-08-30):
+Model fallback chain:
 
-    qwen3.7-plus (primary)
-        -> qwen3.6-plus
-        -> qwen-plus-2025-07-28
+    qwen-plus-2025-07-28 (primary)
         -> qwen3-vl-235b-a22b-thinking
+        -> qwen-turbo
 
 The chain is deterministic and configuration-driven (QWEN_MODEL + the
 ordered QWEN_FALLBACK_MODELS list). A fallback model is used ONLY when
@@ -258,8 +257,8 @@ class AIService:
         Model fallback: if a model fails with an ELIGIBLE
         model-availability error (HTTP 429 / 404 / 5xx), the identical
         request + validation pipeline runs on the NEXT model in the
-        configured fallback chain (qwen3.6-plus -> qwen-plus-2025-07-28
-        -> qwen3-vl-235b-a22b-thinking). The chain never restarts from
+        configured fallback chain (qwen-plus-2025-07-28 -> qwen3-vl-235b-a22b-thinking
+        -> qwen-turbo). The chain never restarts from
         the primary and never recurses; non-eligible errors never switch
         models.
 

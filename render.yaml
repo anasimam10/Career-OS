@@ -23,9 +23,9 @@ services:
       - key: DASHSCOPE_BASE_URL
         value: https://ws-knn10vssjylmv6s0.ap-southeast-1.maas.aliyuncs.com
       - key: QWEN_MODEL
-        value: qwen3.6-plus
+        value: qwen-plus-2025-07-28
       - key: QWEN_FALLBACK_MODELS
-        value: qwen-plus-2025-07-28,qwen3-vl-235b-a22b-thinking,qwen-turbo
+        value: qwen3-vl-235b-a22b-thinking,qwen-turbo
       - key: DATABASE_URL
         sync: false                  # e.g. sqlite:////data/ah_career.db
       - key: SECRET_KEY

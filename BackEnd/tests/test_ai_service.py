@@ -197,7 +197,6 @@ class TestTransportErrors:
         # limit is never retried on the SAME model — every model in the
         # chain is called exactly once, in order, then stop.
         chain = [
-            "qwen3.6-plus",
             "qwen-plus-2025-07-28",
             "qwen3-vl-235b-a22b-thinking",
             "qwen-turbo",
