@@ -90,8 +90,6 @@ Career-OS/
 │
 ├── Mcp/                    # Model Context Protocol servers (Career, Opportunity, PKE)
 ├── data/                   # Production seed datasets (JSON) and seed_db.py loader
-├── Docs/                   # Final deliverables: presentation deck and technical reports
-├── scripts/                # Verification, extraction, and deck generation utilities
 ├── .gitignore              # Multi-tier exclusion rules
 ├── README.md               # Project documentation
 └── render.yaml             # Infrastructure-as-code deployment blueprint
@@ -108,7 +106,7 @@ Career-OS/
 
 ### 1. Backend Setup
 
-```bash
+
 cd BackEnd
 
 # Create and activate virtual environment
@@ -132,13 +130,11 @@ python data/seed_db.py
 # Start the FastAPI server
 cd BackEnd
 python -m uvicorn main:app --host 127.0.0.1 --port 8000 --reload
-```
 
 *API will be available at `http://127.0.0.1:8000` with interactive Swagger docs at `http://127.0.0.1:8000/docs`.*
 
 ### 2. Frontend Setup
 
-```bash
 cd Frontend
 
 # Install dependencies
@@ -149,39 +145,27 @@ cp .env.local.example .env.local
 
 # Start the development server
 npm run dev
-```
+
 
 *Application will be available at `http://localhost:3000`.*
 
----
+
 
 ## Verification & Test Suite
 
 ### Backend Test Suite (806 Tests)
-```bash
+
 cd BackEnd
 .venv\Scripts\python -m pytest -q
-```
+
 
 ### Data Integrity Suite (47 Tests)
-```bash
+
 cd BackEnd
 .venv\Scripts\python -m pytest tests/test_data_integrity.py -q
-```
+
 
 ### Frontend Code Quality
-```bash
 cd Frontend
 npm run lint
 npm run build
-```
-
----
-
-## Submission Materials
-
-- **Final Presentation Deck**: [`Docs/Career_OS_Presentation_FINAL.pptx`](Docs/Career_OS_Presentation_FINAL.pptx)
-- **Technical & Product Study Report**: [`Docs/PROJECT_REPORT.md`](Docs/PROJECT_REPORT.md)
-- **System Architecture Specification**: [`Docs/architecture_corrected.md`](Docs/architecture_corrected.md)
-- **Pakistan Knowledge Engine (PKE) Reference**: [`Docs/pakistan_knowledge_engine.md`](Docs/pakistan_knowledge_engine.md)
-

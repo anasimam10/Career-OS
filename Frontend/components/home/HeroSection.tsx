@@ -41,7 +41,9 @@ export function HeroSection() {
 
           {/* H1 — large, bold with silver/white gradient title */}
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-white via-[#E2E8F0] to-[#94A3B8] leading-[1.12] pb-2">
-            Know your path before you commit.
+            Find the Right Path.
+            <br />
+            Take the Next Step.
           </h1>
 
           {/* Subline */}
@@ -71,11 +73,10 @@ export function HeroSection() {
         {/* Centered Showcase Visual with 3D Perspective Scroll Tilt */}
         <div className="hero-perspective-wrapper mt-12 sm:mt-16 md:mt-20 max-w-[1024px] mx-auto">
           <div
-            className={`hero-perspective-card relative w-full rounded-2xl border border-[#23334D]/80 bg-[#0F1424]/90 p-2 sm:p-3 shadow-[0_30px_70px_-20px_rgba(0,0,0,0.8)] backdrop-blur-md ${
-              scrolled
+            className={`hero-perspective-card relative w-full rounded-2xl border border-[#23334D]/80 bg-[#0F1424]/90 p-2 sm:p-3 shadow-[0_30px_70px_-20px_rgba(0,0,0,0.8)] backdrop-blur-md ${scrolled
                 ? "scrolled shadow-[0_40px_90px_-15px_rgba(37,99,235,0.18)]"
                 : ""
-            }`}
+              }`}
           >
             {/* Architectural Corner Ticks */}
             <div className="absolute top-1.5 left-1.5 w-2.5 h-2.5 border-t border-l border-[#3B82F6]/40 pointer-events-none" />
